@@ -2,6 +2,7 @@
 
 Its a game.
 
+<<<<<<< HEAD
 hine 1
 sef
 sefosef
@@ -11,3 +12,6 @@ fs
 ef
 sef
 s
+=======
+Line 2
+>>>>>>> thomas
