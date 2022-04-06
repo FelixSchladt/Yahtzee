@@ -88,6 +88,6 @@ if __name__ == "__main__":
         tui.frame()
         tui.frame(10, 10, 30, 30)
         tui.text(12, 12, "TesT")
-        tui.terminal.getch()
         tui.flush()
+        tui.terminal.getch()
 
