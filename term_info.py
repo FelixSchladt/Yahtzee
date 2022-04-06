@@ -3,28 +3,22 @@ import platform
 
 def terminal():
     if platform.system() == 'Linux':
-        return linux()
+        return _linux()
     else:
-        return windows()
+        return _windows()
 
-class linux:
+class _linux:
     def __init__(self):
         import sys, tty, termios
-        self.term_size()
+        self.rows, self.columns = self.term_size()
 
     def term_size(self):
         rows, columns = os.popen('stty size', 'r').read().split()
-        self.rows, self.columns = int(rows), int(columns)
-        """
-
-        self.lines < 40 or self.columns < 90:
-             self.invalid_terminal_size()
-        """
-        #TODO implement minimum terminal size
+        return int(rows), int(columns)
 
     def invalid_terminal_size(self):
         pass
-        #TODO
+        #TODO implement watch function which checks for changing termianl size
 
     def getch(self):
         import termios, sys, tty
@@ -34,12 +28,22 @@ class linux:
         termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old_settings)
         return ch
 
-class windows:
+
+class _windows:
     def __init__(self):
         import msvcrt
 
     def getch(self):
         return msvcrt.getch()
+
+    def term_size():
+        #TODO implement working windows version
+        pass
+
+    def invalid_terminal_size(self):
+        pass
+        #TODO implement watch function which checks for changing termianl size
+
 
 if __name__ == "__main__":
     term = terminal()
