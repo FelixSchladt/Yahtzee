@@ -39,9 +39,30 @@ def triplet(throws: []) -> (bool, int):
     return (is_rule, score)
 
 
-def quadrupel() -> int:
-    # return Sum of eyes
-    pass
+def quadrupel(throws: []) -> int:
+    '''This method checks whether the eyes fullfill
+       the requirements of a triplet and returns the score
+
+       :param throws: the throws that will be checked
+       :returns: whether the rule was fullfilled or not as well as the potential score
+    '''
+    equal: int = 0
+    score: int = 0
+    is_rule = False
+
+    for i in range(1,6):
+        for eyes in throws:
+            if eyes == i:
+                equal += 1
+
+        if equal == 4:
+            score = i*4
+            is_rule = True
+            break
+
+        equal = 0
+
+    return (is_rule, score)
 
 
 def full_house() -> int:
