@@ -1,5 +1,6 @@
 import term_info
 import exceptions
+import time
 
 
 #terminal = term_info.terminal()
@@ -10,7 +11,7 @@ class tui_engine:
         self.__grid_init()
 
     def __grid_init(self):
-    #grid[y][x]
+        #grid[y][x]
         self.grid = [[" " for j in range(self.terminal.columns)] for i in range(self.terminal.rows)]
 
     def render(self):
@@ -30,7 +31,13 @@ class tui_engine:
 if __name__ == "__main__":
     tui = tui_engine()
     tui.render()
-    for i in range(0, 10):
-        tui.pixel(10,10, tui.terminal.getch())
+    for i in range(0, 1000):
+        tui.pixel(10,10, "/")
+        tui.render()
+        tui.pixel(10,10, "-")
+        tui.render()
+        tui.pixel(10,10, "\\")
+        tui.render()
+        tui.pixel(10,10, "|")
         tui.render()
 
