@@ -1,11 +1,16 @@
 #!/usr/bin/python3
 # pylint: disable=C
 from unittest import TestCase
-from rule_generator import triplet,\
+from rule_generator import multiple,\
+                           triplet,\
                            quadrupel
 
 
 class TestRuleGenerator(TestCase):
+    def test_multiple(self):
+        self.assertEqual(multiple([1, 1, 3, 4, 5], 2), (True, 2))
+        self.assertEqual(multiple([1, 2, 3, 4, 5], 1), (True, 1))
+
     def test_triplet(self):
         self.assertEqual(triplet([1, 1, 1, 4, 5]), (True, 3))
         self.assertEqual(triplet([5, 2, 3, 5, 5]), (True, 15))

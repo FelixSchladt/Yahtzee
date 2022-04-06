@@ -13,12 +13,13 @@ def check_lower_block() -> int:
 # LOWER BLOCK RULES
 #
 
-def triplet(throws: []) -> (bool, int):
-    '''This method checks whether the eyes fullfill
-       the requirements of a triplet and returns the score
+
+def multiple(throws: [], amount: int) -> (bool, int):
+    '''This method checks whether a set of numbers contains a given amount of duplicates
 
        :param throws: the throws that will be checked
-       :returns: whether the rule was fullfilled or not as well as the potential score
+       :param amount: how many duplicates are wanted
+       :returns: whether the rule was fullfilled or not as well as the sum of the duplicate elements
     '''
     equal: int = 0
     score: int = 0
@@ -29,14 +30,23 @@ def triplet(throws: []) -> (bool, int):
             if eyes == i:
                 equal += 1
 
-        if equal == 3:
-            score = i*3
+        if equal == amount:
+            score = i*amount
             is_rule = True
             break
 
         equal = 0
 
     return (is_rule, score)
+
+def triplet(throws: []) -> (bool, int):
+    '''This method checks whether the eyes fullfill
+       the requirements of a triplet and returns the score
+
+       :param throws: the throws that will be checked
+       :returns: whether the rule was fullfilled or not as well as the potential score
+    '''
+    return multiple(throws, 3)
 
 
 def quadrupel(throws: []) -> int:
@@ -46,23 +56,7 @@ def quadrupel(throws: []) -> int:
        :param throws: the throws that will be checked
        :returns: whether the rule was fullfilled or not as well as the potential score
     '''
-    equal: int = 0
-    score: int = 0
-    is_rule = False
-
-    for i in range(1,6):
-        for eyes in throws:
-            if eyes == i:
-                equal += 1
-
-        if equal == 4:
-            score = i*4
-            is_rule = True
-            break
-
-        equal = 0
-
-    return (is_rule, score)
+    return multiple(throws, 4)
 
 
 def full_house() -> int:
