@@ -1,5 +1,6 @@
 # Kniffel
 
-Its a game.
+A simple simulation of the game 'Kniffel' also known
+as 'Yahtzee'.
 
-Line 2
+For additional Information please refer to */doc*.
