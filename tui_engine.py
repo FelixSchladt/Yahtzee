@@ -1,5 +1,5 @@
 import term_info
-import InvalidLenght
+import exceptions
 
 
 #terminal = term_info.terminal()
@@ -11,14 +11,16 @@ class tui_engine:
 
     def __grid_init(self):
     #grid[y][x]
-        self.grid = [["h" for j in range(self.terminal.columns)] for i in range(self.terminal.rows)]
+        self.grid = [[" " for j in range(self.terminal.columns)] for i in range(self.terminal.rows)]
 
     def render(self):
         for i in range(0, len(self.grid)):
             print("".join(self.grid[i]))
 
     def pixel(self, x, y, char):
-        self.grid[y][x] = char if len(char) == 1 else raise InvalidLength
+        if len(char) != 1:
+            raise InvalidLenght
+        self.grid[y][x] = char
 
 
 

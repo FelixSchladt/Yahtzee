@@ -1,2 +1,3 @@
 class InvalidLenght(Exception):
+    pass
 
