@@ -23,7 +23,7 @@ def multiple(throws: [], amount: int) -> (bool, int):
     '''
     equal: int = 0
     score: int = 0
-    is_rule = False
+    is_rule: bool = False
 
     for i in range(1,6):
         for eyes in throws:
@@ -59,8 +59,25 @@ def quadrupel(throws: []) -> int:
     return multiple(throws, 4)
 
 
-def full_house() -> int:
-    return 25
+def full_house(throws: []) -> int:
+    '''This method checks whether the numbers in an array match a full house.
+
+    :param throws: the throws that will be checked
+    :returns: whether the rule was fullfilled and the potential score
+    '''
+    score: int = 0
+    is_rule: bool = False
+
+    first_set = multiple(throws, 2)
+    second_set = multiple(throws, 3)
+
+    if first_set[0]\
+       and second_set[0]\
+       and first_set[1] != second_set[1]:
+        score = 25
+        is_rule = True
+
+    return (is_rule, score)
 
 
 def small_road() -> int:

@@ -3,7 +3,8 @@
 from unittest import TestCase
 from rule_generator import multiple,\
                            triplet,\
-                           quadrupel
+                           quadrupel,\
+                           full_house
 
 
 class TestRuleGenerator(TestCase):
@@ -23,3 +24,9 @@ class TestRuleGenerator(TestCase):
         self.assertEqual(quadrupel([1, 2, 3, 4, 5]), (False, 0))
         self.assertEqual(quadrupel([1, 1, 1, 1, 1]), (False, 0))
         self.assertEqual(quadrupel([1, 1, 1, 2, 2]), (False, 0))
+
+    def test_full_house(self):
+        self.assertEqual(full_house([1, 1, 2, 2, 2]), (True, 25))
+        self.assertEqual(full_house([1, 2, 3, 4, 5]), (False, 0))
+        self.assertEqual(full_house([1, 1, 2, 3, 4]), (False, 0))
+        self.assertEqual(full_house([1, 2, 3, 3, 3]), (False, 0))
