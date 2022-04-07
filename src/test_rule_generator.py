@@ -4,13 +4,15 @@ from unittest import TestCase
 from rule_generator import multiple,\
                            triplet,\
                            quadrupel,\
-                           full_house
+                           full_house,\
+                           yahtzee
 
 
 class TestRuleGenerator(TestCase):
     def test_multiple(self):
         self.assertEqual(multiple([1, 1, 3, 4, 5], 2), (True, 2))
         self.assertEqual(multiple([1, 2, 3, 4, 5], 1), (True, 1))
+        self.assertEqual(multiple([1, 2, 3, 4, 5], 3), (False, 0))
 
     def test_triplet(self):
         self.assertEqual(triplet([1, 1, 1, 4, 5]), (True, 3))
@@ -30,3 +32,9 @@ class TestRuleGenerator(TestCase):
         self.assertEqual(full_house([1, 2, 3, 4, 5]), (False, 0))
         self.assertEqual(full_house([1, 1, 2, 3, 4]), (False, 0))
         self.assertEqual(full_house([1, 2, 3, 3, 3]), (False, 0))
+
+    def test_yahtzee(self):
+        self.assertEqual(yahtzee([1, 1, 1, 1, 1]), (True, 50))
+        self.assertEqual(yahtzee([1, 2, 3, 4, 5]), (False, 0))
+        self.assertEqual(yahtzee([5, 5, 5, 5, 5]), (True, 50))
+        self.assertEqual(yahtzee([1, 1, 2, 1, 1]), (False, 0))
