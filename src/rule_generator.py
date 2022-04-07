@@ -1,17 +1,12 @@
 #!/usr/bin/python3
+'''This file contains all kniffel rules.
+   All results will be returned with the following tupel:
+   - (bool, int)
 
-def check_rules(throws: []) -> int:
-    pass
-
-def check_upper_block() -> int:
-    pass
-
-def check_lower_block() -> int:
-    pass
-
-#
-# LOWER BLOCK RULES
-#
+   The boolean is true if the rule applies to a set of given numbers
+   and the int is the score that can be earned from each rule in
+   combination with a given array of numbers.
+'''
 
 
 def multiple(throws: [], amount: int) -> (bool, int):
@@ -80,11 +75,21 @@ def full_house(throws: []) -> (bool, int):
     return (is_rule, score)
 
 
-def small_road() -> int:
+def small_road(throws: []) -> (bool, int):
+    '''This fuction checks whether the numbers in an array match a "small road".
+
+       :param throws: an array of numbers to be checked
+       :returns: whether the rule was fullfilled as well as the potential score
+    '''
     return 30
 
 
-def big_road() -> int:
+def big_road(throws: []) -> (bool, int):
+    '''This fuction checks whether the numbers in an array match a "big road".
+
+       :param throws: an array of numbers to be checked
+       :returns: whether the rule was fullfilled as well as the potential score
+    '''
     return 40
 
 
