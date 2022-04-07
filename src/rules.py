@@ -125,3 +125,6 @@ def chance(throws: []) -> (bool, int):
         score += eyes
 
     return (is_rule, score)
+
+if __name__ == "__main__":
+    print(f"\033[33mWarning\033[0m: cannot run file on its own: {__file__}")
