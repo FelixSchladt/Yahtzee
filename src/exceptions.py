@@ -2,7 +2,11 @@
 # Copyright 2022 FelixSchladt (https://github.com/FelixSchladt)
 
 class InvalidLenght(Exception):
-    pass
+    """
+    Exception raised if given variable exceeds lenght
+    """
 
 class OutOfBounds(Exception):
-    pass
+    """
+    Exception raised if a coordinate is outisde of the coordinate spectrum
+    """

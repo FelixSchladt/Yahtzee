@@ -135,8 +135,6 @@ if __name__ == "__main__":
     tui = TuiEngine()
     for k in range(1, 7):
         tui.clear()
-        #tui.line_vertical(10+i, color = tui.terminal.getch())
-        #tui.circle(color = tui.terminal.getch())
         tui.frame()
         tui.frame(10, 10, 30, 30)
         tui.text(12, 12, chr(65 + k))
