@@ -1,4 +1,7 @@
+
 # Kniffel
 
-This branch is currently worked on.
-Please refer to the main branch for the full project.
+A simple simulation of the game 'Kniffel' also known
+as 'Yahtzee'.
+
+For additional Information please refer to */doc*.
