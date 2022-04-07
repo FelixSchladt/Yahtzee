@@ -153,4 +153,4 @@ def chance(throws: []) -> (bool, int):
     return (is_rule, score)
 
 if __name__ == "__main__":
-    print(f"\033[33mWarning\033[0m: cannot run file on its own: {__file__}")
+    print(f"\033[33mWarning\033[0m: cannot run file directly: {__file__}")
