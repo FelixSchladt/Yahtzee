@@ -7,7 +7,8 @@ from rules import multiple,\
                            full_house,\
                            small_road,\
                            big_road,\
-                           yahtzee
+                           yahtzee,\
+                           chance
 
 
 class TestRuleGenerator(TestCase):
@@ -54,3 +55,8 @@ class TestRuleGenerator(TestCase):
         self.assertEqual(yahtzee([1, 2, 3, 4, 5]), (False, 0))
         self.assertEqual(yahtzee([5, 5, 5, 5, 5]), (True, 50))
         self.assertEqual(yahtzee([1, 1, 2, 1, 1]), (False, 0))
+
+    def test_chance(self):
+        self.assertEqual(chance([1, 2, 3, 4, 5]), (True, 15))
+        self.assertEqual(chance([6, 6, 6, 6, 6]), (True, 30))
+        self.assertEqual(chance([3, 6, 1, 2, 3]), (True, 15))
