@@ -11,8 +11,10 @@ class TestTuiEngine(TestCase):
     def setUp(self):
         self.tui = TuiEngine()
 
-
     def test_pixel(self):
+        self.tui = TuiEngine()
         self.tui.pixel(0,0, "A")
         self.assertEqual(self.tui._TuiEngine__grid[1][0], "A")
 
+    def tearDown(self):
+        pass

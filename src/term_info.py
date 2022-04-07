@@ -20,7 +20,9 @@ class _linux:
         self.rows, self.columns = self.term_size()
 
     def term_size(self):
-        rows, columns = os.popen('stty size', 'r').read().split()
+        with os.popen('stty size', 'r') as pipe:
+            rows, columns = pipe.read().split()
+
         return int(rows)-1, int(columns)
 
     def invalid_terminal_size(self):

@@ -21,7 +21,8 @@ class TuiEngine:
         self.display_height = self.terminal.rows -1
 
     def __grid_init(self):
-        self.__grid = [[" " for j in range(self.terminal.columns)] for i in range(self.terminal.rows+1)]
+        self.__grid = [[" " for j in range(self.terminal.columns)]\
+                for i in range(self.terminal.rows+1)]
 
     def clear(self):
         """
@@ -33,77 +34,85 @@ class TuiEngine:
         """
         prints grid buffer onto terminal
         """
-        #TODO Check if this works on WINDOWS
+        # TODO Check if this works on WINDOWS
         for counter, value in enumerate(self.__grid):
             print(f"\033[{counter};0H" + "".join(value))
 
-    def pixel(self, x, y, char = " "):
+    def pixel(self, pos_x, pos_y, char = " "):
         """
-        assigns char to (x, y) coordinate in the grid buffer
+        assigns char to (pos_x, pos_y) coordinate in the grid buffer
         """
         if len(char) != 1:
             raise InvalidLenght
-        if len(self.__grid) < (y+1) or len(self.__grid[0]) < x:
+        if len(self.__grid) < (pos_y+1) or len(self.__grid[0]) < pos_x:
             raise OutOfBounds
-        self.__grid[y+1][x] = char
+        self.__grid[pos_y+1][pos_x] = char
 
-    def text(self, x, y, txt, length=None):
+    def text(self, pos_x, pos_y, txt, length=None):
         """
         prints text into the grid buffer
-        Starts at (x, y) coordinate.
+        Starts at (pos_x, pos_y) coordinate.
         If a length is specified, no symbols beyond the lenght will be written
         """
         lenght = len(txt) if length is None else length
 
-        if (lenght + x) > self.display_width:
+        if (lenght + pos_x) > self.display_width:
             raise OutOfBounds
 
         i = 0
-        for x0 in range(x, x + int(lenght)):
-            self.pixel(x0, y, txt[i])
+        for x_0 in range(pos_x, pos_x + int(lenght)):
+            self.pixel(x_0, pos_y, txt[i])
             i+=1
 
-    def frame(self, x0 = 0, y0 = 0, x1 = None, y1 = None):
+    def frame(self, x_0 = 0, y_0 = 0, x_1 = None, y_1 = None):
         """
         clears output in the terminal
         """
-        x1 = self.display_width if x1 is None else x1
-        y1 = self.display_height if y1 is None else y1
+        x_1 = self.display_width if x_1 is None else x_1
+        y_1 = self.display_height if y_1 is None else y_1
 
-        self.line_horizontal(y0, x0, x1, color = "─")
-        self.line_horizontal(y1, x0, x1, color = "─")
+        self.line_horizontal(y_0, x_0, x_1, color = "─")
+        self.line_horizontal(y_1, x_0, x_1, color = "─")
 
-        self.line_vertical( x0, y0, y1, color = "│")
-        self.line_vertical( x1, y0, y1, color = "│")
+        self.line_vertical(x_0, y_0, y_1, color = "│")
+        self.line_vertical(x_1, y_0, y_1, color = "│")
 
-        self.pixel(x0, y0, "┌")
-        self.pixel(x0, y1, "└")
-        self.pixel(x1, y0, "┐")
-        self.pixel(x1, y1, "┘")
+        self.pixel(x_0, y_0, "┌")
+        self.pixel(x_0, y_1, "└")
+        self.pixel(x_1, y_0, "┐")
+        self.pixel(x_1, y_1, "┘")
 
     @staticmethod
-    def finish():
+    def clear_screen():
         """
         clears output in the terminal
         """
-        #TODO Check if this works on WINDOWS
+        # TODO Check if this works on WINDOWS
         os.system("clear")
 
-    def line_horizontal(self, y, x0 = 0, x1 = None, color = " "):
+    def line_horizontal(self, pos_y, x_0 = 0, x_1 = None, color = " "):
         """
-        Draws line from (x0, y) to (x1, y)
+        Draws line from (x_0, pos_y) to (x_1, pos_y)
         """
-        x1 = self.display_width if x1 is None else x1
-        for x in range(x0 if x0 < x1 else x1, x1 if x0 < x1 else x0):
-            self.pixel(x, y, color)
+        x_1 = self.display_width if x_1 is None else x_1
+        for pos_x in range(
+                x_0 if x_0 < x_1
+                else x_1,
+                x_1 if x_0 < x_1
+                else x_0):
+            self.pixel(pos_x, pos_y, color)
 
-    def line_vertical(self, x, y0 = 0, y1 = None, color = " "):
+    def line_vertical(self, pos_x, y_0 = 0, y_1 = None, color = " "):
         """
-        Draws line from (x, y0) to (x, y1)
+        Draws line from (pos_x, y_0) to (pos_x, y_1)
         """
-        y1 = self.display_height if y1 is None else y1
-        for y in range(y0 if y0 < y1 else y1, y1 if y0 < y1 else y0):
-            self.pixel(x, y, color)
+        y_1 = self.display_height if y_1 is None else y_1
+        for pos_y in range(
+                y_0 if y_0 < y_1
+                else y_1,
+                y_1 if y_0 < y_1
+                else y_0):
+            self.pixel(pos_x, pos_y, color)
 
 
 if __name__ == "__main__":
@@ -117,4 +126,4 @@ if __name__ == "__main__":
         tui.text(12, 12, chr(65 + k))
         tui.flush()
         tui.terminal.getch()
-    tui.finish()
+    tui.clear_screen()
