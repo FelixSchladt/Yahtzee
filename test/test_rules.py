@@ -1,15 +1,14 @@
 #!/usr/bin/python3
 # pylint: disable=C
 from unittest import TestCase
-from rules import multiple,\
-                           triplet,\
-                           quadrupel,\
-                           full_house,\
-                           small_road,\
-                           big_road,\
-                           yahtzee,\
-                           chance
-
+from src.rules import multiple,\
+                         triplet,\
+                         quadrupel,\
+                         full_house,\
+                         small_road,\
+                         big_road,\
+                         yahtzee,\
+                         chance
 
 class TestRuleGenerator(TestCase):
     def test_multiple(self):
