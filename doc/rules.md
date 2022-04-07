@@ -1,4 +1,4 @@
-# Rule generator
+# Rules
 
 This file contains a summary of all functions from *rules.py*.
 
