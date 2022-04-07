@@ -21,7 +21,7 @@ def multiple(throws: [], amount: int) -> (bool, int):
     score: int = 0
     is_rule: bool = False
 
-    for i in range(1,6):
+    for i in range(1, 7):
         for eyes in throws:
             if eyes == i:
                 equal += 1
@@ -85,7 +85,7 @@ def small_road(throws: []) -> (bool, int):
     score: int = 0
     is_rule: bool = False
 
-    for i in range(1,3):
+    for i in range(1, 4):
         if i in throws\
         and i+1 in throws\
         and i+2 in throws\
@@ -104,9 +104,9 @@ def big_road(throws: []) -> (bool, int):
        :returns: whether the rule was fullfilled as well as the potential score
     '''
     score: int = 0
-    is_rule: bool = True
+    is_rule: bool = False
 
-    for i in (1,2):
+    for i in (1, 2):
         if i in throws\
         and i+1 in throws\
         and i+2 in throws\
