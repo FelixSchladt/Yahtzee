@@ -1,6 +1,11 @@
 # General Information
 
-All documentation, notes and other non-code files
-go into the documentation directory **"/doc"**. 
-
+This dir contains the projects documentation.
 All source-code goes into the source-directory **"/src"**.
+
+## Files:
+
+- [rules.md](https://github.com/FelixSchladt/kniffel/edit/main/doc/rules.md)
+
+
+
