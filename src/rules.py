@@ -14,7 +14,8 @@ def multiple(throws: [], amount: int) -> (bool, int):
 
        :param throws: the throws that will be checked
        :param amount: how many duplicates are wanted
-       :returns: whether the rule was fullfilled or not as well as the sum of the duplicate elements
+       :returns: whether the the amount of multiples exists or not
+                 as well as the sum of the duplicate elements
     '''
     equal: int = 0
     score: int = 0
