@@ -11,7 +11,8 @@ The file contains functions to check for yahtzees/kniffels special rules.
 All functions dedicated to special rules check whether the rule applies to an array of numbers and returns the following tupel:
 - (<rule applies>: bool, <score>: int)
 
-
+---
+  
 
 | Name | Description | Points |
 |------|-------------|--------|
