@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-#Copyright 2022 Ginthom (https://github.com/Ginthom)
+# Copyright 2022 Ginthom (https://github.com/Ginthom)
 
 '''This file contains all kniffel rules.
    All results will be returned with the following tupel:
