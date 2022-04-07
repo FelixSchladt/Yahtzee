@@ -4,7 +4,7 @@
 # pylint: disable=C
 
 from unittest import TestCase
-from tui_engine import TuiEngine
+from src.tui_engine import TuiEngine
 
 
 class TestTuiEngine(TestCase):

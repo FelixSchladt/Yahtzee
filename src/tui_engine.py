@@ -6,8 +6,8 @@ Library for displaying dynamic content in the commandline
 """
 
 import os
-from exceptions import InvalidLenght, OutOfBounds
-from term_info import terminal
+from src.exceptions import InvalidLenght, OutOfBounds
+from src.term_info import terminal
 
 class TuiEngine:
     """
