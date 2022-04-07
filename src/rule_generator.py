@@ -106,6 +106,17 @@ def yahtzee(throws: []) -> (bool, int):
     return (is_rule, score)
 
 
-def chance() -> int:
-    # return sum of all eyes
-    pass
+def chance(throws: []) -> (bool, int):
+    '''This method simply returns the sum of all numbers in a given aray
+
+    :param throws: the array whichs numbers should be added up
+    :returns: whether the rule is fullfilled or not (here: always True)
+              and the potential score
+    '''
+    score: int = 0
+    is_rule: bool = True
+
+    for eyes in throws:
+        score += eyes
+
+    return (is_rule, score)
