@@ -15,6 +15,7 @@ class TestRuleGenerator(TestCase):
         self.assertEqual(multiple([1, 1, 3, 4, 5], 2), (True, 2))
         self.assertEqual(multiple([1, 2, 3, 4, 5], 1), (True, 1))
         self.assertEqual(multiple([1, 2, 3, 4, 5], 3), (False, 0))
+        self.assertEqual(multiple([6, 6, 6, 1, 2], 3), (True, 18))
 
     def test_triplet(self):
         self.assertEqual(triplet([1, 1, 1, 4, 5]), (True, 3))
