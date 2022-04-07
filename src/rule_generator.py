@@ -49,7 +49,7 @@ def triplet(throws: []) -> (bool, int):
     return multiple(throws, 3)
 
 
-def quadrupel(throws: []) -> int:
+def quadrupel(throws: []) -> (bool, int):
     '''This method checks whether the eyes fullfill
        the requirements of a triplet and returns the score
 
@@ -59,7 +59,7 @@ def quadrupel(throws: []) -> int:
     return multiple(throws, 4)
 
 
-def full_house(throws: []) -> int:
+def full_house(throws: []) -> (bool, int):
     '''This method checks whether the numbers in an array match a full house.
 
     :param throws: the throws that will be checked
@@ -88,8 +88,22 @@ def big_road() -> int:
     return 40
 
 
-def yahtzee() -> int:
-    return 50
+def yahtzee(throws: []) -> (bool, int):
+    '''This method checks whether the numbers in an array match a "full house".
+
+       :param throws: an array of the numbers to be checked
+       :returns: whether the rule was fullfilled as well as the potential score
+    '''
+    score: int = 0
+    is_rule: bool = False
+
+    dice_set = multiple(throws, 5)
+
+    if dice_set[0]:
+        score = 50
+        is_rule = True
+
+    return (is_rule, score)
 
 
 def chance() -> int:
