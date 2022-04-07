@@ -16,7 +16,7 @@ All functions dedicated to special rules check whether the rule applies to an ar
 
 | Name | Description | Points |
 |------|-------------|--------|
-| multiple(throws: [], amount) | Checks if an array has <amount> equal duplicates and returns true/false as well as the sum of the elements | Sum of the multiple |
+| multiple(throws: [], amount) | Checks if an array has \<amount\> duplicates and returns true/false as well as the sum of the elements | Sum of the multiple |
 | triplet(throws: []) | Rule applies when array contains 3 equal numbers | Sum of those numbers |
 | quardupel(throws: []) | Rule applies when array contains 4 equal numbers | Sum of those numbers |
 | full_house(throws: []) | Rule applies when array contains a pair of equal numbers, a triplet of numbers and the pair and triplet are not made of the same numbers | 25 |
