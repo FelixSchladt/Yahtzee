@@ -5,6 +5,8 @@ from rules import multiple,\
                            triplet,\
                            quadrupel,\
                            full_house,\
+                           small_road,\
+                           big_road,\
                            yahtzee
 
 
@@ -32,6 +34,19 @@ class TestRuleGenerator(TestCase):
         self.assertEqual(full_house([1, 2, 3, 4, 5]), (False, 0))
         self.assertEqual(full_house([1, 1, 2, 3, 4]), (False, 0))
         self.assertEqual(full_house([1, 2, 3, 3, 3]), (False, 0))
+
+    def test_small_road(self):
+        self.assertEqual(small_road([1, 2, 3, 4, 1]), (True, 30))
+        self.assertEqual(small_road([1, 3, 2, 4, 2]), (True, 30))
+        self.assertEqual(small_road([4, 3, 2, 1, 6]), (True, 30))
+        self.assertEqual(small_road([6, 5, 4, 3, 6]), (True, 30))
+        self.assertEqual(small_road([1, 3, 5, 6, 2]), (False, 0))
+
+    def test_big_road(self):
+        self.assertEqual(big_road([1, 2, 3, 4, 5]), (True, 40))
+        self.assertEqual(big_road([2, 3, 4, 5, 6]), (True, 40))
+        self.assertEqual(big_road([3, 4, 2, 1, 5]), (True, 40))
+        self.assertEqual(big_road([1, 2, 3, 4, 6]), (False, 0))
 
     def test_yahtzee(self):
         self.assertEqual(yahtzee([1, 1, 1, 1, 1]), (True, 50))
