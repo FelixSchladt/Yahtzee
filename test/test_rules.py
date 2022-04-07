@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 # pylint: disable=C
+
+# Copyright 2022 Ginthom (https://github.com/Ginthom)
+
+
 from unittest import TestCase
 from src.rules import multiple,\
                          triplet,\
