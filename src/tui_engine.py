@@ -6,14 +6,22 @@ Library for displaying dynamic content in the commandline
 """
 
 import os
-from src.exceptions import InvalidLenght, OutOfBounds
-from src.term_info import terminal
+from exceptions import InvalidLenght, OutOfBounds
+from term_info import terminal
+
 
 class TuiEngine:
     """
     Creates a virtual display in the terminal by using assign each character
     a coordinate
     """
+    __dice =   {1: ["     ", "  *  ", "     "],
+                2: ["     ", " * * ", "     "],
+                3: [" *   ", "  *  ", "   * "],
+                4: [" * * ", "     ", " * * "],
+                5: [" * * ", "  *  ", " * * "],
+                6: [" * * ", " * * ", " * * "]}
+
     def __init__(self):
         self.terminal = terminal()
         self.__grid_init()
@@ -82,12 +90,21 @@ class TuiEngine:
         self.pixel(x1, y1, "┘")
 
     @staticmethod
-    def finish():
+    def clear():
         """
         clears output in the terminal
         """
         #TODO Check if this works on WINDOWS
         os.system("clear")
+
+    def dice(self, x, y, face):
+        """
+        prints ascii representation of an dice to (x, y) top left
+        """
+        self.frame(x, y, x + 6, y + 4)
+        for counter, text in enumerate(self.__dice[face]):
+            self.text(x + 1, y + counter + 1, text)
+
 
     def line_horizontal(self, y, x0 = 0, x1 = None, color = " "):
         """
@@ -108,13 +125,14 @@ class TuiEngine:
 
 if __name__ == "__main__":
     tui = TuiEngine()
-    for k in range(0, 10):
+    for k in range(1, 7):
         tui.clear()
         #tui.line_vertical(10+i, color = tui.terminal.getch())
         #tui.circle(color = tui.terminal.getch())
         tui.frame()
         tui.frame(10, 10, 30, 30)
         tui.text(12, 12, chr(65 + k))
+        tui.dice(40, 10, k)
         tui.flush()
         tui.terminal.getch()
-    tui.finish()
+    tui.clear()
