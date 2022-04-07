@@ -68,8 +68,8 @@ def full_house(throws: []) -> (bool, int):
     second_set = multiple(throws, 3)
 
     if first_set[0]\
-       and second_set[0]\
-       and first_set[1] != second_set[1]:
+    and second_set[0]\
+    and first_set[1] != second_set[1]:
         score = 25
         is_rule = True
 
@@ -82,7 +82,19 @@ def small_road(throws: []) -> (bool, int):
        :param throws: an array of numbers to be checked
        :returns: whether the rule was fullfilled as well as the potential score
     '''
-    return 30
+    score: int = 0
+    is_rule: bool = False
+
+    for i in range(1,3):
+        if i in throws\
+        and i+1 in throws\
+        and i+2 in throws\
+        and i+3 in throws:
+            score = 30
+            is_rule = True
+            break
+
+    return (is_rule, score)
 
 
 def big_road(throws: []) -> (bool, int):
@@ -91,7 +103,20 @@ def big_road(throws: []) -> (bool, int):
        :param throws: an array of numbers to be checked
        :returns: whether the rule was fullfilled as well as the potential score
     '''
-    return 40
+    score: int = 0
+    is_rule: bool = True
+
+    for i in (1,2):
+        if i in throws\
+        and i+1 in throws\
+        and i+2 in throws\
+        and i+3 in throws\
+        and i+4 in throws:
+            score = 40
+            is_rule = True
+            break
+
+    return (is_rule, score)
 
 
 def yahtzee(throws: []) -> (bool, int):
