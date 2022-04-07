@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# Copyright 2022 FelixSchladt (https://github.com/FelixSchladt)
+
 import os
 import platform
 
@@ -18,7 +21,7 @@ class _linux:
 
     def term_size(self):
         rows, columns = os.popen('stty size', 'r').read().split()
-        return int(rows), int(columns)
+        return int(rows)-1, int(columns)
 
     def invalid_terminal_size(self):
         pass
