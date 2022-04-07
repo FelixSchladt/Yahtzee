@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # pylint: disable=C
 from unittest import TestCase
-from rule_generator import multiple,\
+from rules import multiple,\
                            triplet,\
                            quadrupel,\
                            full_house,\
