@@ -8,6 +8,7 @@ if platform.system() == 'Linux' or platform.system() == 'FreeBSD':
     import sys, tty, termios
 else:
     import msvcrt
+    import shutil
 
 def terminal():
     """
@@ -66,8 +67,7 @@ class _windows:
     handles platform specific terminal functionality for nt based systems
     """
     def __init__(self):
-        #TODO -> I do not have access to windows
-        pass
+        self.lines, self.columns = self.term_size()
 
     @staticmethod
     def getch():
@@ -80,8 +80,8 @@ class _windows:
         """
         returns current size and height of terminal in characters
         """
-        #TODO implement working windows version
-        pass
+        columns, lines = shutil.get_terminal_size()
+        return int(columns), int(lines)
 
     def invalid_terminal_size(self):
         """
