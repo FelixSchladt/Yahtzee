@@ -67,7 +67,7 @@ class _windows:
     handles platform specific terminal functionality for nt based systems
     """
     def __init__(self):
-        self.lines, self.columns = self.term_size()
+        self.rows, self.columns = self.term_size()
 
     @staticmethod
     def getch():
@@ -80,8 +80,8 @@ class _windows:
         """
         returns current size and height of terminal in characters
         """
-        columns, lines = shutil.get_terminal_size()
-        return int(columns), int(lines)
+        columns, rows = shutil.get_terminal_size()
+        return int(columns), int(rows)
 
     def invalid_terminal_size(self):
         """

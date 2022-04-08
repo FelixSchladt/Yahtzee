@@ -9,6 +9,24 @@ import os
 from exceptions import InvalidLenght, OutOfBounds
 from term_info import terminal
 
+#OFFSET for the Score table and WIDTH for the Value Tables
+OFFSET = 40
+
+chars = {
+    'a': '┌',
+    'b': '┐',
+    'c': '┘',
+    'd': '└',
+    'e': '─',
+    'f': '│',
+    'g': '┴',
+    'h': '├',
+    'i': '┬',
+    'j': '┤',
+    'k': '╷',
+    'l': '┼',
+}
+
 class TuiEngine:
     """
     Creates a virtual display in the terminal by using assign each character
@@ -62,13 +80,16 @@ class TuiEngine:
         Starts at (pos_x, pos_y) coordinate.
         If a length is specified, no symbols beyond the lenght will be written
         """
-        lenght = len(txt) if length is None else length
+        length = len(txt) if length is None else length
 
-        if (lenght + pos_x) > self.display_width:
+        if (length + pos_x) > self.display_width:
             raise OutOfBounds
 
+        if length > len(txt):
+            length = len(txt)
+
         i = 0
-        for x_0 in range(pos_x, pos_x + int(lenght)):
+        for x_0 in range(pos_x, pos_x + int(length)):
             self.pixel(x_0, pos_y, txt[i])
             i+=1
 
@@ -88,7 +109,9 @@ class TuiEngine:
         self.pixel(x_0, y_0, "┌")
         self.pixel(x_0, y_1, "└")
         self.pixel(x_1, y_0, "┐")
-        self.pixel(x_1, y_1, "┘")
+        self.pixel(x_1  , y_1, "┘")
+
+
 
     @staticmethod
     def clear():
@@ -130,16 +153,75 @@ class TuiEngine:
                 else y_0):
             self.pixel(pos_x, pos_y, color)
 
+    def draw_table(self, x_pos, y_pos, width, height, left="├"):
+        """
+        Draws a table and return a list with objects to assign text to the columns
+        Table is only one column wide -> if multiple columns are needed place the
+        tables next to each other and pass '┼' as left parameter
+        """
+        self.frame(x_pos, y_pos, x_pos + width, y_pos + height)
+
+        for i in range(y_pos+2, y_pos+height, 2):
+            self.line_horizontal(i, x_pos, x_pos+width, "─")
+            self.pixel(x_pos, i, left)
+            self.pixel(x_pos+width, i, "┤" )
+
+        if left == "┼":
+            self.pixel(x_pos, y_pos, "┬")
+            self.pixel(x_pos, y_pos + height, "┴")
+
+        return [ PlacedText(self, x_pos+1, j, width-2) for j in range(y_pos+1, y_pos+height, 2)]
+
+
+
+class PlacedText:
+    """
+    Text field with given coordinates and lenght
+    """
+    def __init__(self, tui, x_pos, y_pos, length):
+        self.__dict__.update({k: v for k, v in locals().items() if k != 'self'})
+
+    def __call__(self, text):
+        self.tui.text(self.x_pos, self.y_pos, text, self.length)
+
+
+def category_table(tui):
+    """
+    Draws table with the yathzee categories
+    """
+    categories =["", "Aces", "Twos", "Threes", "Fours", "Fives", "Sixes", "Total ->",\
+                "Bonus if t > 63", "Three Of A Kind", "Four Of A Kind", "Full House",\
+                "Small Straight", "Large Straight", "Yahtzee", "Chance", "Total"]
+
+    fields = tui.draw_table(tui.display_width - OFFSET , 2, 17, 17 *2)
+    for counter, field in enumerate(fields):
+        field(categories[counter])
+
+def draw_player_tables(tui, name_1 = "Player1", name_2 = "Player2"):
+    """
+    Draws tables for the players points
+    """
+    w_1, w_2 = len(name_1), len(name_2)
+    player_1 = tui.draw_table(tui.display_width - OFFSET + 17, 2, w_1+2, 17 *2, "┼")
+    player_2 = tui.draw_table(tui.display_width - OFFSET + 17 + w_2+2, 2, w_2+2, 17 *2, "┼")
+
+    player_1[0](name_1)
+    player_2[0](name_2)
+
+    return player_1, player_2
+
 
 if __name__ == "__main__":
     tui = TuiEngine()
     for k in range(1, 7):
         tui.clear()
         tui.frame()
-        tui.frame(10, 10, 30, 30)
+        tui.text(12, 12, "te" )
+        category_table(tui)
+        draw_player_tables(tui)
+        #tui.frame(10, 10, 30, 30)
         #tui.text(12, 12, chr(65 + k))
-        tui.text(12, 12, "test", 2 )
-        tui.dice(40, 10, k)
+        #tui.dice(40, 10, k)
         tui.flush()
         tui.terminal.getch()
     tui.clear()

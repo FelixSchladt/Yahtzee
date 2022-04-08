@@ -6,6 +6,7 @@ class dice:
 
      def roll(self):
          self.value = randint(0, 6)
+         return self.value
 
 def get_dices():
     return [dice() for i in range(5)]
