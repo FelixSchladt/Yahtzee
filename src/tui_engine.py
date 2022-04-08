@@ -6,8 +6,8 @@ Library for displaying dynamic content in the commandline
 """
 
 import os
-from exceptions import InvalidLenght, OutOfBounds
-from term_info import terminal
+from src.exceptions import InvalidLenght, OutOfBounds
+from src.term_info import terminal
 
 class TuiEngine:
     """
@@ -31,9 +31,9 @@ class TuiEngine:
         self.__grid = [[" " for j in range(self.terminal.columns)]\
                 for i in range(self.terminal.rows+1)]
 
-    def clear(self):
+    def reset_grid(self):
         """
-        clears output in the terminal
+        creates new empty grid buffer
         """
         self.__grid_init()
 
@@ -41,8 +41,9 @@ class TuiEngine:
         """
         prints grid buffer onto terminal
         """
-        # TODO Check if this works on WINDOWS
         for counter, value in enumerate(self.__grid):
+            # TODO Check if this works on WINDOWS -> if not is colorama needed?
+            # Refer to comment in term_info.py at _windows class
             print(f"\033[{counter};0H" + "".join(value))
 
     def pixel(self, pos_x, pos_y, char = " "):
@@ -73,7 +74,7 @@ class TuiEngine:
 
     def frame(self, x_0 = 0, y_0 = 0, x_1 = None, y_1 = None):
         """
-        clears output in the terminal
+        draws a solid lined broder around the specified coordinates
         """
         x_1 = self.display_width if x_1 is None else x_1
         y_1 = self.display_height if y_1 is None else y_1
@@ -97,14 +98,13 @@ class TuiEngine:
         # TODO Check if this works on WINDOWS
         os.system("clear")
 
-    def dice(self, x, y, face):
+    def dice(self, x_pos, y_pos, face):
         """
-        prints ascii representation of an dice to (x, y) top left
+        prints ascii representation of an dice to (x_pos, y_pos) top left
         """
-        self.frame(x, y, x + 6, y + 4)
+        self.frame(x_pos, y_pos, x_pos + 6, y_pos + 4)
         for counter, text in enumerate(self.__dice[face]):
-            self.text(x + 1, y + counter + 1, text)
-
+            self.text(x_pos + 1, y_pos + counter + 1, text)
 
     def line_horizontal(self, pos_y, x_0 = 0, x_1 = None, color = " "):
         """
@@ -137,7 +137,8 @@ if __name__ == "__main__":
         tui.clear()
         tui.frame()
         tui.frame(10, 10, 30, 30)
-        tui.text(12, 12, chr(65 + k))
+        #tui.text(12, 12, chr(65 + k))
+        tui.text(12, 12, "test", 2 )
         tui.dice(40, 10, k)
         tui.flush()
         tui.terminal.getch()

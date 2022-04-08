@@ -48,7 +48,7 @@ class _posix:
         self.old_settings = termios.tcgetattr(sys.stdin.fileno())
         tty.setraw(sys.stdin.fileno())
         ch = sys.stdin.read(1)
-        termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old_settings)
+        termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, self.old_settings)
         return ch
 
     def exit_raw(self):
