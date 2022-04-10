@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 # Copyright 2022 FelixSchladt (https://github.com/FelixSchladt)
 
 """
@@ -8,13 +9,11 @@ Library for displaying dynamic content in the commandline
 import os
 from exceptions import InvalidLenght, OutOfBounds
 from term_info import terminal, Colors
+from rules import CATEGORIES
+from player import Player
 
 #OFFSET for the Score table and WIDTH for the Value Tables
 OFFSET = 40
-
-CATEGORIES =["", "Aces", "Twos", "Threes", "Fours", "Fives", "Sixes", "Total ->",\
-                "Bonus if t > 63", "Three Of A Kind", "Four Of A Kind", "Full House",\
-                "Small Straight", "Large Straight", "Yahtzee", "Chance", "Total"]
 
 
 chars = {
@@ -153,6 +152,13 @@ class TuiEngine:
                 else y_0):
             self.pixel(pos_x, pos_y, char, color)
 
+    def rectangle(self, x_pos, y_pos, width, height, char = " ", color = ""):
+        """
+        Fills a rectangular section with char on the grid
+        """
+        for i in range(height):
+            self.line_horizontal(y_pos + i, x_pos, x_pos + width, char, color)
+
     def draw_table(self, x_pos, y_pos, width, height, left="├"):
         """
         Draws a table and return a list with objects to assign text to the columns
@@ -208,23 +214,34 @@ def draw_player_tables(tui, name_1 = "Player1", name_2 = "Player2"):
 
 
 def draw_dices(tui, dices):
-    dw = 7 + 2 # dice width
+    dw = 7 + 2  # dice width
+    dh = 5      # dice height
 
-    for counter, dice in enumerate([dice for dice in dices if not dice.chosen]):
-        x_pos, y_pos = [(4+i*dw, 2) for i in range(5)][counter]
+    for counter, dice in enumerate(dices):
+        level_1, level_2  = (2*dh, 2) if dice.selected else (2, 2*dh)
+        x_pos, y_pos = [(4+counter*dw, level_1,) for i in range(5)][counter]
         tui.dice(x_pos, y_pos, dice.value)
+        tui.rectangle(x_pos, level_2, dw, dh, )
 
-    for counter, dice in enumerate([dice for dice in dices if dice.chosen]):
-        x_pos, y_pos = [(4+i*dw, tui.display_height - 2 - 5) for i in range(5)][counter]
-        tui.dice(x_pos, y_pos, dice.value)
 
 
 def show_current_game(tui, player_active, player_inactive):
     pass
 
-def test_dices(tui):
+def test_dices(tui, players):
     from dices import get_dices
-    draw_dices(tui, get_dices())
+    dices = get_dices()
+    player = Player(True)
+    dices[0].selected = True
+    dices[1].selected = True
+    dices[2].selected = True
+    dices[3].selected = True
+    dices[4].selected = True
+    draw_dices(tui, dices)
+    #selected = players[0].get_options()
+
+    tui.text(2, 20, f"Selected: {[ dice.value for dice in dices if dice.selected ]}")
+    tui.text(2, 22, f"Options: {player.get_options(dices)}")
 
 
 
@@ -234,10 +251,11 @@ if __name__ == "__main__":
         tui.terminal.clear()
         tui.frame()
         category_table(tui)
-        draw_player_tables(tui)
-        test_dices(tui)
+        players = draw_player_tables(tui)
+        test_dices(tui, players)
         #tui.frame(10, 10, 30, 30)
         tui.text(12, 12, chr(65 + k), color=Colors.CYAN)
+        tui.text
         #tui.dice(40, 10, k)
         tui.flush()
         tui.terminal.getch()

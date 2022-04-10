@@ -11,6 +11,13 @@
    combination with a given array of numbers.
 '''
 
+class Multiple:
+    def __init__(self, face):
+        self.face  = face
+
+    def __call__(self, throws):
+        return multiple(throws, self.face)
+
 
 def multiple(throws: [], amount: int) -> (bool, int):
     '''This method checks whether a set of numbers contains a given amount of duplicates
@@ -152,5 +159,16 @@ def chance(throws: []) -> (bool, int):
 
     for eyes in throws:
         score += eyes
-
     return (is_rule, score)
+
+
+CATEGORIES =["", "Aces", "Twos", "Threes", "Fours", "Fives", "Sixes", "Total ->",\
+                "Bonus", "Three Of A Kind", "Four Of A Kind", "Full House",\
+                "Small Straight", "Large Straight", "Yahtzee", "Chance", "Total"]
+
+RULES = ["multiple", "triplet", "quadrupel", "full_house", "small_road", "big_road", "yahtzee", "chance"]
+
+
+CATEGORY_FUNCTIONS = [ Multiple(face) for face in range(1, 7) ]\
+                   + [ eval(item) for item in RULES[3:] ]
+

@@ -1,9 +1,17 @@
+##!/usr/bin/python3
+
+# Copyright 2022 FelixSchladt (https://github.com/FelixSchladt)
+
+"""
+Dice class
+"""
+
 from random import randint
 
 class dice:
      def __init__(self):
          self.value = self.roll()
-         self.chosen = False
+         self.selected = False
 
      def roll(self):
          self.value = randint(1, 6)
