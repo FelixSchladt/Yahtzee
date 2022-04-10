@@ -233,15 +233,16 @@ def test_dices(tui, players):
     dices = get_dices()
     player = Player(True)
     dices[0].selected = True
-    dices[1].selected = True
+    #dices[1].selected = True
     dices[2].selected = True
-    dices[3].selected = True
+    #dices[3].selected = True
     dices[4].selected = True
     draw_dices(tui, dices)
     #selected = players[0].get_options()
 
     tui.text(2, 20, f"Selected: {[ dice.value for dice in dices if dice.selected ]}")
-    tui.text(2, 22, f"Options: {player.get_options(dices)}")
+    tui.text(2, 22, f"Options: {player.get_options(dices)[:6]}")
+    tui.text(2, 23, f"Options: {player.get_options(dices)[6:]}")
 
 
 
@@ -254,8 +255,7 @@ if __name__ == "__main__":
         players = draw_player_tables(tui)
         test_dices(tui, players)
         #tui.frame(10, 10, 30, 30)
-        tui.text(12, 12, chr(65 + k), color=Colors.CYAN)
-        tui.text
+        #tui.text(12, 12, chr(65 + k), color=Colors.CYAN)
         #tui.dice(40, 10, k)
         tui.flush()
         tui.terminal.getch()

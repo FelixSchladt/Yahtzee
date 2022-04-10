@@ -33,8 +33,9 @@ class Player:
         options = []
         for index, function in enumerate(CATEGORY_FUNCTIONS):
             res, value = function(selected_dice_faces)
-            if res:
-                options.append((CATEGORIES[index+1], value))
+            #if res:
+            options.append((CATEGORIES[index+1], value))
+        return options
 
         #for counter, function in enumerate(RULES_FUNCTION_POINTER):
         #    return [ {} for opt in selected if  ]
