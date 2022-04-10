@@ -2,10 +2,11 @@ from random import randint
 
 class dice:
      def __init__(self):
-         self.roll()
+         self.value = self.roll()
+         self.chosen = False
 
      def roll(self):
-         self.value = randint(0, 6)
+         self.value = randint(1, 6)
          return self.value
 
 def get_dices():

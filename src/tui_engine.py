@@ -7,10 +7,15 @@ Library for displaying dynamic content in the commandline
 
 import os
 from exceptions import InvalidLenght, OutOfBounds
-from term_info import terminal
+from term_info import terminal, Colors
 
 #OFFSET for the Score table and WIDTH for the Value Tables
 OFFSET = 40
+
+CATEGORIES =["", "Aces", "Twos", "Threes", "Fours", "Fives", "Sixes", "Total ->",\
+                "Bonus if t > 63", "Three Of A Kind", "Four Of A Kind", "Full House",\
+                "Small Straight", "Large Straight", "Yahtzee", "Chance", "Total"]
+
 
 chars = {
     'a': '┌',
@@ -26,6 +31,9 @@ chars = {
     'k': '╷',
     'l': '┼',
 }
+
+
+
 
 class TuiEngine:
     """
@@ -62,9 +70,10 @@ class TuiEngine:
         for counter, value in enumerate(self.__grid):
             # TODO Check if this works on WINDOWS -> if not is colorama needed?
             # Refer to comment in term_info.py at _windows class
+            # ====> I implemented a supposed fix working for windos 10 and newer in term_info.py bitte testen
             print(f"\033[{counter};0H" + "".join(value))
 
-    def pixel(self, pos_x, pos_y, char = " "):
+    def pixel(self, pos_x, pos_y, char = " ", color = ""):
         """
         assigns char to (pos_x, pos_y) coordinate in the grid buffer
         """
@@ -72,9 +81,9 @@ class TuiEngine:
             raise InvalidLenght
         if len(self.__grid) < (pos_y+1) or len(self.__grid[0]) < pos_x:
             raise OutOfBounds
-        self.__grid[pos_y+1][pos_x] = char
+        self.__grid[pos_y+1][pos_x] = f"{color}{char}{Colors.END}"
 
-    def text(self, pos_x, pos_y, txt, length=None):
+    def text(self, pos_x, pos_y, txt, length=None, color = ""):
         """
         prints text into the grid buffer
         Starts at (pos_x, pos_y) coordinate.
@@ -90,7 +99,7 @@ class TuiEngine:
 
         i = 0
         for x_0 in range(pos_x, pos_x + int(length)):
-            self.pixel(x_0, pos_y, txt[i])
+            self.pixel(x_0, pos_y, txt[i], color)
             i+=1
 
     def frame(self, x_0 = 0, y_0 = 0, x_1 = None, y_1 = None):
@@ -100,26 +109,17 @@ class TuiEngine:
         x_1 = self.display_width if x_1 is None else x_1
         y_1 = self.display_height if y_1 is None else y_1
 
-        self.line_horizontal(y_0, x_0, x_1, color = "─")
-        self.line_horizontal(y_1, x_0, x_1, color = "─")
+        self.line_horizontal(y_0, x_0, x_1, char = "─")
+        self.line_horizontal(y_1, x_0, x_1, char = "─")
 
-        self.line_vertical(x_0, y_0, y_1, color = "│")
-        self.line_vertical(x_1, y_0, y_1, color = "│")
+        self.line_vertical(x_0, y_0, y_1, char = "│")
+        self.line_vertical(x_1, y_0, y_1, char = "│")
 
         self.pixel(x_0, y_0, "┌")
         self.pixel(x_0, y_1, "└")
         self.pixel(x_1, y_0, "┐")
         self.pixel(x_1  , y_1, "┘")
 
-
-
-    @staticmethod
-    def clear():
-        """
-        clears output in the terminal
-        """
-        # TODO Check if this works on WINDOWS
-        os.system("clear")
 
     def dice(self, x_pos, y_pos, face):
         """
@@ -129,7 +129,7 @@ class TuiEngine:
         for counter, text in enumerate(self.__dice[face]):
             self.text(x_pos + 1, y_pos + counter + 1, text)
 
-    def line_horizontal(self, pos_y, x_0 = 0, x_1 = None, color = " "):
+    def line_horizontal(self, pos_y, x_0 = 0, x_1 = None, char = " ", color = ""):
         """
         Draws line from (x_0, pos_y) to (x_1, pos_y)
         """
@@ -139,9 +139,9 @@ class TuiEngine:
                 else x_1,
                 x_1 if x_0 < x_1
                 else x_0):
-            self.pixel(pos_x, pos_y, color)
+            self.pixel(pos_x, pos_y, char, color)
 
-    def line_vertical(self, pos_x, y_0 = 0, y_1 = None, color = " "):
+    def line_vertical(self, pos_x, y_0 = 0, y_1 = None,char = " ", color = ""):
         """
         Draws line from (pos_x, y_0) to (pos_x, y_1)
         """
@@ -151,7 +151,7 @@ class TuiEngine:
                 else y_1,
                 y_1 if y_0 < y_1
                 else y_0):
-            self.pixel(pos_x, pos_y, color)
+            self.pixel(pos_x, pos_y, char, color)
 
     def draw_table(self, x_pos, y_pos, width, height, left="├"):
         """
@@ -181,7 +181,7 @@ class PlacedText:
     def __init__(self, tui, x_pos, y_pos, length):
         self.__dict__.update({k: v for k, v in locals().items() if k != 'self'})
 
-    def __call__(self, text):
+    def __call__(self, text, color = ""):
         self.tui.text(self.x_pos, self.y_pos, text, self.length)
 
 
@@ -189,13 +189,9 @@ def category_table(tui):
     """
     Draws table with the yathzee categories
     """
-    categories =["", "Aces", "Twos", "Threes", "Fours", "Fives", "Sixes", "Total ->",\
-                "Bonus if t > 63", "Three Of A Kind", "Four Of A Kind", "Full House",\
-                "Small Straight", "Large Straight", "Yahtzee", "Chance", "Total"]
-
     fields = tui.draw_table(tui.display_width - OFFSET , 2, 17, 17 *2)
     for counter, field in enumerate(fields):
-        field(categories[counter])
+        field(CATEGORIES[counter])
 
 def draw_player_tables(tui, name_1 = "Player1", name_2 = "Player2"):
     """
@@ -211,17 +207,38 @@ def draw_player_tables(tui, name_1 = "Player1", name_2 = "Player2"):
     return player_1, player_2
 
 
+def draw_dices(tui, dices):
+    dw = 7 + 2 # dice width
+
+    for counter, dice in enumerate([dice for dice in dices if not dice.chosen]):
+        x_pos, y_pos = [(4+i*dw, 2) for i in range(5)][counter]
+        tui.dice(x_pos, y_pos, dice.value)
+
+    for counter, dice in enumerate([dice for dice in dices if dice.chosen]):
+        x_pos, y_pos = [(4+i*dw, tui.display_height - 2 - 5) for i in range(5)][counter]
+        tui.dice(x_pos, y_pos, dice.value)
+
+
+def show_current_game(tui, player_active, player_inactive):
+    pass
+
+def test_dices(tui):
+    from dices import get_dices
+    draw_dices(tui, get_dices())
+
+
+
 if __name__ == "__main__":
     tui = TuiEngine()
     for k in range(1, 7):
-        tui.clear()
+        tui.terminal.clear()
         tui.frame()
-        tui.text(12, 12, "te" )
         category_table(tui)
         draw_player_tables(tui)
+        test_dices(tui)
         #tui.frame(10, 10, 30, 30)
-        #tui.text(12, 12, chr(65 + k))
+        tui.text(12, 12, chr(65 + k), color=Colors.CYAN)
         #tui.dice(40, 10, k)
         tui.flush()
         tui.terminal.getch()
-    tui.clear()
+    tui.terminal.clear()
