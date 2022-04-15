@@ -16,7 +16,23 @@ class Multiple:
         self.face  = face
 
     def __call__(self, throws):
-        return multiple(throws, self.face)
+        return add_faces(throws, self.face)
+
+
+def add_faces(throws: [], face: int) -> (bool, int):
+    '''This method adds up all integers equal to <face>
+
+    :param throws: the array containing the numbers
+    :param face: The number that will be added up
+    :returns: True, to fit the general 'rule'-format, and the added up score
+    '''
+    score: int = 0
+
+    for i in range(1, 7):
+        if throws[i] == face:
+            score += face
+
+    return (True, score)
 
 
 def multiple(throws: [], amount: int) -> (bool, int):
@@ -166,9 +182,9 @@ CATEGORIES =["", "Aces", "Twos", "Threes", "Fours", "Fives", "Sixes", "Total ->"
                 "Bonus", "Three Of A Kind", "Four Of A Kind", "Full House",\
                 "Small Straight", "Large Straight", "Yahtzee", "Chance", "Total"]
 
-RULES = ["multiple", "triplet", "quadrupel", "full_house", "small_road", "big_road", "yahtzee", "chance"]
+RULES = ["multiple", "triplet", "quadrupel", "full_house",
+         "small_road", "big_road", "yahtzee", "chance"]
 
 
 CATEGORY_FUNCTIONS = [ Multiple(face) for face in range(1, 7) ]\
                    + [ eval(item) for item in RULES[3:] ]
-
