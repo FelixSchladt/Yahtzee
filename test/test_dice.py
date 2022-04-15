@@ -5,12 +5,20 @@
 
 from unittest import TestCase
 
-from src.dices import dice, get_dices
+from src.dices import dice as Dice
+from src.dices import get_dices
 
 
 class TestRuleGenerator(TestCase):
     def test_get_dices(self):
-       self.assertIsNotNone(get_dices()) 
+        self.assertIsNotNone(get_dices()) 
 
     def test_dice(self):
-        pass
+        test_dice = Dice()
+        self.assertIsInstance(test_dice, Dice)
+
+    def setUp(self):
+        self.dice = Dice()
+
+    def test_dice_roll(self):
+        self.assertIn(self.dice.roll(), range(1, 7))
