@@ -11,5 +11,4 @@ pylint:
 	pylint ./src/
 
 coverage:
-	coverage html
-	brave ./htmlcov/index.html 
+	coverage -report -m 
