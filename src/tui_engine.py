@@ -6,11 +6,10 @@
 Library for displaying dynamic content in the commandline
 """
 
-import os
-from exceptions import InvalidLenght, OutOfBounds
-from term_info import terminal, Colors
-from rules import CATEGORIES
-from player import Player
+from src.exceptions import InvalidLenght, OutOfBounds
+from src.term_info import terminal, Colors
+from src.rules import CATEGORIES
+from src.player import Player
 
 #OFFSET for the Score table and WIDTH for the Value Tables
 OFFSET = 40
