@@ -28,7 +28,7 @@ def add_faces(throws: [], face: int) -> (bool, int):
     '''
     score: int = 0
 
-    for i in range(1, 7):
+    for i in range(1, 6):
         if throws[i] == face:
             score += face
 
