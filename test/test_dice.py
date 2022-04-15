@@ -10,7 +10,7 @@ from src.dices import dice, get_dices
 
 class TestRuleGenerator(TestCase):
     def test_get_dices(self):
-        pass
+       self.assertIsNotNone(get_dices()) 
 
     def test_dice(self):
         pass
