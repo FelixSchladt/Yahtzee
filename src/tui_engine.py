@@ -192,6 +192,30 @@ class PlacedText:
     def __call__(self, text, color = ""):
         self.tui.text(self.x_pos, self.y_pos, text, self.length)
 
+class RoundsBox:
+    def __init__(self, tui):
+        self.rounds = 3
+        self.__tui = tui
+        self.text = PlacedText(tui, 57, 4, 30)
+        self.draw()
+
+    def draw(self):
+        self.__tui.frame(55, 3, 77, 5)
+        self.text(f"Rounds remaining: {self.rounds}")
+
+    def reset(self):
+        self.rounds = 3
+        self.draw()
+
+    def __call__(self):
+        self.rounds -= 1
+        if self.rounds == 0:
+            self.reset()
+            return False
+        else:
+            self.draw()
+            return True
+
 
 def category_table(tui):
     """
@@ -249,6 +273,19 @@ def evaluate_keypress(tui, dices):
         tui.terminal.clear()
         sys.exit(0)
 
+    elif ord(char) == 13: # ENTER for end of player round
+        pass
+        #TODO   If this is pressed, execute score system and restart round
+        #       The active player should switch.
+        #       reset of the current rounds
+
+    elif ord(char) == 32: # SPACE for next dice roll
+        pass
+        #TODO   If space is pressed execute dice roll
+
+    else:
+        log(f"Character input: {ord(char)}")
+
 
 def test_game():
     from dices import get_dices
@@ -258,6 +295,7 @@ def test_game():
     players = new_players()
     category_table(tui)
     players[1].scores[1] = 3
+    rounds_box = RoundsBox(tui)
 
     while True:
         tui.terminal.clear()
@@ -271,7 +309,7 @@ def test_game():
         tui.text(2, 20, f"Selected: {[ dice.value for dice in dices if dice.selected ]}")
         tui.text(2, 22, f"Options: {players[0].get_options(dices)}")
         #tui.text(2, 23, f"Options: {player.get_options(dices)[6:]}")
-
+        rounds_box()
 
         tui.flush()
         evaluate_keypress(tui, dices)
