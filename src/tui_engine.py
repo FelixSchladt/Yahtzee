@@ -7,10 +7,11 @@ Library for displaying dynamic content in the commandline
 """
 
 import os
+import sys
 from exceptions import InvalidLenght, OutOfBounds
 from term_info import terminal, Colors
 from rules import CATEGORIES
-from player import Player
+from player import new_players
 
 #OFFSET for the Score table and WIDTH for the Value Tables
 OFFSET = 40
@@ -88,6 +89,7 @@ class TuiEngine:
         Starts at (pos_x, pos_y) coordinate.
         If a length is specified, no symbols beyond the lenght will be written
         """
+        txt = str(txt)
         length = len(txt) if length is None else length
 
         if (length + pos_x) > self.display_width:
@@ -199,18 +201,23 @@ def category_table(tui):
     for counter, field in enumerate(fields):
         field(CATEGORIES[counter])
 
-def draw_player_tables(tui, name_1 = "Player1", name_2 = "Player2"):
+def update_player_scores(players):
+    for player in players:
+        for i in range(len(CATEGORIES)):
+            player.table[i](player.scores[i])
+        player.table[0](player.name)
+        player.calculate_scores()
+
+
+def draw_player_tables(tui, players):
     """
     Draws tables for the players points
     """
-    w_1, w_2 = len(name_1), len(name_2)
-    player_1 = tui.draw_table(tui.display_width - OFFSET + 17, 2, w_1+2, 17 *2, "┼")
-    player_2 = tui.draw_table(tui.display_width - OFFSET + 17 + w_2+2, 2, w_2+2, 17 *2, "┼")
+    w_1, w_2 = len(players[0].name), len(players[1].name)
+    players[0].table = tui.draw_table(tui.display_width - OFFSET + 17, 2, w_1+2, 17 *2, "┼")
+    players[1].table = tui.draw_table(tui.display_width - OFFSET + 17 + w_2+2, 2, w_2+2, 17 *2, "┼")
 
-    player_1[0](name_1)
-    player_2[0](name_2)
-
-    return player_1, player_2
+    update_player_scores(players)
 
 
 def draw_dices(tui, dices):
@@ -224,39 +231,83 @@ def draw_dices(tui, dices):
         tui.rectangle(x_pos, level_2, dw, dh, )
 
 
+def log(msg):
+    with open("tui_engine.log", "a") as myfile:
+        myfile.write(msg + "\n")
+
 
 def show_current_game(tui, player_active, player_inactive):
     pass
 
-def test_dices(tui, players):
+def evaluate_keypress(tui, dices):
+    char = tui.terminal.getch()
+
+    if char.isnumeric() and int(char) in [1,2,3,4,5]:
+        dices[int(char)-1].switch()
+
+    elif char == "q":
+        tui.terminal.clear()
+        sys.exit(0)
+
+
+def test_game():
     from dices import get_dices
-    dices = get_dices()
-    player = Player(True)
-    dices[0].selected = True
-    #dices[1].selected = True
-    dices[2].selected = True
-    #dices[3].selected = True
-    dices[4].selected = True
-    draw_dices(tui, dices)
-    #selected = players[0].get_options()
-
-    tui.text(2, 20, f"Selected: {[ dice.value for dice in dices if dice.selected ]}")
-    tui.text(2, 22, f"Options: {player.get_options(dices)[:6]}")
-    tui.text(2, 23, f"Options: {player.get_options(dices)[6:]}")
-
-
-
-if __name__ == "__main__":
     tui = TuiEngine()
+
+    dices = get_dices()
+    players = new_players()
+    category_table(tui)
+    players[1].scores[1] = 3
+
+    while True:
+        tui.terminal.clear()
+
+        tui.frame()
+        draw_dices(tui, dices)
+
+        draw_player_tables(tui, players)
+
+        tui.text(2, 20, f"Selected:                            ")
+        tui.text(2, 20, f"Selected: {[ dice.value for dice in dices if dice.selected ]}")
+        tui.text(2, 22, f"Options: {players[0].get_options(dices)}")
+        #tui.text(2, 23, f"Options: {player.get_options(dices)[6:]}")
+
+
+        tui.flush()
+        evaluate_keypress(tui, dices)
+
+
+    """
     for k in range(1, 7):
         tui.terminal.clear()
         tui.frame()
         category_table(tui)
+        dices = get_dices()
+        player = Player(True)
+        #dices[0].selected = True
+        if dices[0].selected:
+            dices[0].selected = False
+        else:
+            dices[0].selected = True
+        #dices[1].selected = True
+        dices[2].selected = True
+        #dices[3].selected = True
+        #dices[4].selected = True
+        draw_dices(tui, dices)
+        #selected = players[0].get_options()
+
+        tui.text(2, 20, f"Selected: {[ dice.value for dice in dices if dice.selected ]}")
+        tui.text(2, 22, f"Options: {player.get_options(dices)[:6]}")
+        tui.text(2, 23, f"Options: {player.get_options(dices)[6:]}")
+
         players = draw_player_tables(tui)
-        test_dices(tui, players)
-        #tui.frame(10, 10, 30, 30)
-        #tui.text(12, 12, chr(65 + k), color=Colors.CYAN)
-        #tui.dice(40, 10, k)
         tui.flush()
-        tui.terminal.getch()
+        #tui.terminal.getch()
+        evaluate_keypress(tui, dices, players[0])
+    """
     tui.terminal.clear()
+
+
+if __name__ == "__main__":
+    test_game()
+    #tui.terminal.clear()

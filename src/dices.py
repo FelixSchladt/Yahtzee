@@ -17,8 +17,16 @@ class dice:
          self.value = randint(1, 6)
          return self.value
 
+     def switch(self):
+         self.selected = not(self.selected)
+
 def get_dices():
     return [ dice() for i in range(5) ]
+
+def reset_dices(dices):
+    for dice in dices:
+        dice.selected = False
+        dice.roll()
 
 if __name__ == "__main__" :
     dices = get_dices()

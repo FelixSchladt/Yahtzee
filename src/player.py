@@ -11,17 +11,15 @@ from random import getrandbits
 from rules import CATEGORIES
 
 
-#for rule in RULES:
-#    exec(f"from rules import {rule}")
-
-#RULES_FUNCTION_POINTER = [ eval(item) for item in RULES ]
 from rules import CATEGORY_FUNCTIONS
 
 class Player:
     def __init__(self, name, active = False):
         self.__dict__.update({k: v for k, v in locals().items() if k != 'self'})
+        self.table = []
 
         self.dices = get_dices()
+        self.scores = [ 0 for i in range(len(CATEGORIES)) ]
         #for key in CATEGORIES[1:]:
         #    self.scoreboard[key] = None
 
@@ -33,21 +31,20 @@ class Player:
         options = []
         for index, function in enumerate(CATEGORY_FUNCTIONS):
             res, value = function(selected_dice_faces)
-            #if res:
-            options.append((CATEGORIES[index+1], value))
+            if res:
+                options.append((CATEGORIES[index+1], value))
         return options
 
         #for counter, function in enumerate(RULES_FUNCTION_POINTER):
         #    return [ {} for opt in selected if  ]
 
+    def calculate_scores(self):
+        self.scores[7] = sum(self.scores[1:7])
+        self.scores[8] = 35 if self.scores[7] > 62 else 0
+        self.scores[16] = sum(self.scores[7:16])
 
 
-
-
-
-
-
-def new_players(name_1, name_2):
+def new_players(name_1 = "PLAYER 1", name_2 = "PLAYER 2"):
     if getrandbits(1):
         return Player(name_1, True), Player(name_2)
     else:

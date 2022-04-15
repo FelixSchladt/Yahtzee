@@ -16,9 +16,18 @@ class Multiple:
         self.face  = face
 
     def __call__(self, throws):
-        return multiple(throws, self.face)
+        return add_faces(throws, self.face)
 
 #TODO REFACTOR MULTIPLE FUNCITON TO BE ASSIGNED OF ONE TYPE OF FACE INSTEAD OF AMOUNT
+
+def add_faces(throws, face):
+    score = 0
+    print(throws)
+
+    for dice_face in throws:
+        if dice_face == face:
+            score += face
+    return (True, score)
 
 def multiple(throws: [], amount: int) -> (bool, int):
     '''This method checks whether a set of numbers contains a given amount of duplicates
