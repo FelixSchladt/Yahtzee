@@ -12,27 +12,40 @@
 '''
 
 class Multiple:
+    '''This class calculates the sum of all faces with a given
+       value.
+    '''
     def __init__(self, face):
         self.face  = face
 
-    def __call__(self, throws):
-        return add_faces(throws, self.face)
+    def __call__(self, throws: []):
+        return self.add_faces(throws)
 
+    def add_faces(self, throws: []):
+        '''Adds up all numbers equal to self.face
 
-def add_faces(throws: [], face: int) -> (bool, int):
-    '''This method adds up all integers equal to <face>
+        :param throws: an array of the numbers that are to be added up
+        :returns: True to fit the general 'rule'-format
+                  and the sum of the numbers
+        '''
+        score: int = 0
 
-    :param throws: the array containing the numbers
-    :param face: The number that will be added up
-    :returns: True, to fit the general 'rule'-format, and the added up score
-    '''
-    score: int = 0
+        for i in throws:
+            if i == self.face:
+                score += self.face
 
-    for i in range(1, 6):
-        if throws[i] == face:
-            score += face
+        return (True, score)
 
-    return (True, score)
+    def set_face(self, face: int):
+        '''
+        Set the face of he object manually.
+        Contains a value check.
+
+        :param face: the new face value
+        :returns: None
+        '''
+        if 0 < face < 7:
+            self.face = face
 
 
 def multiple(throws: [], amount: int) -> (bool, int):
