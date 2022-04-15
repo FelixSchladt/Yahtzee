@@ -14,15 +14,15 @@ class TestTuiEngine(TestCase):
     def test_pixel(self):
         #self.tui = TuiEngine()
         self.tui.pixel(0,0, "A")
-        self.assertEqual(self.tui._TuiEngine__grid[1][0], "A")
+        self.assertEqual(self.tui._TuiEngine__grid[1][0], "A\x1b[0m")
 
     def test_frame(self):
         self.tui.reset_grid()
         self.tui.frame(1, 1, 4, 4)
-        self.assertEqual(self.tui._TuiEngine__grid[2][1], "┌")
-        self.assertEqual(self.tui._TuiEngine__grid[2][4], "┐")
-        self.assertEqual(self.tui._TuiEngine__grid[5][1], "└")
-        self.assertEqual(self.tui._TuiEngine__grid[5][4], "┘")
+        self.assertEqual(self.tui._TuiEngine__grid[2][1], "┌\x1b[0m")
+        self.assertEqual(self.tui._TuiEngine__grid[2][4], "┐\x1b[0m")
+        self.assertEqual(self.tui._TuiEngine__grid[5][1], "└\x1b[0m")
+        self.assertEqual(self.tui._TuiEngine__grid[5][4], "┘\x1b[0m")
 
     @expectedFailure
     def test_dice(self):

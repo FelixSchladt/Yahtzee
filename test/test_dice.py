@@ -21,4 +21,8 @@ class TestRuleGenerator(TestCase):
         self.dice = Dice()
 
     def test_dice_roll(self):
-        self.assertIn(self.dice.roll(), range(1, 7))
+        for _ in range(0, 10):
+            self.assertIn(self.dice.roll(), range(1, 7))
+
+    def tearDown(self):
+        pass
