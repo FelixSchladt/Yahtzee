@@ -6,6 +6,7 @@
 
 from unittest import TestCase
 from src.rules import multiple,\
+                         add_faces,\
                          triplet,\
                          quadrupel,\
                          full_house,\
@@ -15,6 +16,11 @@ from src.rules import multiple,\
                          chance
 
 class TestRuleGenerator(TestCase):
+    def test_add_faces(self):
+        self.assertEqual(add_faces([1, 1, 2, 3, 4], 1), (True, 2))
+        self.assertEqual(add_faces([1, 2, 6, 6, 3], 6), (True, 12))
+        self.assertEqual(add_faces([5, 5, 5, 5, 5], 5), (True, 25))
+
     def test_multiple(self):
         self.assertEqual(multiple([1, 1, 3, 4, 5], 2), (True, 2))
         self.assertEqual(multiple([1, 2, 3, 4, 5], 1), (True, 1))
