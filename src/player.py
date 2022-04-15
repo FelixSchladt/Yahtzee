@@ -6,16 +6,16 @@
 Class for handeling one player in the game
 """
 
-from dices import get_dices
 from random import getrandbits
-from rules import CATEGORIES
+
+from src.dices import get_dices
+from src.rules import CATEGORIES, CATEGORY_FUNCTIONS
 
 
 #for rule in RULES:
 #    exec(f"from rules import {rule}")
 
 #RULES_FUNCTION_POINTER = [ eval(item) for item in RULES ]
-from rules import CATEGORY_FUNCTIONS
 
 class Player:
     def __init__(self, name, active = False):
