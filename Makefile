@@ -11,4 +11,4 @@ pylint:
 	pylint ./src/
 
 coverage:
-	coverage -report -m 
+	coverage report -m 
