@@ -5,21 +5,42 @@
 
 
 from unittest import TestCase
-from src.rules import multiple,\
-                         add_faces,\
-                         triplet,\
-                         quadrupel,\
-                         full_house,\
-                         small_road,\
-                         big_road,\
-                         yahtzee,\
-                         chance
+from src.rules import Multiple,\
+                      multiple,\
+                      triplet,\
+                      quadrupel,\
+                      full_house,\
+                      small_road,\
+                      big_road,\
+                      yahtzee,\
+                      chance
 
 class TestRuleGenerator(TestCase):
-    def test_add_faces(self):
-        self.assertEqual(add_faces([1, 1, 2, 3, 4], 1), (True, 2))
-        self.assertEqual(add_faces([1, 2, 6, 6, 3], 6), (True, 12))
-        self.assertEqual(add_faces([5, 5, 5, 5, 5], 5), (True, 25))
+    def test_Multiple(self):
+        mul = Multiple(3)
+        self.assertEqual(mul([1, 2, 3, 3, 3]), (True, 9))
+        
+        mul.set_face(6)
+        self.assertEqual(mul([6, 6, 6, 6, 6]), (True, 30))
+
+        mul.set_face(999)
+        self.assertEqual(mul([6, 6, 6, 6, 6]), (True, 30))
+
+        mul.set_face(-1)
+        self.assertEqual(mul([6, 6, 6, 6, 6]), (True, 30))
+
+    def test_Multiple_add_faces(self):
+        mul = Multiple(3)
+        self.assertEqual(mul.add_faces([1, 2, 3, 3, 3]), (True, 9))
+        
+        mul.set_face(6)
+        self.assertEqual(mul.add_faces([6, 6, 6, 6, 6]), (True, 30))
+
+        mul.set_face(999)
+        self.assertEqual(mul.add_faces([6, 6, 6, 6, 6]), (True, 30))
+
+        mul.set_face(-1)
+        self.assertEqual(mul.add_faces([6, 6, 6, 6, 6]), (True, 30))
 
     def test_multiple(self):
         self.assertEqual(multiple([1, 1, 3, 4, 5], 2), (True, 2))
