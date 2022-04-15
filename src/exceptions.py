@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# Copyright 2022 FelixSchladt (https://github.com/FelixSchladt)
+# Copyright 2022 Felix Schladt (https://github.com/FelixSchladt)
 
 class InvalidLenght(Exception):
     """

@@ -1,6 +1,6 @@
 ##!/usr/bin/python3
 
-# Copyright 2022 FelixSchladt (https://github.com/FelixSchladt)
+# Copyright 2022 Felix Schladt (https://github.com/FelixSchladt)
 
 """
 Dice class
@@ -18,9 +18,9 @@ class dice:
          return self.value
 
 def get_dices():
-    return [dice() for i in range(5)]
+    return [ dice() for i in range(5) ]
 
-if __name__ == "__main__":
+if __name__ == "__main__" :
     dices = get_dices()
     for die in dices:
         print(die.value)
