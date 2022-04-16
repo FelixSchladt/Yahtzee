@@ -5,11 +5,10 @@
 """
 Library for displaying dynamic content in the commandline
 """
-
-from src.exceptions import InvalidLenght, OutOfBounds
+import sys
+from src.exceptions import InvalidLenghtError, OutOfBoundsError
 from src.term_info import terminal, Colors
 from src.rules import CATEGORIES
-from src.player import Player
 
 #OFFSET for the Score table and WIDTH for the Value Tables
 OFFSET = 40
@@ -68,7 +67,8 @@ class TuiEngine:
         for counter, value in enumerate(self.__grid):
             # TODO Check if this works on WINDOWS -> if not is colorama needed?
             # Refer to comment in term_info.py at _windows class
-            # ====> I implemented a supposed fix working for windos 10 and newer in term_info.py bitte testen
+            # ====> I implemented a supposed fix working for windos 10 and
+            #       newer in term_info.py bitte testen
             print(f"\033[{counter};0H" + "".join(value))
 
     def pixel(self, pos_x, pos_y, char = " ", color = ""):
@@ -76,9 +76,9 @@ class TuiEngine:
         assigns char to (pos_x, pos_y) coordinate in the grid buffer
         """
         if len(char) != 1:
-            raise InvalidLenght
+            raise InvalidLenghtError
         if len(self.__grid) < (pos_y+1) or len(self.__grid[0]) < pos_x:
-            raise OutOfBounds
+            raise OutOfBoundsError
         self.__grid[pos_y+1][pos_x] = f"{color}{char}{Colors.END}"
 
     def text(self, pos_x, pos_y, txt, length=None, color = ""):
@@ -87,10 +87,11 @@ class TuiEngine:
         Starts at (pos_x, pos_y) coordinate.
         If a length is specified, no symbols beyond the lenght will be written
         """
+        txt = str(txt)
         length = len(txt) if length is None else length
 
         if (length + pos_x) > self.display_width:
-            raise OutOfBounds
+            raise OutOfBoundsError
 
         if length > len(txt):
             length = len(txt)
@@ -184,10 +185,44 @@ class PlacedText:
     Text field with given coordinates and lenght
     """
     def __init__(self, tui, x_pos, y_pos, length):
-        self.__dict__.update({k: v for k, v in locals().items() if k != 'self'})
+        self.tui = tui
+        self.x_pos = x_pos
+        self.y_pos = y_pos
+        self.length = length
 
     def __call__(self, text, color = ""):
         self.tui.text(self.x_pos, self.y_pos, text, self.length)
+
+class RoundsBox:
+    '''A dedicated class to display a box containing the remaining rounds
+    '''
+    def __init__(self, tui):
+        self.rounds = 3
+        self.__tui = tui
+        self.text = PlacedText(tui, 57, 4, 30)
+        self.draw()
+
+    def draw(self):
+        '''Draws the box
+
+           :returns: None
+        '''
+        self.__tui.frame(55, 3, 77, 5)
+        self.text(f"Rounds remaining: {self.rounds}")
+
+    def reset(self):
+        '''Reset the counter in the box
+        '''
+        self.rounds = 3
+        self.draw()
+
+    def __call__(self):
+        self.rounds -= 1
+        if self.rounds == 0:
+            self.reset()
+            return False
+        self.draw()
+        return True
 
 
 def category_table(tui):
@@ -198,64 +233,84 @@ def category_table(tui):
     for counter, field in enumerate(fields):
         field(CATEGORIES[counter])
 
-def draw_player_tables(tui, name_1 = "Player1", name_2 = "Player2"):
+def update_player_scores(players):
+    '''Get both players current scores
+
+       :param players: the players whos scores are supposed to be
+                       displayed
+       :returns: None
+    '''
+    for player in players:
+        for i in range(len(CATEGORIES)):
+            player.table[i](player.scores[i])
+        player.table[0](player.name)
+        player.calculate_scores()
+
+
+def draw_player_tables(tui, players):
     """
     Draws tables for the players points
     """
-    w_1, w_2 = len(name_1), len(name_2)
-    player_1 = tui.draw_table(tui.display_width - OFFSET + 17, 2, w_1+2, 17 *2, "┼")
-    player_2 = tui.draw_table(tui.display_width - OFFSET + 17 + w_2+2, 2, w_2+2, 17 *2, "┼")
+    w_1, w_2 = len(players[0].name), len(players[1].name)
+    players[0].table = tui.draw_table(tui.display_width - OFFSET + 17, 2, w_1+2, 17 *2, "┼")
+    players[1].table = tui.draw_table(tui.display_width - OFFSET + 17 + w_2+2, 2, w_2+2, 17 *2, "┼")
 
-    player_1[0](name_1)
-    player_2[0](name_2)
-
-    return player_1, player_2
+    update_player_scores(players)
 
 
 def draw_dices(tui, dices):
-    dw = 7 + 2  # dice width
-    dh = 5      # dice height
+    '''Draws all dices in the terminal
+
+       :param tui: The drawing engine
+       :param dices: The dices to be drawn
+       :returns: Non None
+    '''
+    dice_width = 9
+    dice_height = 5
 
     for counter, dice in enumerate(dices):
-        level_1, level_2  = (2*dh, 2) if dice.selected else (2, 2*dh)
-        x_pos, y_pos = [(4+counter*dw, level_1,) for i in range(5)][counter]
+        level_1, level_2  = (2*dice_height, 2) if dice.selected else (2, 2*dice_height)
+        x_pos, y_pos = [(4+counter*dice_width, level_1,) for i in range(5)][counter]
         tui.dice(x_pos, y_pos, dice.value)
-        tui.rectangle(x_pos, level_2, dw, dh, )
+        tui.rectangle(x_pos, level_2, dice_width, dice_height, )
 
 
+def log(msg):
+    '''Log function for the drawing engine
 
+       :param msg: the log message
+       :returns: None
+    '''
+    with open("tui_engine.log", "a", encoding='utf-8') as myfile:
+        myfile.write(msg + "\n")
+
+# TODO add function body or remove method
 def show_current_game(tui, player_active, player_inactive):
+    '''Placeholder docstring
+    '''
     pass
 
-def test_dices(tui, players):
-    from dices import get_dices
-    dices = get_dices()
-    player = Player(True)
-    dices[0].selected = True
-    #dices[1].selected = True
-    dices[2].selected = True
-    #dices[3].selected = True
-    dices[4].selected = True
-    draw_dices(tui, dices)
-    #selected = players[0].get_options()
+def evaluate_keypress(tui, dices):
+    '''Input listener
+    '''
+    char = tui.terminal.getch()
 
-    tui.text(2, 20, f"Selected: {[ dice.value for dice in dices if dice.selected ]}")
-    tui.text(2, 22, f"Options: {player.get_options(dices)[:6]}")
-    tui.text(2, 23, f"Options: {player.get_options(dices)[6:]}")
+    if char.isnumeric() and int(char) in [1,2,3,4,5]:
+        dices[int(char)-1].switch()
 
-
-
-if __name__ == "__main__":
-    tui = TuiEngine()
-    for k in range(1, 7):
+    elif char == "q":
         tui.terminal.clear()
-        tui.frame()
-        category_table(tui)
-        players = draw_player_tables(tui)
-        test_dices(tui, players)
-        #tui.frame(10, 10, 30, 30)
-        #tui.text(12, 12, chr(65 + k), color=Colors.CYAN)
-        #tui.dice(40, 10, k)
-        tui.flush()
-        tui.terminal.getch()
-    tui.terminal.clear()
+        sys.exit(0)
+
+    elif ord(char) == 13: # ENTER for end of player round
+        pass
+        #TODO   If this is pressed, execute score system and restart round
+        #       The active player should switch.
+        #       reset of the current rounds
+
+    elif ord(char) == 32: # SPACE for next dice roll
+        pass
+        #TODO   If space is pressed execute dice roll
+
+    else:
+        log(f"Character input: {ord(char)}")

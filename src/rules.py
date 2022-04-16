@@ -47,7 +47,6 @@ class Multiple:
         if 0 < face < 7:
             self.face = face
 
-
 def multiple(throws: [], amount: int) -> (bool, int):
     '''This method checks whether a set of numbers contains a given amount of duplicates
 

@@ -8,53 +8,53 @@ Class for handeling one player in the game
 
 from random import getrandbits
 
-from src.dices import get_dices
-from src.rules import CATEGORIES, CATEGORY_FUNCTIONS
+from dices import get_dices
+from rules import CATEGORIES,\
+                  CATEGORY_FUNCTIONS
 
-
-#for rule in RULES:
-#    exec(f"from rules import {rule}")
-
-#RULES_FUNCTION_POINTER = [ eval(item) for item in RULES ]
 
 class Player:
+    '''This class represents a single player.
+       Can calculate the players score and stores
+       a username.
+    '''
     def __init__(self, name, active = False):
+        # TODO add name and active more transparently
         self.__dict__.update({k: v for k, v in locals().items() if k != 'self'})
+        self.table = []
 
         self.dices = get_dices()
-        #for key in CATEGORIES[1:]:
-        #    self.scoreboard[key] = None
+        self.scores = [ 0 for i in range(len(CATEGORIES)) ]
 
-    def get_options(self, dices):
-        """
+    @staticmethod
+    def get_options(dices):
+        '''
         Returns list with values for each rule for the currently selected dice faces
-        """
+        '''
         selected_dice_faces = [ dice.value for dice in dices if dice.selected ]
         options = []
         for index, function in enumerate(CATEGORY_FUNCTIONS):
             res, value = function(selected_dice_faces)
-            #if res:
-            options.append((CATEGORIES[index+1], value))
+            if res:
+                options.append((CATEGORIES[index+1], value))
         return options
 
-        #for counter, function in enumerate(RULES_FUNCTION_POINTER):
-        #    return [ {} for opt in selected if  ]
+    def calculate_scores(self):
+        '''Calculate the current score of the player
+
+           :returns: None
+        '''
+        self.scores[7] = sum(self.scores[1:7])
+        self.scores[8] = 35 if self.scores[7] > 62 else 0
+        self.scores[16] = sum(self.scores[7:16])
 
 
+def new_players(name_one = "PLAYER 1", name_two = "PLAYER 2"):
+    '''Generate two new players with a selectable username.
+       Randomly select who goes first.
 
-
-
-
-
-
-def new_players(name_1, name_2):
+       :param name_1:
+    '''
     if getrandbits(1):
-        return Player(name_1, True), Player(name_2)
-    else:
-        return Player(name_2, True), Player(name_1)
-
-
-if __name__ == "__main__":
-    p = Player("Peter", True)
-    print(p.active)
-
+        return Player(name_one, True), Player(name_two)
+    return Player(name_two, True), Player(name_one)
