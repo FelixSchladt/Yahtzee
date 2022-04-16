@@ -7,7 +7,7 @@
 '''
 
 import sys
-from src.tui_engine import TuiEngine, draw_dices, draw_player_tables
+from src.tui_engine import TuiEngine, RoundsBox, draw_dices, draw_player_tables
 from src.dices import get_dices
 from src.player import new_players
 from src.term_info import terminal
@@ -17,6 +17,7 @@ class GameEngine():
     '''
     def __init__(self):
         self.tui = TuiEngine()
+        self.round_box = RoundsBox(self.tui)
         self.terminal = terminal()
         self.turns = 3
         self.players = new_players()
@@ -62,11 +63,14 @@ class GameEngine():
 
            :returns: None
         '''
-        for i, _ in self.dices:
+        for i, _ in enumerate(self.dices):
             if not self.dices[i].selected:
                 self.dices[i].roll()
 
         self.turns -= 1
+
+        if self.turns == 0:
+            self.end_turn()
 
     def draw_game(self):
         '''Draws the game on the terminal
@@ -74,8 +78,11 @@ class GameEngine():
            :returns: None
         '''
         self.tui.frame()
+        self.round_box.set_round(self.turns)
+
         draw_dices(self.tui, self.dices)
         draw_player_tables(self.tui, self.players)
+        self.round_box.draw()
         self.tui.text(2, 20, "Selected                  ")
         self.tui.text(2, 20, f"Selected: {[ dice.value for dice in self.dices if dice.selected ]}")
         self.tui.text(2, 22, "Options:"\
