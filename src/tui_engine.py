@@ -6,9 +6,11 @@
 Library for displaying dynamic content in the commandline
 """
 import sys
-from src.exceptions import InvalidLenghtError, OutOfBoundsError
-from src.term_info import terminal, Colors
-from src.rules import CATEGORIES
+from exceptions import InvalidLenghtError, OutOfBoundsError
+from term_info import terminal, Colors
+from rules import CATEGORIES
+from dices import get_dices 
+from player import new_players
 
 #OFFSET for the Score table and WIDTH for the Value Tables
 OFFSET = 40
@@ -314,3 +316,29 @@ def evaluate_keypress(tui, dices):
 
     else:
         log(f"Character input: {ord(char)}")
+
+def test_game():
+    '''A simple function to test the tui of the game
+    '''
+    tui = TuiEngine()
+    dices = get_dices()
+    players = new_players()
+
+    category_table(tui)
+    players[1].scores[1] = 3
+    rounds_box = RoundsBox(tui)
+
+    while True:
+        tui.terminal.clear()
+
+        tui.frame()
+        draw_dices(tui, dices)
+        draw_player_tables(tui, players)
+
+        tui.text(2, 20, "Selected:\t\t\t")
+        tui.text(2, 20, f"Selected: {[ dice.value for dice in dices if dice.selected ]}")
+        tui.text(2, 22, f"Options: {players[0].get_options(dices)}")
+        rounds_box()
+
+        tui.flush()
+        evaluate_keypress(tui, dices)
