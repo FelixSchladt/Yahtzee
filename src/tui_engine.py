@@ -130,7 +130,12 @@ class TuiEngine:
         for counter, text in enumerate(self.__dice[face]):
             self.text(x_pos + 1, y_pos + counter + 1, text)
 
-    def line_horizontal(self, pos_y, x_0 = 0, x_1 = None, char = " ", color = ""):
+    def line_horizontal(self,
+                        pos_y,
+                        x_0 = 0,
+                        x_1 = None,
+                        char = " ",
+                        color = ""):
         """
         Draws line from (x_0, pos_y) to (x_1, pos_y)
         """
@@ -142,7 +147,12 @@ class TuiEngine:
                 else x_0):
             self.pixel(pos_x, pos_y, char, color)
 
-    def line_vertical(self, pos_x, y_0 = 0, y_1 = None,char = " ", color = ""):
+    def line_vertical(self,
+                      pos_x,
+                      y_0 = 0,
+                      y_1 = None,
+                      char = " ",
+                      color = ""):
         """
         Draws line from (pos_x, y_0) to (pos_x, y_1)
         """
@@ -154,14 +164,25 @@ class TuiEngine:
                 else y_0):
             self.pixel(pos_x, pos_y, char, color)
 
-    def rectangle(self, x_pos, y_pos, width, height, char = " ", color = ""):
+    def rectangle(self,
+                  x_pos,
+                  y_pos,
+                  width,
+                  height,
+                  char = " ",
+                  color = ""):
         """
         Fills a rectangular section with char on the grid
         """
         for i in range(height):
             self.line_horizontal(y_pos + i, x_pos, x_pos + width, char, color)
 
-    def draw_table(self, x_pos, y_pos, width, height, left="├"):
+    def draw_table(self,
+                   x_pos,
+                   y_pos,
+                   width,
+                   height,
+                   left="├"):
         """
         Draws a table and return a list with objects to assign text to the columns
         Table is only one column wide -> if multiple columns are needed place the
@@ -287,10 +308,10 @@ def log(msg):
         myfile.write(msg + "\n")
 
 # TODO add function body or remove method
-def show_current_game(tui, player_active, player_inactive):
-    '''Placeholder docstring
-    '''
-    pass
+#def show_current_game(tui, player_active, player_inactive):
+ # '''Placeholder docstring
+ # '''
+  #  pass
 
 def evaluate_keypress(tui, dices):
     '''Input listener
@@ -311,8 +332,9 @@ def evaluate_keypress(tui, dices):
         #       reset of the current rounds
 
     elif ord(char) == 32: # SPACE for next dice roll
-        pass
-        #TODO   If space is pressed execute dice roll
+        for i, _ in enumerate(dices):
+            if not dices[i].selected:
+                dices[i].roll()
 
     else:
         log(f"Character input: {ord(char)}")
