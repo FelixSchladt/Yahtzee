@@ -5,7 +5,7 @@
 
 from unittest import TestCase
 
-from src.dices import dice as Dice
+from src.dices import Dice
 from src.dices import get_dices
 
 
