@@ -19,19 +19,18 @@ class Player:
        a username.
     '''
     def __init__(self, name, active = False):
-        # TODO add name and active more transparently
-        self.__dict__.update({k: v for k, v in locals().items() if k != 'self'})
+        self.name = name
+        self.active = active
         self.table = []
 
         self.dices = get_dices()
         self.scores = [ 0 for i in range(len(CATEGORIES)) ]
 
-    @staticmethod
-    def get_options(dices):
+    def get_options(self) -> []:
         '''
         Returns list with values for each rule for the currently selected dice faces
         '''
-        selected_dice_faces = [ dice.value for dice in dices if dice.selected ]
+        selected_dice_faces = [ dice.value for dice in self.dices if dice.selected ]
         options = []
         for index, function in enumerate(CATEGORY_FUNCTIONS):
             res, value = function(selected_dice_faces)
@@ -51,10 +50,10 @@ class Player:
 
 def new_players(name_one = "PLAYER 1", name_two = "PLAYER 2"):
     '''Generate two new players with a selectable username.
-       Randomly select who goes first.
+    name_one, name_two   Randomly select who goes first.
 
        :param name_1:
     '''
-    if getrandbits(1):
+    if bool(getrandbits(1)):
         return Player(name_one, True), Player(name_two)
     return Player(name_two, True), Player(name_one)

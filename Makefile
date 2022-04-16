@@ -1,5 +1,5 @@
 run:
-	python src/main.py
+	python main.py
 
 run_tui:
 	python src/tui_engine.py

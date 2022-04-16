@@ -6,7 +6,7 @@
    Run this file to start the game
 '''
 
-from tui_engine import test_game
+from src.tui_engine import test_game
 
 if __name__ == '__main__':
     test_game()

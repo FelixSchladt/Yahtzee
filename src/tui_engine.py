@@ -337,7 +337,7 @@ def test_game():
 
         tui.text(2, 20, "Selected:\t\t\t")
         tui.text(2, 20, f"Selected: {[ dice.value for dice in dices if dice.selected ]}")
-        tui.text(2, 22, f"Options: {players[0].get_options(dices)}")
+        tui.text(2, 22, f"Options: {players[0].get_options()}")
         rounds_box()
 
         tui.flush()
