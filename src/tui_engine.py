@@ -233,6 +233,11 @@ class RoundsBox:
         self.__tui.frame(55, 3, 77, 5)
         self.text(f"Rounds remaining: {self.rounds}")
 
+    def set_round(self, rounds: int):
+        '''Set the displayed round
+        '''
+        self.rounds = rounds
+
     def reset(self):
         '''Reset the counter in the box
         '''
