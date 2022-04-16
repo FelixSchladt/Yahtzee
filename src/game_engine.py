@@ -6,44 +6,99 @@
    and general controll unit
 '''
 
-from src.tui_engine import TuiEngine
-from src.dices import Dice
+import sys
+from src.tui_engine import TuiEngine, draw_dices, draw_player_tables
+from src.dices import get_dices
 from src.player import new_players
-from src.term_info import terminal 
+from src.term_info import terminal
 
 class GameEngine():
     '''The main backend of the game
     '''
     def __init__(self):
         self.tui = TuiEngine()
-        self.terminal = terminal() 
-        self.actions = 3
+        self.terminal = terminal()
+        self.turns = 3
         self.players = new_players()
         self.dices = get_dices()
 
     def handle_input(self):
+        '''This method is resposible for executing the
+           correct methods after a certain key is pressed
+
+           :returns: None
+        '''
         key = self.terminal.getch()
 
         if key.isnumeric() and int(key) in range(1, 6):
-            dices[int(key)-1].switch()
+            self.dices[int(key)-1].switch()
 
         elif key == 'q':
             self.terminal.clear()
             sys.exit(0)
 
-        elif ord(key) == 13: # 13 <=> 'Enter':
-            # player has to select the rule he wants to use
-            # calc score
-            # next players turn
+        elif ord(key) == 13: # 'Enter'
+            self.end_turn()
 
-        elif ord(char) == 32: # 32 <=> 'Space'
-            # roll dice 
+        elif ord(key) == 32: # 'Space'
+            self.roll_dice()
 
         # log if necessary
+
+    def end_turn(self):
+        '''Executes when the player presses Enter.
+           Will end a players turn.
+           The player has to select a rule he want to use.
+        '''
+        # TODO player has to select a rule
+        for i, _ in enumerate(self.players):
+            self.players[i].calculate_scores()
+            self.players[i].active = not self.players[i].active
+
+    def roll_dice(self):
+        '''Executes when the user presses space.
+           Will roll all deselected dice.
+           This action costs one of the three turns each player has.
+
+           :returns: None
+        '''
+        for i, _ in self.dices:
+            if not self.dices[i].selected:
+                self.dices[i].roll()
+
+        self.turns -= 1
+
+    def draw_game(self):
+        '''Draws the game on the terminal
+
+           :returns: None
+        '''
+        self.tui.frame()
+        draw_dices(self.tui, self.dices)
+        draw_player_tables(self.tui, self.players)
+        self.tui.text(2, 20, "Selected                  ")
+        self.tui.text(2, 20, f"Selected: {[ dice.value for dice in self.dices if dice.selected ]}")
+        self.tui.text(2, 22, "Options:"\
+                f"{self.players[self.get_active_player_index()].get_options()}"
+                )
+
+        self.tui.flush()
+
+    def get_active_player_index(self) -> int:
+        '''This method returns the index of
+           the player that is currently playing.
+
+           :returns: The index of the playing player
+        '''
+        active_index = 0
+        for i, _ in enumerate(self.players):
+            if self.players[i].active:
+                active_index = i
+        return active_index
 
     def run(self):
         '''Contains the main loop of the game
         '''
         while True:
-            # draw game
-            handle_input()
+            self.draw_game()
+            self.handle_input()

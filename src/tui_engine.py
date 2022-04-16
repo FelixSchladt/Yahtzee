@@ -307,13 +307,17 @@ def log(msg):
     with open("tui_engine.log", "a", encoding='utf-8') as myfile:
         myfile.write(msg + "\n")
 
-# TODO add function body or remove method
-#def show_current_game(tui, player_active, player_inactive):
- # '''Placeholder docstring
- # '''
-  #  pass
+def show_current_game(tui: TuiEngine, dices: [], players: []):
+    '''Placeholder docstring
+    '''
+    tui.frame()
+    draw_dices(tui, dices)
+    draw_player_tables(tui, players)
+    tui.text(2, 20, "Selected:                 ")
+    tui.text(2, 20, f"Selected: {[ dice.value for dice in dices if dice.selected ]}")
+    tui.text(2, 22, f"Options: {players[0].get_options()}")
 
-def evaluate_keypress(tui, dices):
+def evaluate_keypress(tui: TuiEngine, round_box: RoundsBox,  dices: [], players: []):
     '''Input listener
     '''
     char = tui.terminal.getch()
@@ -326,18 +330,42 @@ def evaluate_keypress(tui, dices):
         sys.exit(0)
 
     elif ord(char) == 13: # ENTER for end of player round
-        pass
         #TODO   If this is pressed, execute score system and restart round
-        #       The active player should switch.
-        #       reset of the current rounds
+
+        # The active player should switch.
+        # reset of the current rounds
+        switch_turns(players)
 
     elif ord(char) == 32: # SPACE for next dice roll
         for i, _ in enumerate(dices):
             if not dices[i].selected:
                 dices[i].roll()
 
+        round_box()
+
     else:
         log(f"Character input: {ord(char)}")
+
+def switch_turns(players: []):
+    for i, _ in enumerate(players):
+        players[i].calculate_scores()
+        players[i].active = not players[i].active
+
+def run():
+    '''The main loop of the game
+    '''
+    tui = TuiEngine()
+    dices = get_dices()
+    # TODO add player name selection
+    players = new_players()
+    rounds_box = RoundsBox(tui)
+
+    while True:
+        tui.terminal.clear()
+        show_current_game(tui, dices, players)
+
+        tui.flush()
+        evaluate_keypress(tui, rounds_box, dices, players)
 
 def test_game():
     '''A simple function to test the tui of the game
@@ -347,7 +375,6 @@ def test_game():
     players = new_players()
 
     category_table(tui)
-    players[1].scores[1] = 3
     rounds_box = RoundsBox(tui)
 
     while True:
@@ -357,10 +384,7 @@ def test_game():
         draw_dices(tui, dices)
         draw_player_tables(tui, players)
 
-        tui.text(2, 20, "Selected:\t\t\t")
-        tui.text(2, 20, f"Selected: {[ dice.value for dice in dices if dice.selected ]}")
-        tui.text(2, 22, f"Options: {players[0].get_options()}")
-        rounds_box()
+        
 
         tui.flush()
-        evaluate_keypress(tui, dices)
+        evaluate_keypress(tui, dices, players)

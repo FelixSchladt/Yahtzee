@@ -6,7 +6,8 @@
    Run this file to start the game
 '''
 
-from src.tui_engine import run
+from src.game_engine import GameEngine
 
 if __name__ == '__main__':
-    run()
+    game = GameEngine()
+    game.run()
