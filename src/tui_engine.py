@@ -6,11 +6,11 @@
 Library for displaying dynamic content in the commandline
 """
 import sys
-from exceptions import InvalidLenghtError, OutOfBoundsError
-from term_info import terminal, Colors
-from rules import CATEGORIES
-from dices import get_dices 
-from player import new_players
+from src.exceptions import InvalidLenghtError, OutOfBoundsError
+from src.term_info import terminal, Colors
+from src.rules import CATEGORIES
+from src.dices import get_dices
+from src.player import new_players
 
 #OFFSET for the Score table and WIDTH for the Value Tables
 OFFSET = 40

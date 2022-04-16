@@ -8,8 +8,8 @@ Class for handeling one player in the game
 
 from random import getrandbits
 
-from dices import get_dices
-from rules import CATEGORIES,\
+from src.dices import get_dices
+from src.rules import CATEGORIES,\
                   CATEGORY_FUNCTIONS
 
 
