@@ -47,6 +47,14 @@ class Player:
         self.scores[8] = 35 if self.scores[7] > 62 else 0
         self.scores[16] = sum(self.scores[7:16])
 
+    def reset_dice(self):
+        '''Deselect all players dice
+
+           :returns: None
+        '''
+        for i, _ in enumerate(self.dices):
+            self.dices[i].selected = False
+
 
 def new_players(name_one = "PLAYER 1", name_two = "PLAYER 2"):
     '''Generate two new players with a selectable username.
