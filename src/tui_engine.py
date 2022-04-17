@@ -5,12 +5,9 @@
 """
 Library for displaying dynamic content in the commandline
 """
-import sys
 from src.exceptions import InvalidLenghtError, OutOfBoundsError
 from src.term_info import terminal, Colors
 from src.rules import CATEGORIES
-from src.dices import get_dices
-from src.player import new_players
 
 #OFFSET for the Score table and WIDTH for the Value Tables
 OFFSET = 40
@@ -312,85 +309,3 @@ def log(msg):
     '''
     with open("tui_engine.log", "a", encoding='utf-8') as myfile:
         myfile.write(msg + "\n")
-
-def show_current_game(tui: TuiEngine, dices: [], players: []):
-    '''Placeholder docstring
-    '''
-    tui.frame()
-    draw_dices(tui, dices)
-    draw_player_tables(tui, players)
-    tui.text(2, 20, "Selected:                 ")
-    tui.text(2, 20, f"Selected: {[ dice.value for dice in dices if dice.selected ]}")
-    tui.text(2, 22, f"Options: {players[0].get_options()}")
-
-def evaluate_keypress(tui: TuiEngine, round_box: RoundsBox,  dices: [], players: []):
-    '''Input listener
-    '''
-    char = tui.terminal.getch()
-
-    if char.isnumeric() and int(char) in [1,2,3,4,5]:
-        dices[int(char)-1].switch()
-
-    elif char == "q":
-        tui.terminal.clear()
-        sys.exit(0)
-
-    elif ord(char) == 13: # ENTER for end of player round
-        #TODO   If this is pressed, execute score system and restart round
-
-        # The active player should switch.
-        # reset of the current rounds
-        switch_turns(players)
-
-    elif ord(char) == 32: # SPACE for next dice roll
-        for i, _ in enumerate(dices):
-            if not dices[i].selected:
-                dices[i].roll()
-
-        round_box()
-
-    else:
-        log(f"Character input: {ord(char)}")
-
-def switch_turns(players: []):
-    for i, _ in enumerate(players):
-        players[i].calculate_scores()
-        players[i].active = not players[i].active
-
-def run():
-    '''The main loop of the game
-    '''
-    tui = TuiEngine()
-    dices = get_dices()
-    # TODO add player name selection
-    players = new_players()
-    rounds_box = RoundsBox(tui)
-
-    while True:
-        tui.terminal.clear()
-        show_current_game(tui, dices, players)
-
-        tui.flush()
-        evaluate_keypress(tui, rounds_box, dices, players)
-
-def test_game():
-    '''A simple function to test the tui of the game
-    '''
-    tui = TuiEngine()
-    dices = get_dices()
-    players = new_players()
-
-    category_table(tui)
-    rounds_box = RoundsBox(tui)
-
-    while True:
-        tui.terminal.clear()
-
-        tui.frame()
-        draw_dices(tui, dices)
-        draw_player_tables(tui, players)
-
-        
-
-        tui.flush()
-        evaluate_keypress(tui, dices, players)
