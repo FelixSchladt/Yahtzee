@@ -26,6 +26,19 @@ class Player:
         self.dices = get_dices()
         self.scores = [ 0 for i in range(len(CATEGORIES)) ]
 
+    def get_selected_dice_faces(self) -> []:
+        '''Get all faces of selected dices.
+           This is used for displayment purposes.
+
+           :returns: All selected dice faces
+        '''
+        selected = []
+        for dice in self.dices:
+            if dice.selected:
+                selected.append(dice.value)
+
+        return selected
+
     def get_options(self) -> []:
         '''
         Returns list with values for each rule for the currently selected dice faces

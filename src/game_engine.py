@@ -10,7 +10,8 @@ import sys
 from src.tui_engine import TuiEngine,\
                            RoundsBox,\
                            draw_dices,\
-                           draw_player_tables
+                           draw_player_tables,\
+                           category_table
 from src.dices import get_dices
 from src.player import new_players
 from src.term_info import terminal
@@ -91,11 +92,13 @@ class GameEngine():
         self.round_box.set_round(self.turns)
 
         draw_dices(self.tui, self.players[active].dices)
+        category_table(self.tui)
         draw_player_tables(self.tui, self.players)
         self.round_box.draw()
         self.tui.text(2, 18, f"Player: {self.players[self.get_active_player_index()].name}")
         self.tui.text(2, 20, "Selected                  ")
-        self.tui.text(2, 20, f"Selected: {[ dice.value for dice in self.dices if dice.selected ]}")
+        self.tui.text(2, 20, "Selected: "\
+                f"{self.players[active].get_selected_dice_faces()}")
         # self.tui.text(2, 22, "Options:"\
           #      f"{self.players[self.get_active_player_index()].get_options()}"
            #     )
