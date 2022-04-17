@@ -25,6 +25,7 @@ class GameEngine():
         self.round_box = RoundsBox(self.tui)
         self.terminal = terminal()
         self.turns = 3
+        # TODO add better name input
         self.players = new_players(input("Player One Name: "), input("Player Two Name: "))
         self.dices = get_dices()
 
@@ -58,7 +59,6 @@ class GameEngine():
            The player has to select a rule he want to use.
         '''
         # TODO player has to select a rule
-        # TODO add winscreen
         for i, _ in enumerate(self.players):
             self.players[i].calculate_scores()
             self.players[i].active = not self.players[i].active
@@ -70,7 +70,7 @@ class GameEngine():
         '''This method lets the player select the rule he wants to
            collect points for at the end of his turn
 
-           :returns: None
+           :returns:
         '''
         # TODO implement
 
