@@ -50,7 +50,7 @@ class GameEngine():
         elif ord(key) == 32: # 'Space'
             self.roll_dice()
 
-        log(f"Input read: {key}") 
+        log(f"Input read: {key}")
 
     def end_turn(self):
         '''Executes when the player presses Enter.
@@ -100,9 +100,9 @@ class GameEngine():
         self.tui.text(2, 20, "Selected                  ")
         self.tui.text(2, 20, "Selected: "\
                 f"{self.players[active].get_selected_dice_faces()}")
-        # self.tui.text(2, 22, "Options:"\
-          #      f"{self.players[self.get_active_player_index()].get_options()}"
-           #     )
+        # TODO display possible options
+        self.tui.text(2, 22, "Options: "\
+                f"{self.players[active].get_options()}")
 
         self.tui.flush()
 
