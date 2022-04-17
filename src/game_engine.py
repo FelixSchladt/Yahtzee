@@ -25,7 +25,7 @@ class GameEngine():
         self.round_box = RoundsBox(self.tui)
         self.terminal = terminal()
         self.turns = 3
-        self.players = new_players()
+        self.players = new_players(input("Player One Name: "), input("Player Two Name: "))
         self.dices = get_dices()
 
     def handle_input(self):
@@ -58,12 +58,21 @@ class GameEngine():
            The player has to select a rule he want to use.
         '''
         # TODO player has to select a rule
+        # TODO add winscreen
         for i, _ in enumerate(self.players):
             self.players[i].calculate_scores()
             self.players[i].active = not self.players[i].active
             self.players[i].reset_dice()
 
         self.turns = 3
+
+    def select_rule(self):
+        '''This method lets the player select the rule he wants to
+           collect points for at the end of his turn
+
+           :returns: None
+        '''
+        # TODO implement
 
     def roll_dice(self):
         '''Executes when the user presses space.
@@ -96,7 +105,8 @@ class GameEngine():
         category_table(self.tui)
         draw_player_tables(self.tui, self.players)
         self.round_box.draw()
-        self.tui.text(2, 18, f"Player: {self.players[self.get_active_player_index()].name}")
+        self.tui.text(2, 18, f"Player: {self.players[self.get_active_player_index()].name}"\
+                "                ")
         self.tui.text(2, 20, "Selected                  ")
         self.tui.text(2, 20, "Selected: "\
                 f"{self.players[active].get_selected_dice_faces()}")
