@@ -293,7 +293,8 @@ def draw_dices(tui, dices):
        :param dices: The dices to be drawn
        :returns: Non None
     '''
-    dice_width = 9
+    gap_size = 2
+    dice_width = 7 + gap_size
     dice_height = 5
 
     for counter, dice in enumerate(dices):
