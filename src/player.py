@@ -60,7 +60,9 @@ def new_players(name_one = "PLAYER 1", name_two = "PLAYER 2"):
     '''Generate two new players with a selectable username.
     name_one, name_two   Randomly select who goes first.
 
-       :param name_1:
+       :param name_one: Name of player one
+       :param name_two: Name of player two
+       :returns: None
     '''
     if bool(getrandbits(1)):
         return Player(name_one, True), Player(name_two)
