@@ -10,7 +10,7 @@ from random import getrandbits
 
 from src.dices import get_dices
 from src.rules import CATEGORIES,\
-                  CATEGORY_FUNCTIONS
+                      CATEGORY_FUNCTIONS
 
 
 class Player:
@@ -43,10 +43,9 @@ class Player:
         '''
         Returns list with values for each rule for the currently selected dice faces
         '''
-        selected_dice_faces = [ dice.value for dice in self.dices if dice.selected ]
         options = []
         for index, function in enumerate(CATEGORY_FUNCTIONS):
-            res, value = function(selected_dice_faces)
+            res, value = function([ dice.value for dice in self.dices ])
             if res:
                 options.append((CATEGORIES[index+1], value))
         return options

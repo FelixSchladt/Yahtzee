@@ -100,7 +100,6 @@ class GameEngine():
         self.tui.text(2, 20, "Selected                  ")
         self.tui.text(2, 20, "Selected: "\
                 f"{self.players[active].get_selected_dice_faces()}")
-        # TODO display possible options
         self.tui.text(2, 22, "Options: "\
                 f"{self.players[active].get_options()}")
 
