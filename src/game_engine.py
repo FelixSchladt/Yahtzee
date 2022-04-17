@@ -7,7 +7,10 @@
 '''
 
 import sys
-from src.tui_engine import TuiEngine, RoundsBox, draw_dices, draw_player_tables
+from src.tui_engine import TuiEngine,\
+                           RoundsBox,\
+                           draw_dices,\
+                           draw_player_tables
 from src.dices import get_dices
 from src.player import new_players
 from src.term_info import terminal
@@ -32,7 +35,8 @@ class GameEngine():
         key = self.terminal.getch()
 
         if key.isnumeric() and int(key) in range(1, 6):
-            self.dices[int(key)-1].switch()
+            active = self.get_active_player_index()
+            self.players[active].dices[int(key)-1].switch()
 
         elif key == 'q':
             self.terminal.clear()
@@ -55,6 +59,9 @@ class GameEngine():
         for i, _ in enumerate(self.players):
             self.players[i].calculate_scores()
             self.players[i].active = not self.players[i].active
+            self.players[i].reset_dice()
+
+        self.turns = 3
 
     def roll_dice(self):
         '''Executes when the user presses space.
@@ -63,9 +70,10 @@ class GameEngine():
 
            :returns: None
         '''
-        for i, _ in enumerate(self.dices):
-            if not self.dices[i].selected:
-                self.dices[i].roll()
+        active = self.get_active_player_index()
+        for i, _ in enumerate(self.players[active].dices):
+            if not self.players[active].dices[i].selected:
+                self.players[active].dices[i].roll()
 
         self.turns -= 1
 
@@ -77,17 +85,20 @@ class GameEngine():
 
            :returns: None
         '''
+        active = self.get_active_player_index()
+
         self.tui.frame()
         self.round_box.set_round(self.turns)
 
-        draw_dices(self.tui, self.dices)
+        draw_dices(self.tui, self.players[active].dices)
         draw_player_tables(self.tui, self.players)
         self.round_box.draw()
+        self.tui.text(2, 18, f"Player: {self.players[self.get_active_player_index()].name}")
         self.tui.text(2, 20, "Selected                  ")
         self.tui.text(2, 20, f"Selected: {[ dice.value for dice in self.dices if dice.selected ]}")
-        self.tui.text(2, 22, "Options:"\
-                f"{self.players[self.get_active_player_index()].get_options()}"
-                )
+        # self.tui.text(2, 22, "Options:"\
+          #      f"{self.players[self.get_active_player_index()].get_options()}"
+           #     )
 
         self.tui.flush()
 
@@ -102,6 +113,7 @@ class GameEngine():
             if self.players[i].active:
                 active_index = i
         return active_index
+
 
     def run(self):
         '''Contains the main loop of the game
