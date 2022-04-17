@@ -11,7 +11,8 @@ from src.tui_engine import TuiEngine,\
                            RoundsBox,\
                            draw_dices,\
                            draw_player_tables,\
-                           category_table
+                           category_table,\
+                           log
 from src.dices import get_dices
 from src.player import new_players
 from src.term_info import terminal
@@ -49,7 +50,7 @@ class GameEngine():
         elif ord(key) == 32: # 'Space'
             self.roll_dice()
 
-        # log if necessary
+        log(f"Input read: {key}") 
 
     def end_turn(self):
         '''Executes when the player presses Enter.
