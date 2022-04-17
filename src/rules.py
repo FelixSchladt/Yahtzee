@@ -199,4 +199,5 @@ RULES = ["multiple", "triplet", "quadrupel", "full_house",
 
 
 CATEGORY_FUNCTIONS = [ Multiple(face) for face in range(1, 7) ]\
-                   + [ eval(item) for item in RULES[3:] ]
+                   + [ triplet, quadrupel, full_house, small_road ]\
+                   + [ big_road, yahtzee, chance]
