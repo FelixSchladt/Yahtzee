@@ -59,7 +59,10 @@ class GameEngine():
            Will end a players turn.
            The player has to select a rule he want to use.
         '''
-        self.select_rule()
+        active = self.get_active_player_index()
+        if not self.player_done(active):
+            # TODO also skip if player cannot select any rule
+            self.select_rule()
 
         for i, _ in enumerate(self.players):
             self.players[i].calculate_scores()
@@ -74,7 +77,6 @@ class GameEngine():
 
            :returns:
         '''
-        # TODO implement
         active = self.get_active_player_index()
         options = self.players[active].get_options()
         selection = -1
@@ -107,15 +109,17 @@ class GameEngine():
                          if CATEGORIES[i] == selected_option][0]
         function_index = [i for i in range(len(CATEGORY_FUNCTIONS))\
                          if formated_option == CATEGORY_FUNCTIONS[i]
-                                                                               .__name__][0]
+                                               .__name__][0]
 
         # Set player score[index] to correct score
         self.players[active].scores[scoreboard_index] = CATEGORY_FUNCTIONS[function_index](
                 self.players[active].get_all_dice_faces())[1]
         self.players[active].used_rules[function_index] = True
 
-        # TODO check for game end condition
-        # Display win screen if its given
+        if self.game_over():
+            print("Board full")
+            exit(0)
+            #TODO Display win screen if its given
 
     def roll_dice(self):
         '''Executes when the user presses space.
@@ -170,6 +174,32 @@ class GameEngine():
                 active_index = i
         return active_index
 
+    def game_over(self):
+        '''Check if the board is full
+           Display winscreen and end game if yes
+
+           :returns: None
+        '''
+        game_over = True
+        for i, _ in enumerate(self.players):
+            if not self.player_done(i):
+                game_over = False
+
+        return game_over
+
+    def player_done(self, index: int) -> bool:
+        '''Checks if a player hsa filled his board
+
+           :returns: True if the player filled his board
+                     else False
+        '''
+        done = True
+        for rule_used in self.players[index].used_rules:
+            if not rule_used:
+                done = False
+                break
+
+        return done
 
     def run(self):
         '''Contains the main loop of the game
