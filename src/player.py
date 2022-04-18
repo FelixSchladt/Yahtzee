@@ -61,11 +61,12 @@ class Player:
         self.scores[16] = sum(self.scores[7:16])
 
     def reset_dice(self):
-        '''Deselect all players dice
+        '''Deselect and reroll all dice
 
            :returns: None
         '''
         for i, _ in enumerate(self.dices):
+            self.dices[i].roll()
             self.dices[i].selected = False
 
 

@@ -15,6 +15,7 @@ from src.tui_engine import TuiEngine,\
                            log
 from src.dices import get_dices
 from src.player import new_players
+from src.rules import CATEGORIES, CATEGORY_FUNCTIONS
 from src.term_info import terminal
 
 class GameEngine():
@@ -58,7 +59,8 @@ class GameEngine():
            Will end a players turn.
            The player has to select a rule he want to use.
         '''
-        # TODO player has to select a rule
+        self.select_rule()
+
         for i, _ in enumerate(self.players):
             self.players[i].calculate_scores()
             self.players[i].active = not self.players[i].active
@@ -73,6 +75,27 @@ class GameEngine():
            :returns:
         '''
         # TODO implement
+        active = self.get_active_player_index()
+        options = self.players[active].get_options()
+        selection = -1
+
+        self.terminal.clear()
+        print(f"{self.players[active].name} chooses an option:")
+        for i, option in enumerate(options):
+            print(f"{i+1}. {option}")
+
+        while True:
+            try:
+                selection = int(
+                            input(f"Input (1-{len(options)}): "))\
+                            - 1
+
+                if not selection in range(len(options)):
+                    continue
+                break
+
+            except(Exception):
+                continue
 
     def roll_dice(self):
         '''Executes when the user presses space.
