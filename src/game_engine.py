@@ -106,9 +106,11 @@ class GameEngine():
         function_index = [i for i in range(len(CATEGORY_FUNCTIONS))\
                          if options[selection][0].lower() in CATEGORY_FUNCTIONS[i].__name__][0]
 
-        #TODO set player score[index] to correct score
+        # Set player score[index] to correct score
         self.players[active].scores[scoreboard_index] = CATEGORY_FUNCTIONS[function_index](
                 self.players[active].get_selected_dice_faces())[1]
+
+        # TODO calc player scores somewhere (maybe in end_turn?)
 
     def roll_dice(self):
         '''Executes when the user presses space.
