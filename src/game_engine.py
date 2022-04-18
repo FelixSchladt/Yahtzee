@@ -13,6 +13,7 @@ from src.tui_engine import TuiEngine,\
                            draw_player_tables,\
                            category_table,\
                            log
+#TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
 from src.dices import get_dices
 from src.player import new_players
 from src.rules import CATEGORIES, CATEGORY_FUNCTIONS
@@ -26,7 +27,7 @@ class GameEngine():
         self.round_box = RoundsBox(self.tui)
         self.terminal = terminal()
         self.turns = 3
-        # TODO add better name input
+        # TODO add better name input -> maybe as varargs?? -> much easier than menu
         self.players = new_players()
         self.dices = get_dices()
 
@@ -107,13 +108,15 @@ class GameEngine():
         formated_option = selected_option.lower().replace(' ', '_')
         scoreboard_index = [i for i in range(len(CATEGORIES))\
                          if CATEGORIES[i] == selected_option][0]
+        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
         function_index = [i for i in range(len(CATEGORY_FUNCTIONS))\
                          if formated_option == CATEGORY_FUNCTIONS[i]
                                                .__name__][0]
-
+        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
         # Set player score[index] to correct score
         self.players[active].scores[scoreboard_index] = CATEGORY_FUNCTIONS[function_index](
                 self.players[active].get_all_dice_faces())[1]
+        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
         self.players[active].used_rules[function_index] = True
 
         if self.game_over():
@@ -154,12 +157,14 @@ class GameEngine():
         self.round_box.draw()
         self.tui.text(2, 18, f"Player: {self.players[self.get_active_player_index()].name}"\
                 "                ")
+        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
         self.tui.text(2, 20, "Selected                  ")
         self.tui.text(2, 20, "Selected: "\
                 f"{self.players[active].get_selected_dice_faces()}")
+        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
         self.tui.text(2, 22, "Options: "\
                 f"{self.players[active].get_options()[:6]}")
-
+        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
         self.tui.flush()
 
     def get_active_player_index(self) -> int:

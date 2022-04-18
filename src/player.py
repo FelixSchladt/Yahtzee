@@ -12,7 +12,7 @@ from src.dices import get_dices
 from src.rules import CATEGORIES,\
                       CATEGORY_FUNCTIONS,\
                       OPTIONS
-
+#TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
 
 class Player:
     '''This class represents a single player.
@@ -25,8 +25,8 @@ class Player:
         self.table = []
 
         self.dices = get_dices()
-        self.scores = [ 0 for i in range(len(CATEGORIES)) ]
-        self.used_rules = [ False for _ in range(len(CATEGORY_FUNCTIONS))]
+        self.scores     = [ 0 ]     * len(CATEGORIES)
+        self.used_rules = [ False ] * len(CATEGORY_FUNCTIONS)
 
     def get_all_dice_faces(self) -> []:
         '''Get all dice values
@@ -64,8 +64,8 @@ class Player:
 
            :returns: None
         '''
-        self.scores[7] = sum(self.scores[1:7])
-        self.scores[8] = 35 if self.scores[7] > 62 else 0
+        self.scores[7]  = sum(self.scores[1:7])
+        self.scores[8]  = 35 if self.scores[7] > 62 else 0
         self.scores[16] = sum(self.scores[7:16])
 
     def reset_dice(self):

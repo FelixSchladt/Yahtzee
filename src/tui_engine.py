@@ -133,6 +133,7 @@ class TuiEngine:
                         x_1 = None,
                         char = " ",
                         color = ""):
+        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
         """
         Draws line from (x_0, pos_y) to (x_1, pos_y)
         """
@@ -168,6 +169,7 @@ class TuiEngine:
                   height,
                   char = " ",
                   color = ""):
+        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
         """
         Fills a rectangular section with char on the grid
         """
@@ -180,6 +182,7 @@ class TuiEngine:
                    width,
                    height,
                    left="├"):
+        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
         """
         Draws a table and return a list with objects to assign text to the columns
         Table is only one column wide -> if multiple columns are needed place the
