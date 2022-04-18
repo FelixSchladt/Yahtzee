@@ -59,6 +59,6 @@ class _windows:
         # TODO implement watch function which checks for changing termianl size
 
 
-if __name__ == "__main__":
-    term = terminal()
-    print(term.getch())
+#if __name__ == "__main__":
+#    term = terminal()
+#    print(term.getch())

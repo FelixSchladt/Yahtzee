@@ -1,6 +1,6 @@
 import unittest
 
-import dice_machine
+from src import dice_machine
 
 
 class DiceTest(unittest.TestCase):
