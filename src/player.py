@@ -72,7 +72,7 @@ class Player:
 
 def new_players(name_one = "PLAYER 1", name_two = "PLAYER 2"):
     '''Generate two new players with a selectable username.
-    name_one, name_two   Randomly select who goes first.
+       Randomly select who goes first.
 
        :param name_one: Name of player one
        :param name_two: Name of player two

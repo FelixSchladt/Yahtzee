@@ -91,11 +91,24 @@ class GameEngine():
                             - 1
 
                 if not selection in range(len(options)):
+                    print("Invalid input, try again!")
                     continue
                 break
 
             except(Exception):
+                print("Invalid input, try again!")
                 continue
+
+        # Get indices required to read and write the correct
+        # results to the player object
+        scoreboard_index = [i for i in range(len(CATEGORIES))\
+                         if CATEGORIES[i] == options[selection][0]][0]
+        function_index = [i for i in range(len(CATEGORY_FUNCTIONS))\
+                         if options[selection][0].lower() in CATEGORY_FUNCTIONS[i].__name__][0]
+
+        #TODO set player score[index] to correct score
+        self.players[active].scores[scoreboard_index] = CATEGORY_FUNCTIONS[function_index](
+                self.players[active].get_selected_dice_faces())[1]
 
     def roll_dice(self):
         '''Executes when the user presses space.

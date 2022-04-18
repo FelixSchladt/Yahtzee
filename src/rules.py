@@ -11,41 +11,52 @@
    combination with a given array of numbers.
 '''
 
-class Multiple:
-    '''This class calculates the sum of all faces with a given
-       value.
-    '''
-    def __init__(self, face):
-        self.face  = face
+def add_faces(throws: [], face: int):
+    '''Adds up all numbers equal to self.face
 
-    def __call__(self, throws: []):
-        return self.add_faces(throws)
-
-    def add_faces(self, throws: []):
-        '''Adds up all numbers equal to self.face
-
-        :param throws: an array of the numbers that are to be added up
-        :returns: True to fit the general 'rule'-format
+    :param throws: an array of the numbers that are to be added up
+    :returns: True to fit the general 'rule'-format
                   and the sum of the numbers
-        '''
-        score: int = 0
+    '''
+    score: int = 0
 
-        for i in throws:
-            if i == self.face:
-                score += self.face
+    for i in throws:
+        if i == face:
+            score += face
 
-        return (score > 0, score)
+    return (score > 0, score)
 
-    def set_face(self, face: int):
-        '''
-        Set the face of he object manually.
-        Contains a value check.
+# TODO better docstrings
 
-        :param face: the new face value
-        :returns: None
-        '''
-        if 0 < face < 7:
-            self.face = face
+def aces(throws: []) -> (bool, int):
+    '''Returns hthe sum of all ones
+    '''
+    return add_faces(throws, 1)
+
+def twos(throws: []) -> (bool, int):
+    '''Returns hthe sum of all twos
+    '''
+    return add_faces(throws, 2)
+
+def threes(throws: []) -> (bool, int):
+    '''Returns hthe sum of all threes
+    '''
+    return add_faces(throws, 3)
+
+def fours(throws: []) -> (bool, int):
+    '''Returns hthe sum of all fours
+    '''
+    return add_faces(throws, 4)
+
+def fives(throws: []) -> (bool, int):
+    '''Returns hthe sum of all fives
+    '''
+    return add_faces(throws, 5)
+
+def sixes(throws: []) -> (bool, int):
+    '''Returns hthe sum of all sixes
+    '''
+    return add_faces(throws, 6)
 
 def multiple(throws: [], amount: int) -> (bool, int):
     '''This method checks whether a set of numbers contains a given amount of duplicates
@@ -202,6 +213,6 @@ OPTIONS = ["Aces", "Twos", "Threes", "Fours", "Fives", "Sixes"]\
           + ["Small Straight", "Large Straight", "Yahtzee", "Chance"]
 
 
-CATEGORY_FUNCTIONS = [ Multiple(face) for face in range(1, 7) ]\
+CATEGORY_FUNCTIONS = [ aces, twos, threes, fours, fives, sixes ]\
                    + [ triplet, quadrupel, full_house, small_road ]\
                    + [ big_road, yahtzee, chance]
