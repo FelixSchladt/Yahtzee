@@ -5,7 +5,7 @@ from exeptions import EmptyFileError
 
 def save_score(json_dict):
     """
-    This methods saves the score in a json file
+    This method saves the score in a json file
     :rtype: object
     """
     # json_dict = json_dict.to_json()           //Falls es ein Objekt ist
@@ -16,16 +16,13 @@ def save_score(json_dict):
 
 def get_score():
     """
-    This mehtod gets the score from a json file.
+    This method gets the score from a json file.
     :rtype: object
     """
     if os.stat("score_yahtzee.json").st_size > 0:
-
         with open("score_yahtzee.json", "r", encoding="UTF-8") as file:
             file_content = json.load(file)
-            if not file_content:
-                print("no data in file")
+            return file_content
 
-        print(file_content)
-    else:
-        raise EmptyFileError("File is empty")
+    raise EmptyFileError("File is empty")
+    return None
