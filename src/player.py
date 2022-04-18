@@ -26,6 +26,14 @@ class Player:
 
         self.dices = get_dices()
         self.scores = [ 0 for i in range(len(CATEGORIES)) ]
+        self.used_rules = [ False for _ in range(len(CATEGORY_FUNCTIONS))]
+
+    def get_all_dice_faces(self) -> []:
+        '''Get all dice values
+
+           :returns: All dice faces as integers
+        '''
+        return [dice.value for dice in self.dices]
 
     def get_selected_dice_faces(self) -> []:
         '''Get all faces of selected dices.
@@ -47,7 +55,7 @@ class Player:
         options = []
         for index, function in enumerate(CATEGORY_FUNCTIONS):
             res, value = function([ dice.value for dice in self.dices ])
-            if res:
+            if res and not self.used_rules[index]:
                 options.append((OPTIONS[index], value))
         return options
 

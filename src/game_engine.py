@@ -95,22 +95,27 @@ class GameEngine():
                     continue
                 break
 
-            except(Exception):
+            except Exception:
                 print("Invalid input, try again!")
                 continue
 
         # Get indices required to read and write the correct
         # results to the player object
+        selected_option = options[selection][0]
+        formated_option = selected_option.lower().replace(' ', '_')
         scoreboard_index = [i for i in range(len(CATEGORIES))\
-                         if CATEGORIES[i] == options[selection][0]][0]
+                         if CATEGORIES[i] == selected_option][0]
         function_index = [i for i in range(len(CATEGORY_FUNCTIONS))\
-                         if options[selection][0].lower() in CATEGORY_FUNCTIONS[i].__name__][0]
+                         if formated_option == CATEGORY_FUNCTIONS[i]
+                                                                               .__name__][0]
 
         # Set player score[index] to correct score
         self.players[active].scores[scoreboard_index] = CATEGORY_FUNCTIONS[function_index](
-                self.players[active].get_selected_dice_faces())[1]
+                self.players[active].get_all_dice_faces())[1]
+        self.players[active].used_rules[function_index] = True
 
-        # TODO calc player scores somewhere (maybe in end_turn?)
+        # TODO check for game end condition
+        # Display win screen if its given
 
     def roll_dice(self):
         '''Executes when the user presses space.

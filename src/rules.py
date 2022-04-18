@@ -125,7 +125,7 @@ def full_house(throws: []) -> (bool, int):
     return (is_rule, score)
 
 
-def small_road(throws: []) -> (bool, int):
+def small_straight(throws: []) -> (bool, int):
     '''This fuction checks whether the numbers in an array match a "small road".
 
        :param throws: an array of numbers to be checked
@@ -146,7 +146,7 @@ def small_road(throws: []) -> (bool, int):
     return (is_rule, score)
 
 
-def big_road(throws: []) -> (bool, int):
+def big_straight(throws: []) -> (bool, int):
     '''This fuction checks whether the numbers in an array match a "big road".
 
        :param throws: an array of numbers to be checked
@@ -201,18 +201,18 @@ def chance(throws: []) -> (bool, int):
     return (is_rule, score)
 
 
-CATEGORIES =["", "Aces", "Twos", "Threes", "Fours", "Fives", "Sixes", "Total ->",\
-                "Bonus", "Three Of A Kind", "Four Of A Kind", "Full House",\
-                "Small Straight", "Large Straight", "Yahtzee", "Chance", "Total"]
+CATEGORIES =["", "Aces", "Twos", "Threes", "Fours", "Fives", "Sixes", "Total ->"]\
+                + [ "Bonus", "Triplet", "Quadrupel", "Full House"]\
+                + ["Small Straight", "Large Straight", "Yahtzee", "Chance", "Total"]
 
 RULES = ["multiple", "triplet", "quadrupel", "full_house",
          "small_road", "big_road", "yahtzee", "chance"]
 
 OPTIONS = ["Aces", "Twos", "Threes", "Fours", "Fives", "Sixes"]\
-          + ["Three of a kind", "Four of a kind", "Full House"]\
+          + ["Triplet", "Quadrupel", "Full House"]\
           + ["Small Straight", "Large Straight", "Yahtzee", "Chance"]
 
 
 CATEGORY_FUNCTIONS = [ aces, twos, threes, fours, fives, sixes ]\
-                   + [ triplet, quadrupel, full_house, small_road ]\
-                   + [ big_road, yahtzee, chance]
+                   + [ triplet, quadrupel, full_house, small_straight ]\
+                   + [ big_straight, yahtzee, chance]
