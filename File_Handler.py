@@ -1,5 +1,6 @@
 import os
 import json
+from exeptions import EmptyFileError
 
 
 def save_score(json_dict):
@@ -10,19 +11,27 @@ def save_score(json_dict):
 
 
 def get_score():
-    with open(f"score_yahtzee.json", "r", encoding="UTF-8") as file:
-        file_content = json.load(file)
+    if os.stat("score_yahtzee.json").st_size > 0:
+
+        with open(f"score_yahtzee.json", "r", encoding="UTF-8") as file:
+            file_content = json.load(file)
+            if not file_content:
+                print("no data in file")
+
         print(file_content)
+    else:
+        raise EmptyFileError("File is empty")
 
 
 def main():
-    json_dict = {"Snickers": 1.2,
-                 "Mars": 1.3,
-                 "Nuts": 2,
-                 "Lindt": 4,
-                 "Milka": 2.2,
-                 "Alpenmilch": 3, }
-    save_score(json_dict)
+    # json_dict = {"Snickers": 1.2,
+    #            "Mars": 1.3,
+    #           "Nuts": 2,
+    #          "Lindt": 4,
+    #         "Milka": 2.2,
+    #        "Alpenmilch": 3, }
+
+    # save_score(json_dict)
     get_score()
 
 
