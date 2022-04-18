@@ -5,6 +5,7 @@ from unittest.mock import patch, mock_open
 import file_handler
 
 
+
 class FileHandler(unittest.TestCase):
 
     def test_writetofile(tmpdir):
