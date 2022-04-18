@@ -34,7 +34,7 @@ class Multiple:
             if i == self.face:
                 score += self.face
 
-        return (True, score)
+        return (score > 0, score)
 
     def set_face(self, face: int):
         '''
@@ -196,6 +196,10 @@ CATEGORIES =["", "Aces", "Twos", "Threes", "Fours", "Fives", "Sixes", "Total ->"
 
 RULES = ["multiple", "triplet", "quadrupel", "full_house",
          "small_road", "big_road", "yahtzee", "chance"]
+
+OPTIONS = ["Aces", "Twos", "Threes", "Fours", "Fives", "Sixes"]\
+          + ["Three of a kind", "Four of a kind", "Full House"]\
+          + ["Small Straight", "Large Straight", "Yahtzee", "Chance"]
 
 
 CATEGORY_FUNCTIONS = [ Multiple(face) for face in range(1, 7) ]\

@@ -10,7 +10,8 @@ from random import getrandbits
 
 from src.dices import get_dices
 from src.rules import CATEGORIES,\
-                      CATEGORY_FUNCTIONS
+                      CATEGORY_FUNCTIONS,\
+                      OPTIONS
 
 
 class Player:
@@ -47,7 +48,7 @@ class Player:
         for index, function in enumerate(CATEGORY_FUNCTIONS):
             res, value = function([ dice.value for dice in self.dices ])
             if res:
-                options.append((CATEGORIES[index+1], value))
+                options.append((OPTIONS[index], value))
         return options
 
     def calculate_scores(self):

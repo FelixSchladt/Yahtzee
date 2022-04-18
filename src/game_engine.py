@@ -26,7 +26,7 @@ class GameEngine():
         self.terminal = terminal()
         self.turns = 3
         # TODO add better name input
-        self.players = new_players(input("Player One Name: "), input("Player Two Name: "))
+        self.players = new_players()
         self.dices = get_dices()
 
     def handle_input(self):
@@ -111,7 +111,7 @@ class GameEngine():
         self.tui.text(2, 20, "Selected: "\
                 f"{self.players[active].get_selected_dice_faces()}")
         self.tui.text(2, 22, "Options: "\
-                f"{self.players[active].get_options()}")
+                f"{self.players[active].get_options()[:6]}")
 
         self.tui.flush()
 
