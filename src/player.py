@@ -51,9 +51,13 @@ class Player:
         '''
         options = []
         for index, function in enumerate(CATEGORY_FUNCTIONS):
-            _, value = function([ dice.value for dice in self.dices ])
+            is_rule, value = function([ dice.value for dice in self.dices ])
             if not self.used_rules[index]:
                 options.append((OPTIONS[index], value))
+
+            if self.used_rules[index] and function.__name__ == "yahtzee" and is_rule:
+                options.append(OPTIONS[index], value+self.dices[0].value*len(self.dices))
+
         return options
 
     def calculate_scores(self):

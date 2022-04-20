@@ -69,6 +69,12 @@ class GameEngine():
             self.players[i].active = not self.players[i].active
             self.players[i].reset_dice()
 
+        if self.game_over():
+            self.terminal.clear()
+            # TODO add player name
+            print("Someone won")
+            input("Press 'Enter' to exit")
+
         self.turns = 3
 
     def select_rule(self):
@@ -112,7 +118,7 @@ class GameEngine():
                          if formated_option == CATEGORY_FUNCTIONS[i].__name__][0]
 
         # Set player score[index] to correct score
-        self.players[active].scores[scoreboard_index] = CATEGORY_FUNCTIONS[function_index](
+        self.players[active].scores[scoreboard_index] += CATEGORY_FUNCTIONS[function_index](
                 self.players[active].get_all_dice_faces())[1]
 
         self.players[active].used_rules[function_index] = True
