@@ -9,4 +9,3 @@ The file handler contains two function for reading from a file and writing to a 
     • get_score:
       This mehtod reads the score of the game from the json file „score_yatzee.json“. If the file is empty, it will return None. If the file is not empty, it will return the file content.
 
-
