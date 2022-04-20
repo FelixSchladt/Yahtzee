@@ -74,6 +74,9 @@ class Player:
             self.dices[i].roll()
             self.dices[i].selected = False
 
+    def get_score(self):
+        return sum(score for score in self.scores)
+
 
 def new_players(name_one = "PLAYER 1", name_two = "PLAYER 2"):
     '''Generate two new players with a selectable username.

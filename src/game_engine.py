@@ -61,8 +61,8 @@ class GameEngine():
         '''
         active = self.get_active_player_index()
         if not self.player_done(active):
-            # TODO also skip if player cannot select any rule
-            self.select_rule()
+            if len(self.players[active].get_options()) > 0:
+                self.select_rule()
 
         for i, _ in enumerate(self.players):
             self.players[i].calculate_scores()
@@ -118,9 +118,14 @@ class GameEngine():
         self.players[active].used_rules[function_index] = True
 
         if self.game_over():
-            print("Board full")
             exit(0)
-            #TODO Display win screen if its given
+            winner = self.players[0].name if self.players[0].get_score() > self.players[1].get_score() else self.player[1].name
+
+            #TODO make this a little more beautiful
+            self.terminal.clear()
+            print(f"The winner of the game is: {winner}")
+            input("Press 'Enter' to exit")
+            exit(0)
 
     def roll_dice(self):
         '''Executes when the user presses space.

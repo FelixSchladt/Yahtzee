@@ -146,7 +146,7 @@ def small_straight(throws: []) -> (bool, int):
     return (is_rule, score)
 
 
-def big_straight(throws: []) -> (bool, int):
+def large_straight(throws: []) -> (bool, int):
     '''This fuction checks whether the numbers in an array match a "big road".
 
        :param throws: an array of numbers to be checked
@@ -214,4 +214,4 @@ OPTIONS = ["Aces", "Twos", "Threes", "Fours", "Fives", "Sixes"]\
 
 CATEGORY_FUNCTIONS = [ aces, twos, threes, fours, fives, sixes ]\
                    + [ triplet, quadrupel, full_house, small_straight ]\
-                   + [ big_straight, yahtzee, chance]
+                   + [ large_straight, yahtzee, chance]
