@@ -1,6 +1,8 @@
+"""This file reads and writes the score to a file"""
+
 import os
 import json
-from exeptions import EmptyFileError
+#from exeptions import EmptyFileError
 
 
 def save_score(json_dict):
@@ -24,5 +26,5 @@ def get_score():
             file_content = json.load(file)
             return file_content
 
-    raise EmptyFileError("File is empty")
+    #raise EmptyFileError("File is empty")
     return None
