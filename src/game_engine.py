@@ -13,7 +13,6 @@ from src.tui_engine import TuiEngine,\
                            draw_player_tables,\
                            category_table,\
                            log
-#TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
 from src.dices import get_dices
 from src.player import new_players
 from src.rules import CATEGORIES, CATEGORY_FUNCTIONS
@@ -106,17 +105,16 @@ class GameEngine():
         # results to the player object
         selected_option = options[selection][0]
         formated_option = selected_option.lower().replace(' ', '_')
+
         scoreboard_index = [i for i in range(len(CATEGORIES))\
                          if CATEGORIES[i] == selected_option][0]
-        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
         function_index = [i for i in range(len(CATEGORY_FUNCTIONS))\
-                         if formated_option == CATEGORY_FUNCTIONS[i]
-                                               .__name__][0]
-        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
+                         if formated_option == CATEGORY_FUNCTIONS[i].__name__][0]
+
         # Set player score[index] to correct score
         self.players[active].scores[scoreboard_index] = CATEGORY_FUNCTIONS[function_index](
                 self.players[active].get_all_dice_faces())[1]
-        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
+
         self.players[active].used_rules[function_index] = True
 
         if self.game_over():

@@ -27,7 +27,6 @@ def add_faces(throws: [], face: int):
     return (score > 0, score)
 
 # TODO better docstrings
-# TODO was ist daran besser als an der Multiple class ??? -> unnötige wiederholungen
 
 def aces(throws: []) -> (bool, int):
     '''Returns hthe sum of all ones
@@ -216,4 +215,3 @@ OPTIONS = ["Aces", "Twos", "Threes", "Fours", "Fives", "Sixes"]\
 CATEGORY_FUNCTIONS = [ aces, twos, threes, fours, fives, sixes ]\
                    + [ triplet, quadrupel, full_house, small_straight ]\
                    + [ big_straight, yahtzee, chance]
-# TODO ich fand meine implementierung besser, mit der multiple class, wo soll hierdrann der vorteil sein?

@@ -9,10 +9,7 @@ Class for handeling one player in the game
 from random import getrandbits
 
 from src.dices import get_dices
-from src.rules import CATEGORIES,\
-                      CATEGORY_FUNCTIONS,\
-                      OPTIONS
-#TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
+from src.rules import CATEGORIES, CATEGORY_FUNCTIONS, OPTIONS
 
 class Player:
     '''This class represents a single player.

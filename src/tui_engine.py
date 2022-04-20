@@ -127,13 +127,7 @@ class TuiEngine:
         for counter, text in enumerate(self.__dice[face]):
             self.text(x_pos + 1, y_pos + counter + 1, text)
 
-    def line_horizontal(self,
-                        pos_y,
-                        x_0 = 0,
-                        x_1 = None,
-                        char = " ",
-                        color = ""):
-        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
+    def line_horizontal(self, pos_y, x_0 = 0, x_1 = None, char = " ", color = ""):
         """
         Draws line from (x_0, pos_y) to (x_1, pos_y)
         """
@@ -145,12 +139,7 @@ class TuiEngine:
                 else x_0):
             self.pixel(pos_x, pos_y, char, color)
 
-    def line_vertical(self,
-                      pos_x,
-                      y_0 = 0,
-                      y_1 = None,
-                      char = " ",
-                      color = ""):
+    def line_vertical(self, pos_x, y_0 = 0, y_1 = None, char = " ", color = ""):
         """
         Draws line from (pos_x, y_0) to (pos_x, y_1)
         """
@@ -162,27 +151,14 @@ class TuiEngine:
                 else y_0):
             self.pixel(pos_x, pos_y, char, color)
 
-    def rectangle(self,
-                  x_pos,
-                  y_pos,
-                  width,
-                  height,
-                  char = " ",
-                  color = ""):
-        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
+    def rectangle(self, x_pos, y_pos, width, height, char = " ", color = ""):
         """
         Fills a rectangular section with char on the grid
         """
         for i in range(height):
             self.line_horizontal(y_pos + i, x_pos, x_pos + width, char, color)
 
-    def draw_table(self,
-                   x_pos,
-                   y_pos,
-                   width,
-                   height,
-                   left="├"):
-        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
+    def draw_table(self, x_pos, y_pos, width, height, left="├"):
         """
         Draws a table and return a list with objects to assign text to the columns
         Table is only one column wide -> if multiple columns are needed place the
