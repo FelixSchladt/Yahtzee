@@ -51,8 +51,8 @@ class Player:
         '''
         options = []
         for index, function in enumerate(CATEGORY_FUNCTIONS):
-            res, value = function([ dice.value for dice in self.dices ])
-            if res and not self.used_rules[index]:
+            _, value = function([ dice.value for dice in self.dices ])
+            if not self.used_rules[index]:
                 options.append((OPTIONS[index], value))
         return options
 

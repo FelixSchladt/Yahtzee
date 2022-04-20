@@ -147,10 +147,6 @@ class GameEngine():
         active = self.get_active_player_index()
 
         self.tui.frame()
-        #TODO
-        #size = self.tui.terminal.term_size()
-        #log(f"1: {size[0]}, 2: {size[1]}")
-
         self.round_box.set_round(self.turns)
 
         draw_dices(self.tui, self.players[active].dices)
@@ -192,7 +188,7 @@ class GameEngine():
         return game_over
 
     def player_done(self, index: int) -> bool:
-        '''Checks if a player hsa filled his board
+        '''Checks if a player has filled his board
 
            :returns: True if the player filled his board
                      else False
