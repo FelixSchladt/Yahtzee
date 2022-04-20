@@ -5,21 +5,24 @@ import json
 #from exeptions import EmptyFileError
 
 
-def save(json_dict):
+def save(json_dict: {}, path: str):
     """
     This method saves the score in a json file
-    :rtype: object
+
+    :param json_dict: The state of all players of the game
+    :param path: The file path
+    :returns: None
     """
-    # json_dict = json_dict.to_json()           //Falls es ein Objekt ist
-    acess = "w" if os.path.isfile("score_yahtzee.json") else "x"
-    with open("score_yahtzee.json", acess, encoding="UTF-8") as file:
+    acess = "w" if os.path.isfile(f"{path}.json") else "x"
+    with open(f"{path}.json", acess, encoding="UTF-8") as file:
         json.dump(json_dict, file)
 
 
 def load():
     """
     This method gets the score from a json file.
-    :rtype: object
+
+    :return: A dictionray containing the players state or None
     """
     if os.stat("score_yahtzee.json").st_size > 0:
         with open("score_yahtzee.json", "r", encoding="UTF-8") as file:

@@ -17,6 +17,7 @@ from src.dices import get_dices
 from src.player import new_players
 from src.rules import CATEGORIES, CATEGORY_FUNCTIONS
 from src.term_info import terminal
+from src.file_handler import save, load
 
 class GameEngine():
     '''The main backend of the game
@@ -27,12 +28,16 @@ class GameEngine():
         self.terminal = terminal()
         self.turns = 3
         # TODO add better name input -> maybe as varargs?? -> much easier than menu
+        self.save_path = "./.save"
         self.players = new_players()
         self.dices = get_dices()
 
-    def load_players(self):
-        # TODO implement
-        pass
+    def save_game(self):
+        player_dict = {"turns": self.turns}
+        for index, player in enumerate(self.players):
+            player_dict[f"player_{index}"] = player.__dict__
+
+        save(player_dict, self.save_path)
 
     def handle_input(self):
         '''This method is resposible for executing the
@@ -80,6 +85,7 @@ class GameEngine():
             input("Press 'Enter' to exit")
 
         self.turns = 3
+        self.save_game()
 
     def select_rule(self):
         '''This method lets the player select the rule he wants to
