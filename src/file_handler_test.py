@@ -1,3 +1,5 @@
+"""This test file tests the "file_handler" file"""
+
 import unittest
 
 from unittest.mock import patch, mock_open
@@ -5,10 +7,17 @@ from unittest.mock import patch, mock_open
 import file_handler
 
 
-
 class FileHandler(unittest.TestCase):
+    """
+    This class tests the file handler.
+    """
 
-    def test_writetofile(tmpdir):
+    @classmethod
+    def test_writetofile(cls):
+        """
+        This method tests the "save_score" method.
+        :rtype: object
+        """
         open_mock = mock_open()
         with patch("file_handler.open", open_mock, create=True):
             file_handler.save_score('test-data')
