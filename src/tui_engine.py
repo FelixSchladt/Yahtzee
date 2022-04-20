@@ -12,6 +12,8 @@ from src.rules import CATEGORIES
 #OFFSET for the Score table and WIDTH for the Value Tables
 OFFSET = 40
 
+MIN_HEIGHT = 38
+MIN_WIDTH  = 123
 
 chars = {
     'a': '┌',
@@ -52,6 +54,10 @@ class TuiEngine:
     def __grid_init(self):
         self.__grid = [[" " for j in range(self.terminal.columns)]\
                 for i in range(self.terminal.rows+1)]
+
+    def invalid_terminal_size(self):
+        return self.columns < MIN_WIDTH  or self.rows < MIN_HEIGHT:
+            #TODO Implement logic behind this to cause the  terminal to show different screen and show the user the issues -> calls function when OutOfBoundsError is raised
 
     def reset_grid(self):
         """

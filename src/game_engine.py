@@ -147,6 +147,10 @@ class GameEngine():
         active = self.get_active_player_index()
 
         self.tui.frame()
+        #TODO
+        #size = self.tui.terminal.term_size()
+        #log(f"1: {size[0]}, 2: {size[1]}")
+
         self.round_box.set_round(self.turns)
 
         draw_dices(self.tui, self.players[active].dices)
@@ -155,14 +159,11 @@ class GameEngine():
         self.round_box.draw()
         self.tui.text(2, 18, f"Player: {self.players[self.get_active_player_index()].name}"\
                 "                ")
-        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
         self.tui.text(2, 20, "Selected                  ")
         self.tui.text(2, 20, "Selected: "\
                 f"{self.players[active].get_selected_dice_faces()}")
-        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
         self.tui.text(2, 22, "Options: "\
                 f"{self.players[active].get_options()[:6]}")
-        #TODO Ich mag die Formatierung nicht -> dürfen laut herrn möbius 140 zeichen nutzen und würde dies auch dann gerne.
         self.tui.flush()
 
     def get_active_player_index(self) -> int:

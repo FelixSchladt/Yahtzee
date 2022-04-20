@@ -38,7 +38,6 @@ class Colors:
     CROSSED = "\033[9m"
     END = "\033[0m"
 
-
 def terminal():
     """
     returns the platform specific library for terminal handling
@@ -69,6 +68,7 @@ class _posix:
         """
         Checks for minimum required size
         """
+
         pass
         #TODO implement watch function which checks for changing termianl size
 
