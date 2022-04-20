@@ -30,6 +30,10 @@ class GameEngine():
         self.players = new_players()
         self.dices = get_dices()
 
+    def load_players(self):
+        # TODO implement
+        pass
+
     def handle_input(self):
         '''This method is resposible for executing the
            correct methods after a certain key is pressed
