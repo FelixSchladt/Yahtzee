@@ -5,7 +5,7 @@ import json
 #from exeptions import EmptyFileError
 
 
-def save_score(json_dict):
+def save(json_dict):
     """
     This method saves the score in a json file
     :rtype: object
@@ -16,7 +16,7 @@ def save_score(json_dict):
         json.dump(json_dict, file)
 
 
-def get_score():
+def load():
     """
     This method gets the score from a json file.
     :rtype: object
@@ -26,5 +26,4 @@ def get_score():
             file_content = json.load(file)
             return file_content
 
-    #raise EmptyFileError("File is empty")
     return None
