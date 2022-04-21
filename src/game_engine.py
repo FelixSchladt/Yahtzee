@@ -22,17 +22,30 @@ from src.file_handler import save, load
 class GameEngine():
     '''The main backend of the game
     '''
-    def __init__(self):
+    def __init__(self, save_file: str = None,
+                       player_one: str = "Player One",
+                       player_two: str = "Player Two"):
         self.tui = TuiEngine()
         self.round_box = RoundsBox(self.tui)
         self.terminal = terminal()
         self.turns = 3
-        # TODO add better name input -> maybe as varargs?? -> much easier than menu
-        self.save_path = "./.save"
-        self.players = new_players()
+        self.save_path = save_file
+        self.players = new_players(player_one, player_two)
         self.dices = get_dices()
 
+    def load_game(self):
+        '''This method loads a save state from a save file
+           if a save file is given
+        '''
+        if self.save_path is not None:
+            save_dict = load(self.save_path)
+            self.turns = save_dict["turns"]
+            for i, _ in enumerate(self.players):
+                self.players[i].load_from_dict(save_dict[f"players_{i}"])
+
     def save_game(self):
+        '''Stores the game in a save file
+        '''
         player_dict = {"turns": self.turns}
         for index, player in enumerate(self.players):
             player_dict[f"player_{index}"] = {"name": player.name,\
@@ -137,14 +150,15 @@ class GameEngine():
         self.players[active].used_rules[function_index] = True
 
         if self.game_over():
-            exit(0)
-            winner = self.players[0].name if self.players[0].get_score() > self.players[1].get_score() else self.player[1].name
+            winner = self.players[0].name \
+                     if self.players[0].get_score() > self.players[1].get_score()\
+                     else self.players[1].name
 
             #TODO make this a little more beautiful
             self.terminal.clear()
             print(f"The winner of the game is: {winner}")
             input("Press 'Enter' to exit")
-            exit(0)
+            sys.exit(0)
 
     def roll_dice(self):
         '''Executes when the user presses space.

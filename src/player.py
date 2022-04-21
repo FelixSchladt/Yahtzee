@@ -25,6 +25,14 @@ class Player:
         self.scores     = [ 0 ]     * len(CATEGORIES)
         self.used_rules = [ False ] * len(CATEGORY_FUNCTIONS)
 
+    def load_from_dict(self, data: []):
+        '''This method loads a players data from a dictionary
+
+           :param data: The dict the data is loaded from
+           :returns: None
+        '''
+        
+
     def get_all_dice_faces(self) -> []:
         '''Get all dice values
 
@@ -79,6 +87,10 @@ class Player:
             self.dices[i].selected = False
 
     def get_score(self):
+        '''Get the total score of a player
+
+           :returns: The total amount of points the player has collected
+        '''
         return sum(score for score in self.scores)
 
 

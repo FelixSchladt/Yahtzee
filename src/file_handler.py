@@ -18,13 +18,14 @@ def save(json_dict: {}, path: str):
         json.dump(json_dict, file)
 
 
-def load():
+def load(path: str):
     """
     This method gets the score from a json file.
 
+    :param path: the path to the save file
     :return: A dictionray containing the players state or None
     """
-    if os.stat("score_yahtzee.json").st_size > 0:
+    if os.stat(f"{path}.json").st_size > 0:
         with open("score_yahtzee.json", "r", encoding="UTF-8") as file:
             file_content = json.load(file)
             return file_content
