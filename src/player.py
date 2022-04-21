@@ -31,7 +31,15 @@ class Player:
            :param data: The dict the data is loaded from
            :returns: None
         '''
-        
+        self.name = data["name"]
+        for i, dice_value in enumerate(data["dices"]):
+            self.dices[i].value = dice_value
+
+        for i, flag in enumerate(data["flags"]):
+            self.used_rules[i] = flag
+
+        for i, score in enumerate(data["scores"]):
+            self.scores[i] = score
 
     def get_all_dice_faces(self) -> []:
         '''Get all dice values
