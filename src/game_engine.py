@@ -37,8 +37,8 @@ class GameEngine():
         for index, player in enumerate(self.players):
             player_dict[f"player_{index}"] = {"name": player.name,\
                                               "dices": [dice.value for dice in player.dices],\
-                                              "flags": [flag for flag in player.used_rules],\
-                                              "scores": [score for score in player.scores]}
+                                              "flags": list(player.used_rules),\
+                                              "scores": list(player.scores)}
 
         save(player_dict, self.save_path)
 
