@@ -28,20 +28,27 @@ class GameEngine():
         self.tui = TuiEngine()
         self.round_box = RoundsBox(self.tui)
         self.terminal = terminal()
-        self.turns = 3
+
         self.save_path = save_file
-        self.players = new_players(player_one, player_two)
-        self.dices = get_dices()
+
+        # TODO try for logic? -> maybe change somehow
+        try:
+            self.load_game()
+
+        except Exception:
+            self.players = new_players(player_one, player_two)
+            self.dices = get_dices()
+            self.turns = 3
+
 
     def load_game(self):
         '''This method loads a save state from a save file
            if a save file is given
         '''
-        if self.save_path is not None:
-            save_dict = load(self.save_path)
-            self.turns = save_dict["turns"]
-            for i, _ in enumerate(self.players):
-                self.players[i].load_from_dict(save_dict[f"players_{i}"])
+        save_dict = load(self.save_path)
+        self.turns = save_dict["turns"]
+        for i, _ in enumerate(self.players):
+            self.players[i].load_from_dict(save_dict[f"players_{i}"])
 
     def save_game(self):
         '''Stores the game in a save file
@@ -116,7 +123,7 @@ class GameEngine():
         self.terminal.clear()
         print(f"{self.players[active].name} chooses an option:")
         for i, option in enumerate(options):
-            print(f"{i+1}. {option}")
+            print(f"{i+1}. {option[0].upper()}\tPoints: {option[1]}")
 
         while True:
             try:
@@ -196,8 +203,6 @@ class GameEngine():
         self.tui.text(2, 20, "Selected                  ")
         self.tui.text(2, 20, "Selected: "\
                 f"{self.players[active].get_selected_dice_faces()}")
-        self.tui.text(2, 22, "Options: "\
-                f"{self.players[active].get_options()[:6]}")
         self.tui.flush()
 
     def get_active_player_index(self) -> int:
