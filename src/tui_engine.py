@@ -10,7 +10,7 @@ from src.term_info import terminal, Colors
 from src.rules import CATEGORIES
 
 #OFFSET for the Score table and WIDTH for the Value Tables
-OFFSET = 40
+OFFSET = 50
 
 MIN_HEIGHT = 38
 MIN_WIDTH  = 123
