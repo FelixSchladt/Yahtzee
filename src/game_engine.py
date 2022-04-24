@@ -7,6 +7,7 @@
 '''
 
 import sys
+import os
 from json import JSONDecodeError
 from src.tui_engine import TuiEngine,\
                            RoundsBox,\
@@ -22,7 +23,7 @@ from src.file_handler import save, load
 class GameEngine():
     '''The main backend of the game
     '''
-    def __init__(self, save_file: str = None,
+    def __init__(self, save_file: str = "save",
                        player_one: str = "Player2",
                        player_two: str = "Player1"):
         self.tui = TuiEngine()
@@ -32,11 +33,11 @@ class GameEngine():
 
         self.save_path = save_file
 
-        if save_file is not None:
+        if os.path.exists(self.save_path):
             try:
                 self.load_game()
 
-            except JSONDecodeError:
+            except (JSONDecodeError, ValueError):
                 self._init_players(player_one, player_two)
 
         else:
@@ -44,6 +45,15 @@ class GameEngine():
 
     def _init_players(self, name_one: str, name_two: str):
         self.players = new_players(name_one, name_two)
+
+    def _validate_save_file_contents(self, content: {}):
+        '''This method checks whether the data found in a save file matches
+           the format used by the game.
+
+           :throws: ValueError, when data is invalid
+           :returns: None
+        '''
+        pass
 
     def load_game(self):
         '''This method loads a save state from a save file

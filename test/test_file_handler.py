@@ -1,29 +1,23 @@
-"""This test file tests the "file_handler" file"""
+#!/usr/bin/python3
 
-import unittest
+# pylint: disable=C
 
-from unittest.mock import patch, mock_open
+import os
+from unittest import TestCase
 from src.file_handler import save, load
 
 
-class TestRuleGenerator(unittest.TestCase):
-    """
-    This class tests the file handler.
-    """
+class TestRuleGenerator(TestCase):
+    def test_save(self):
+        save({"A": "B"}, "test_file")
+        with open("test_file.json", "r") as file:
+            content = file.read()
 
-    @classmethod
-    def test_writetofile(cls):
-        """
-        This method tests the "save" method.
-        :rtype: object
-        """
-        open_mock = mock_open()
-        with patch("file_handler.open", open_mock, create=True):
-            save({"test-data": "Some_Value"}, "test_save")
+        self.assertEqual(content, '{"A": "B"}')
 
-        open_mock.assert_called_with("test_save.json", "x", encoding="UTF-8")
-        open_mock.return_value.write.assert_called_once_with('{"test-data": "Some_Value"}')
+    def test_load(self):
+        content = load("test_file")
+        self.assertEqual(content, {"A": "B"})
 
-
-if __name__ == '__main__':
-    unittest.main()
+    def tearDown(self):
+        os.remove("test_file.json")
