@@ -209,10 +209,10 @@ class GameEngine():
         category_table(self.tui)
         draw_player_tables(self.tui, self.players)
         self.round_box.draw()
-        self.tui.text(2, 18, f"Player: {self.players[self.get_active_player_index()].name}"\
+        self.tui.text(4, 18, f"Player: {self.players[self.get_active_player_index()].name}"\
                 "                ")
-        self.tui.text(2, 20, "Selected                  ")
-        self.tui.text(2, 20, "Selected: "\
+        self.tui.text(4, 20, "Selected                  ")
+        self.tui.text(4, 20, "Selected: "\
                 f"{self.players[active].get_selected_dice_faces()}")
         self.tui.flush()
 
