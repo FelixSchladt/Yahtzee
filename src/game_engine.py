@@ -31,11 +31,10 @@ class GameEngine():
 
         self.save_path = save_file
 
-        # TODO try for logic? -> maybe change somehow
-        try:
+        if save_file is not None:
             self.load_game()
 
-        except Exception:
+        if save_file is None:
             self.players = new_players(player_one, player_two)
             self.dices = get_dices()
             self.turns = 3
