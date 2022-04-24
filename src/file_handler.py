@@ -2,8 +2,6 @@
 
 import os
 import json
-#from exeptions import EmptyFileError
-
 
 def save(json_dict: {}, path: str):
     """
