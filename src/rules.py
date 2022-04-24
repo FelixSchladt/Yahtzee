@@ -11,7 +11,7 @@
    combination with a given array of numbers.
 '''
 
-def add_faces(throws: [], face: int):
+def add_faces(throws: [], face: int) -> (bool, int):
     '''Adds up all numbers equal to self.face
 
     :param throws: an array of the numbers that are to be added up
@@ -26,35 +26,33 @@ def add_faces(throws: [], face: int):
 
     return (score > 0, score)
 
-# TODO better docstrings
-
 def aces(throws: []) -> (bool, int):
-    '''Returns hthe sum of all ones
+    '''Returns the sum of all ones
     '''
     return add_faces(throws, 1)
 
 def twos(throws: []) -> (bool, int):
-    '''Returns hthe sum of all twos
+    '''Returns the sum of all twos
     '''
     return add_faces(throws, 2)
 
 def threes(throws: []) -> (bool, int):
-    '''Returns hthe sum of all threes
+    '''Returns the sum of all threes
     '''
     return add_faces(throws, 3)
 
 def fours(throws: []) -> (bool, int):
-    '''Returns hthe sum of all fours
+    '''Returns the sum of all fours
     '''
     return add_faces(throws, 4)
 
 def fives(throws: []) -> (bool, int):
-    '''Returns hthe sum of all fives
+    '''Returns the sum of all fives
     '''
     return add_faces(throws, 5)
 
 def sixes(throws: []) -> (bool, int):
-    '''Returns hthe sum of all sixes
+    '''Returns the sum of all sixes
     '''
     return add_faces(throws, 6)
 
