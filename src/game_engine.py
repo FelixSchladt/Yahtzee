@@ -7,13 +7,13 @@
 '''
 
 import sys
+from json import JSONDecodeError
 from src.tui_engine import TuiEngine,\
                            RoundsBox,\
                            draw_dices,\
                            draw_player_tables,\
                            category_table,\
                            log
-from src.dices import get_dices
 from src.player import new_players
 from src.rules import CATEGORIES, CATEGORY_FUNCTIONS
 from src.term_info import terminal
@@ -28,17 +28,22 @@ class GameEngine():
         self.tui = TuiEngine()
         self.round_box = RoundsBox(self.tui)
         self.terminal = terminal()
+        self.turns = 3
 
         self.save_path = save_file
 
         if save_file is not None:
-            self.load_game()
+            try:
+                self.load_game()
 
-        if save_file is None:
-            self.players = new_players(player_one, player_two)
-            self.dices = get_dices()
-            self.turns = 3
+            except JSONDecodeError:
+                self._init_players(player_one, player_two)
 
+        else:
+            self._init_players(player_one, player_two)
+
+    def _init_players(self, name_one: str, name_two: str):
+        self.players = new_players(name_one, name_two)
 
     def load_game(self):
         '''This method loads a save state from a save file
@@ -102,9 +107,17 @@ class GameEngine():
 
         if self.game_over():
             self.terminal.clear()
-            # TODO add player name
-            print("Someone won")
+            winner = self.players[0].name \
+                     if self.players[0].get_score() > self.players[1].get_score()\
+                     else self.players[1].name
+
+            #TODO print better win screen
+            #     print player table
+            #     make big box with winner name
+            self.terminal.clear()
+            print(f"The winner of the game is: {winner}")
             input("Press 'Enter' to exit")
+            sys.exit(0)
 
         self.turns = 3
         self.save_game()
@@ -135,7 +148,7 @@ class GameEngine():
                     continue
                 break
 
-            except Exception:
+            except ValueError:
                 print("Invalid input, try again!")
                 continue
 
@@ -154,17 +167,6 @@ class GameEngine():
                 self.players[active].get_all_dice_faces())[1]
 
         self.players[active].used_rules[function_index] = True
-
-        if self.game_over():
-            winner = self.players[0].name \
-                     if self.players[0].get_score() > self.players[1].get_score()\
-                     else self.players[1].name
-
-            #TODO make this a little more beautiful
-            self.terminal.clear()
-            print(f"The winner of the game is: {winner}")
-            input("Press 'Enter' to exit")
-            sys.exit(0)
 
     def roll_dice(self):
         '''Executes when the user presses space.
