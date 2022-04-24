@@ -2,7 +2,6 @@
 
 # pylint: disable=C
 
-import os
 from unittest import TestCase
 from src.file_handler import save, load
 
@@ -16,8 +15,6 @@ class TestRuleGenerator(TestCase):
         self.assertEqual(content, '{"A": "B"}')
 
     def test_load(self):
+        save({"A": "B"}, "test_file")
         content = load("test_file")
         self.assertEqual(content, {"A": "B"})
-
-    def tearDown(self):
-        os.remove("test_file.json")

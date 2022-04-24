@@ -53,7 +53,7 @@ class GameEngine():
            :throws: ValueError, when data is invalid
            :returns: None
         '''
-        pass
+        # TODO implement this
 
     def load_game(self):
         '''This method loads a save state from a save file

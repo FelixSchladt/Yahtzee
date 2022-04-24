@@ -23,9 +23,9 @@ def load(path: str):
     :param path: the path to the save file
     :return: A dictionray containing the players state or None
     """
+    file_content = None
     if os.stat(f"{path}.json").st_size > 0:
         with open(f"{path}.json", "r", encoding="UTF-8") as file:
             file_content = json.load(file)
-            return file_content
 
-    return None
+    return file_content
