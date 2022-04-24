@@ -23,8 +23,8 @@ class GameEngine():
     '''The main backend of the game
     '''
     def __init__(self, save_file: str = None,
-                       player_one: str = "Player One",
-                       player_two: str = "Player Two"):
+                       player_one: str = "Player2",
+                       player_two: str = "Player1"):
         self.tui = TuiEngine()
         self.round_box = RoundsBox(self.tui)
         self.terminal = terminal()
