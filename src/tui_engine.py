@@ -56,8 +56,12 @@ class TuiEngine:
                 for i in range(self.terminal.rows+1)]
 
     def invalid_terminal_size(self):
-        return self.columns < MIN_WIDTH  or self.rows < MIN_HEIGHT
-            #TODO Implement logic behind this to cause the  terminal to show different screen and show the user the issues -> calls function when OutOfBoundsError is raised
+        '''Check if the dimensions of the current terminal fit the minimum
+           requirements of the game
+        '''
+        return self.display_width < MIN_WIDTH  or self.display_height < MIN_HEIGHT
+        #TODO Implement logic behind this to cause the  terminal to show different screen
+        #     and show the user the issues -> calls function when OutOfBoundsError is raised
 
     def reset_grid(self):
         """
