@@ -1,0 +1,3 @@
+This file contains a lot of text,
+but none if it can be read by a json formatter,
+so its gonna crash 100%

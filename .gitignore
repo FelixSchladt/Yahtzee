@@ -2,4 +2,5 @@
 .coverage
 src/.coverage
 *tui_engine.log
-*.json
+None.json
+
