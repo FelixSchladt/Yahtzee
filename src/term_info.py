@@ -64,14 +64,6 @@ class _posix:
 
         return int(rows)-1, int(columns)
 
-    def invalid_terminal_size(self):
-        """
-        Checks for minimum required size
-        """
-
-        pass
-        #TODO implement watch function which checks for changing termianl size
-
     def getch(self):
         """
         sets terminal to raw mode in order to be able to get raw keyboard input
@@ -128,13 +120,6 @@ class _windows:
         """
         columns, rows = shutil.get_terminal_size()
         return int(columns), int(rows)
-
-    def invalid_terminal_size(self):
-        """
-        Checks for minimum required size
-        """
-        #TODO implement watch function which checks for changing termianl size
-        pass
 
     @staticmethod
     def exit_raw():
