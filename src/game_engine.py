@@ -17,8 +17,10 @@ from src.tui_engine import TuiEngine,\
                            log
 from src.player import new_players
 from src.rules import CATEGORIES, CATEGORY_FUNCTIONS
-from src.term_info import terminal
+from src.term_info import terminal, Colors
+from src.exceptions import OutOfBoundsError
 from src.file_handler import save, load
+
 
 class GameEngine():
     '''The main backend of the game
@@ -27,10 +29,15 @@ class GameEngine():
                        player_one: str = "Player2",
                        player_two: str = "Player1"):
         self.tui = TuiEngine()
-        self.round_box = RoundsBox(self.tui)
         self.terminal = terminal()
+
+        if not self.tui.invalid_terminal_size():
+            self.invalid_screen_size()
+
+        self.round_box = RoundsBox(self.tui)
         self.turns = 3
 
+        self.height, self.width = self.terminal.term_size()
         self.save_path = save_file
 
         if os.path.exists(self.save_path):
@@ -54,6 +61,34 @@ class GameEngine():
            :returns: None
         '''
         # TODO implement this
+
+    def getch(self):
+        """
+            This method checks if terminal size has changed and if so does
+            reinitialize tui_engine -> if nothing changes, it just proceeds to return
+            the blocking terminal.getch() of term_info class
+        """
+        current_height, current_width = self.terminal.term_size()
+        if self.height != current_height or self.width != current_width:
+            self.height, self.width = current_height, current_width
+            #TODO reinitialize tui_engine -> grid init
+            # could we reload the class somehow or is there a need for a dedicated reinit funciton in tui_engine ????
+        if not self.tui.invalid_terminal_size():
+            return self.terminal.getch()
+        self.invalid_screen_size()
+
+    def invalid_screen_size(self):
+        """This function shows the screen if the current terminal size is too small
+        """
+        while not self.tui.invalid_terminal_size():
+            self.tui.text(2,
+                      int(self.tui.display_height/2),
+                      "Invalid Terminal Size",
+                      color=Colors.RED)
+            self.tui.text(2,
+                      int(self.tui.display_height/2+1),
+                      "Please resize the terminal")
+
 
     def load_game(self):
         '''This method loads a save state from a save file
@@ -82,7 +117,7 @@ class GameEngine():
 
            :returns: None
         '''
-        key = self.terminal.getch()
+        key = self.getch()
 
         if key.isnumeric() and int(key) in range(1, 6):
             active = self.get_active_player_index()
@@ -259,5 +294,8 @@ class GameEngine():
         '''Contains the main loop of the game
         '''
         while True:
-            self.draw_game()
-            self.handle_input()
+            try:
+                self.draw_game()
+                self.handle_input()
+            except OutOfBoundsError:
+                self.invalid_screen_size()
