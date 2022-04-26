@@ -11,7 +11,7 @@ from src.term_info import terminal, Colors
 from src.rules import CATEGORIES
 
 #OFFSET for the Score table and WIDTH for the Value Tables
-OFFSET = 90
+OFFSET = 45
 
 MIN_HEIGHT = 38 #TODO REFACTOR minimal rewuired sizes for correct output
 MIN_WIDTH  = 123
@@ -72,10 +72,6 @@ class TuiEngine:
         prints grid buffer onto terminal
         """
         for counter, value in enumerate(self.__grid):
-            # TODO Check if this works on WINDOWS -> if not is colorama needed?
-            # Refer to comment in term_info.py at _windows class
-            # ====> I implemented a supposed fix working for windos 10 and
-            #       newer in term_info.py bitte testen
             print(f"\033[{counter};0H" + "".join(value))
 
     def pixel(self, pos_x, pos_y, char = " ", color = ""):
@@ -88,12 +84,13 @@ class TuiEngine:
             raise OutOfBoundsError
         self.__grid[pos_y+1][pos_x] = f"{color}{char}{Colors.END}"
 
-    def text(self, pos_x, pos_y, txt, length=None, color = ""):
+    def text(self, coordinates, txt, length=None, color = ""):
         """
         prints text into the grid buffer
         Starts at (pos_x, pos_y) coordinate.
         If a length is specified, no symbols beyond the lenght will be written
         """
+        pos_x, pos_y = coordinates
         txt = str(txt)
         length = len(txt) if length is None else length
 
@@ -115,11 +112,11 @@ class TuiEngine:
         x_1 = self.display_width if x_1 is None else x_1
         y_1 = self.display_height if y_1 is None else y_1
 
-        self.line_horizontal(y_0, x_0, x_1, char = "─")
-        self.line_horizontal(y_1, x_0, x_1, char = "─")
+        self.line_horizontal((y_0, x_0), x_1, char = "─")
+        self.line_horizontal((y_1, x_0), x_1, char = "─")
 
-        self.line_vertical(x_0, y_0, y_1, char = "│")
-        self.line_vertical(x_1, y_0, y_1, char = "│")
+        self.line_vertical((x_0, y_0), y_1, char = "│")
+        self.line_vertical((x_1, y_0), y_1, char = "│")
 
         self.pixel(x_0, y_0, "┌")
         self.pixel(x_0, y_1, "└")
@@ -133,12 +130,13 @@ class TuiEngine:
         """
         self.frame(x_pos, y_pos, x_pos + 6, y_pos + 4)
         for counter, text in enumerate(self.__dice[face]):
-            self.text(x_pos + 1, y_pos + counter + 1, text)
+            self.text((x_pos + 1, y_pos + counter + 1), text)
 
-    def line_horizontal(self, pos_y, x_0 = 0, x_1 = None, char = " ", color = ""):
+    def line_horizontal(self, coordinates, x_1 = None, char = " ", color = ""):
         """
         Draws line from (x_0, pos_y) to (x_1, pos_y)
         """
+        pos_y, x_0 = coordinates
         x_1 = self.display_width if x_1 is None else x_1
         for pos_x in range(
                 x_0 if x_0 < x_1
@@ -147,10 +145,11 @@ class TuiEngine:
                 else x_0):
             self.pixel(pos_x, pos_y, char, color)
 
-    def line_vertical(self, pos_x, y_0 = 0, y_1 = None, char = " ", color = ""):
+    def line_vertical(self, coordinates, y_1 = None, char = " ", color = ""):
         """
         Draws line from (pos_x, y_0) to (pos_x, y_1)
         """
+        pos_x, y_0 = coordinates
         y_1 = self.display_height if y_1 is None else y_1
         for pos_y in range(
                 y_0 if y_0 < y_1
@@ -159,23 +158,26 @@ class TuiEngine:
                 else y_0):
             self.pixel(pos_x, pos_y, char, color)
 
-    def rectangle(self, x_pos, y_pos, width, height, char = " ", color = ""):
+    def rectangle(self, coordinates, dimensions, char = " ", color = ""):
         """
         Fills a rectangular section with char on the grid
         """
+        x_pos, y_pos = coordinates
+        width, height = dimensions
         for i in range(height):
-            self.line_horizontal(y_pos + i, x_pos, x_pos + width, char, color)
+            self.line_horizontal((y_pos + i, x_pos), x_pos + width, char, color)
 
-    def draw_table(self, x_pos, y_pos, width, height, left="├"):
+    def draw_table(self, coordinates, width, height, left="├"):
         """
         Draws a table and return a list with objects to assign text to the columns
         Table is only one column wide -> if multiple columns are needed place the
         tables next to each other and pass '┼' as left parameter
         """
+        x_pos, y_pos = coordinates
         self.frame(x_pos, y_pos, x_pos + width, y_pos + height)
 
         for i in range(y_pos+2, y_pos+height, 2):
-            self.line_horizontal(i, x_pos, x_pos+width, "─")
+            self.line_horizontal((i, x_pos), x_pos+width, "─")
             self.pixel(x_pos, i, left)
             self.pixel(x_pos+width, i, "┤" )
 
@@ -196,9 +198,18 @@ class PlacedText:
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.length = length
+        self.color = ""
+        self.text = " "
 
     def __call__(self, text, color = ""):
-        self.tui.text(self.x_pos, self.y_pos, text, self.length)
+        self.tui.text((self.x_pos, self.y_pos), text, self.length, color)
+        self.text = text
+        self.color = color
+
+    def reprint(self):
+        """Reprints last entered text onto the buffer"""
+        self.tui.text((self.x_pos, self.y_pos), self.text, self.length, self.color)
+
 
 class RoundsBox:
     '''A dedicated class to display a box containing the remaining rounds
@@ -241,7 +252,7 @@ def category_table(tui):
     """
     Draws table with the yathzee categories
     """
-    fields = tui.draw_table(tui.display_width - OFFSET , 2, 17, 17 *2)
+    fields = tui.draw_table((tui.display_width - OFFSET , 2), 17, 17 *2)
     for counter, field in enumerate(fields):
         field(CATEGORIES[counter])
 
@@ -264,8 +275,9 @@ def draw_player_tables(tui, players):
     Draws tables for the players points
     """
     w_1, w_2 = len(players[0].name), len(players[1].name)
-    players[0].table = tui.draw_table(tui.display_width - OFFSET + 17, 2, w_1+2, 17 *2, "┼")
-    players[1].table = tui.draw_table(tui.display_width - OFFSET + 17 + w_1+2, 2, w_2+2, 17 *2, "┼")
+    width = tui.display_width - OFFSET
+    players[0].table = tui.draw_table((width + 17, 2), w_1+2, 17 *2, "┼")
+    players[1].table = tui.draw_table((width + 17 + w_1+2, 2), w_2+2, 17 *2, "┼")
 
     update_player_scores(players)
 
@@ -285,7 +297,7 @@ def draw_dices(tui, dices):
         level_1, level_2  = (2*dice_height, 2) if dice.selected else (2, 2*dice_height)
         x_pos, y_pos = [(4+counter*dice_width, level_1,) for i in range(5)][counter]
         tui.dice(x_pos, y_pos, dice.value)
-        tui.rectangle(x_pos, level_2, dice_width, dice_height, )
+        tui.rectangle((x_pos, level_2), (dice_width, dice_height))
 
 
 def log(msg):

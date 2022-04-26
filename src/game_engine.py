@@ -28,7 +28,8 @@ class GameEngine():
     '''The main backend of the game
     '''
     def __init__(self, save_file: str, player_two: str = None, player_one: str = None):
-        players = [ player if player is not None else f"Player{counter+1}" for counter, player in enumerate( (player_one, player_two) ) ]
+        players = [ player if player is not None else f"Player{counter+1}" for\
+                   counter, player in enumerate( (player_one, player_two) ) ]
 
         save_file = "save" if save_file is None else save_file
 
@@ -62,7 +63,6 @@ class GameEngine():
            :returns: None
         '''
         # TODO implement this#
-        pass
 
     def getch(self):
         """
@@ -75,33 +75,27 @@ class GameEngine():
             self.height, self.width = current_height, current_width
 
             self.tui.reset_grid()
-        try:
-            self.tui.invalid_terminal_size()
-            return self.tui.terminal.getch()
-        except OutOfBoundsError:
-            raise OutOfBoundsError
-            return chr(0)
+        self.tui.invalid_terminal_size()
+        return self.tui.terminal.getch()
 
     def invalid_screen_size(self):
         """This function shows the screen if the current terminal size is too small
         """
         self.tui = TuiEngine()
-        text = "Invalid Terminal Size", "Please resize the terminal"
-        if self.tui.display_height < 4 or\
-                self.tui.display_width < (len(max(text, key=len))+4):
+        text = "Invalid Terminal Size", "Please enlarge the terminal"
+        if self.tui.display_height < 4 or self.tui.display_width < (len(max(text, key=len))+4):
             print("Error: Terminal too small")
         else:
-
-            self.tui.text(int(self.tui.display_width/2 - len(text[0])/2),
-                      int(self.tui.display_height/2),
+            self.tui.text((int(self.tui.display_width/2 - len(text[0])/2),
+                      int(self.tui.display_height/2)),
                       text[0],
                       color=Colors.RED)
-            self.tui.text(int(self.tui.display_width/2 - len(text[1])/2),
-                      int(self.tui.display_height/2+1),
+            self.tui.text((int(self.tui.display_width/2 - len(text[1])/2),
+                      int(self.tui.display_height/2+1)),
                       text[1])
             self.tui.flush()
-            self.tui.rectangle(2, int(self.tui.display_height/2),
-                           len(max(text, key = len)), 2)
+            self.tui.rectangle((2, int(self.tui.display_height/2)),
+                           (len(max(text, key = len)), 2))
             sleep(0.1)
 
 
@@ -199,9 +193,7 @@ class GameEngine():
 
         while True:
             try:
-                selection = int(
-                            input(f"Input (1-{len(options)}): "))\
-                            - 1
+                selection = int(input(f"Input (1-{len(options)}): "))- 1
 
                 if not selection in range(len(options)):
                     print("Invalid input, try again!")
@@ -260,10 +252,10 @@ class GameEngine():
         category_table(self.tui)
         draw_player_tables(self.tui, self.players)
         self.round_box.draw()
-        self.tui.text(4, 18, f"Player: {self.players[self.get_active_player_index()].name}"\
+        self.tui.text((4, 18), f"Player: {self.players[self.get_active_player_index()].name}"\
                 "                ")
-        self.tui.text(4, 20, "Selected                  ")
-        self.tui.text(4, 20, "Selected: "\
+        self.tui.text((4, 20), "Selected                  ")
+        self.tui.text((4, 20), "Selected: "\
                 f"{self.players[active].get_selected_dice_faces()}")
         self.tui.flush()
 
@@ -315,8 +307,4 @@ class GameEngine():
                 self.draw_game()
                 self.handle_input()
             except OutOfBoundsError:
-                # TODO maybe do this with an if block, because then
-                # the problem could be solved with a while loop
-                # So the terminal could restore itself automatically
-                # when required size is reached again
                 self.invalid_screen_size()

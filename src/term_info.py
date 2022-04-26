@@ -11,7 +11,9 @@ import os
 import platform
 
 if platform.system() == 'Linux' or platform.system() == 'FreeBSD':
-    import sys, tty, termios
+    import sys
+    import tty
+    import termios
 else:
     import msvcrt
     import shutil
@@ -50,8 +52,7 @@ def terminal():
     """
     if platform.system() == 'Linux' or platform.system() == 'FreeBSD':
         return _posix()
-    else:
-        return _windows()
+    return _windows()
 
 
 class _posix:
@@ -66,19 +67,21 @@ class _posix:
         returns current size and height of terminal in characters
         """
         with os.popen('stty size', 'r') as pipe:
-            rows, columns = pipe.read().split()
+            self.rows, self.columns = pipe.read().split()
+        self.rows=int(self.rows)-1
+        self.columns = int(self.columns)
+        return self.rows, self.columns
 
-        return int(rows)-1, int(columns)
-
-    def getch(self):
+    @staticmethod
+    def getch():
         """
         sets terminal to raw mode in order to be able to get raw keyboard input
         """
         old_settings = termios.tcgetattr(sys.stdin.fileno())
         tty.setraw(sys.stdin.fileno())
-        ch = sys.stdin.read(1)
+        char = sys.stdin.read(1)
         termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old_settings)
-        return ch
+        return char
 
     @staticmethod
     def clear():
@@ -87,8 +90,6 @@ class _posix:
         """
         os.system("clear")
 
-# TODO  I read that the colorama module is needed at least in the ancient dos box terminal, but since win11/win10 i belive ther is a new terminal available
-#       Please check if ansi escape sequences work in this and colored text and cursor positioning works as excpected
 
 class _windows:
     """
@@ -96,7 +97,6 @@ class _windows:
     """
     def __init__(self):
         self.rows, self.columns = self.term_size()
-        #TODO Should enable ANSI codes in cmd on windows without colorama
         kernel32 = ctypes.windll.kernel32
         kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
 
@@ -105,7 +105,7 @@ class _windows:
         """
         uses msvcrt library to get character input
         """
-        return msvcrt.getch()
+        return msvcrt.getch().decode()
 
     @staticmethod
     def clear():
@@ -118,13 +118,13 @@ class _windows:
         """
         returns current size and height of terminal in characters
         """
-        columns, rows = shutil.get_terminal_size()
-        return int(columns), int(rows)
+        self.columns, self.rows = (int(element) for element in shutil.get_terminal_size())
+        self.rows-=1
+        return self.rows, self.columns
 
 
 if __name__ == "__main__":
     term = terminal()
-    print(ord(term.getch()))
     for i in dir(Colors):
         if i[0:1] != "_" and i != "END":
-            print("{:>16} {}".format(i, getattr(Colors, i) + i + Colors.END))
+            print(f"{i:>16} {getattr(Colors, i)}{i}{Colors.END}")
