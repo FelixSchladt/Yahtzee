@@ -94,8 +94,8 @@ class GameEngine():
                       text[1])
         self.tui.flush()
         self.tui.rectangle(2,
-                               int(self.tui.display_height/2),
-                               len(max(text, key = len)), 2)
+                           int(self.tui.display_height/2),
+                           len(max(text, key = len)), 2)
         sleep(0.5)
 
 
@@ -308,4 +308,8 @@ class GameEngine():
                 self.draw_game()
                 self.handle_input()
             except OutOfBoundsError:
+                # TODO maybe do this with an if block, because then 
+                # the problem could be solved with a while loop
+                # So the terminal could restore itself automatically
+                # when required size is reached again
                 self.invalid_screen_size()
