@@ -77,7 +77,7 @@ class GameEngine():
             # could we reload the class somehow or is there a need for a
             #dedicated reinit funciton in tui_engine ????
 
-        self.invalid_screen_size()
+            self.invalid_screen_size()
         return self.tui.terminal.getch()
 
     def invalid_screen_size(self):
