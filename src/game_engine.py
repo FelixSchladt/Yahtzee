@@ -315,4 +315,8 @@ class GameEngine():
                 self.draw_game()
                 self.handle_input()
             except OutOfBoundsError:
+                # TODO maybe do this with an if block, because then
+                # the problem could be solved with a while loop
+                # So the terminal could restore itself automatically
+                # when required size is reached again
                 self.invalid_screen_size()
