@@ -10,6 +10,9 @@ from src.game_engine import GameEngine
 import argparse
 
 def main():
+    """
+    Create Arguments "--name_one", "--name_two", "savefile" for starting the game
+    """
     parser_name = argparse.ArgumentParser(description='Set player names')
     parser_name.add_argument('--name_one', type=str)
     parser_name.add_argument('--name_two', type=str)
