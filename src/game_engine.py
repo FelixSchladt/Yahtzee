@@ -18,7 +18,7 @@ from src.tui_engine import TuiEngine,\
                            log
 from src.player import new_players
 from src.rules import CATEGORIES, CATEGORY_FUNCTIONS
-from src.term_info import terminal, Colors
+from src.term_info import Colors
 from src.exceptions import OutOfBoundsError
 from src.file_handler import save, load
 
@@ -32,15 +32,11 @@ class GameEngine():
         save_file = "save" if save_file is None else save_file
 
         self.tui = TuiEngine()
-        self.terminal = terminal()
-
-        if not self.tui.invalid_terminal_size():
-            self.invalid_screen_size()
 
         self.round_box = RoundsBox(self.tui)
         self.turns = 3
 
-        self.height, self.width = self.terminal.term_size()
+        self.height, self.width = self.tui.terminal.term_size()
         self.save_path = save_file
 
         if os.path.exists(self.save_path):
@@ -71,36 +67,36 @@ class GameEngine():
             reinitialize tui_engine -> if nothing changes, it just proceeds to return
             the blocking terminal.getch() of term_info class
         """
-        current_height, current_width = self.terminal.term_size()
+        current_height, current_width = self.tui.terminal.term_size()
         if self.height != current_height or self.width != current_width:
             self.height, self.width = current_height, current_width
 
             self.tui.reset_grid() #TODO possible bug source
 
             #TODO reinitialize tui_engine -> grid init
-            # could we reload the class somehow or is there a need for a dedicated reinit funciton in tui_engine ????
-        if not self.tui.invalid_terminal_size():
-            self.invalid_screen_size()
-        return self.terminal.getch()
+            # could we reload the class somehow or is there a need for a
+            #dedicated reinit funciton in tui_engine ????
+
+        self.invalid_screen_size()
+        return self.tui.terminal.getch()
 
     def invalid_screen_size(self):
         """This function shows the screen if the current terminal size is too small
         """
-        while self.tui.invalid_terminal_size():
-            self.tui = TuiEngine()
-            text = ["Invalid Terminal Size", "Please resize the terminal"]
-            self.tui.text(2,
+        self.tui = TuiEngine()
+        text = ["Invalid Terminal Size", "Please resize the terminal"]
+        self.tui.text(2,
                       int(self.tui.display_height/2),
                       text[0],
                       color=Colors.RED)
-            self.tui.text(2,
+        self.tui.text(2,
                       int(self.tui.display_height/2+1),
                       text[1])
-            self.tui.flush()
-            self.tui.rectangle(2,
+        self.tui.flush()
+        self.tui.rectangle(2,
                                int(self.tui.display_height/2),
                                len(max(text, key = len)), 2)
-            sleep(0.5)
+        sleep(0.5)
 
 
     def load_game(self):
@@ -137,7 +133,7 @@ class GameEngine():
             self.players[active].dices[int(key)-1].switch()
 
         elif key == 'q':
-            self.terminal.clear()
+            self.tui.terminal.clear()
             sys.exit(0)
 
         elif ord(key) == 13: # 'Enter'
@@ -164,7 +160,7 @@ class GameEngine():
             self.players[i].reset_dice()
 
         if self.game_over():
-            self.terminal.clear()
+            self.tui.terminal.clear()
             winner = self.players[0].name \
                      if self.players[0].get_score() > self.players[1].get_score()\
                      else self.players[1].name
@@ -172,7 +168,7 @@ class GameEngine():
             #TODO print better win screen
             #     print player table
             #     make big box with winner name
-            self.terminal.clear()
+            self.tui.terminal.clear()
             print(f"The winner of the game is: {winner}")
             input("Press 'Enter' to exit")
             sys.exit(0)
@@ -190,7 +186,7 @@ class GameEngine():
         options = self.players[active].get_options()
         selection = -1
 
-        self.terminal.clear()
+        self.tui.terminal.clear()
         print(f"{self.players[active].name} chooses an option:")
         for i, option in enumerate(options):
             print(f"{i+1}. {option[0].upper()}\tPoints: {option[1]}")
@@ -308,6 +304,7 @@ class GameEngine():
         '''
         while True:
             try:
+                self.tui.invalid_terminal_size()
                 self.draw_game()
                 self.handle_input()
             except OutOfBoundsError:

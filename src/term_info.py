@@ -1,6 +1,12 @@
 #!/usr/bin/python3
 # Copyright 2022 FelixSchladt (https://github.com/FelixSchladt)
 
+"""
+Returns an OS specific object for handleing terminal functionality such as clear,
+getch and terminal size
+Also contains a class with the ANSI color codes
+"""
+
 import os
 import platform
 
@@ -68,17 +74,11 @@ class _posix:
         """
         sets terminal to raw mode in order to be able to get raw keyboard input
         """
-        self.old_settings = termios.tcgetattr(sys.stdin.fileno())
+        old_settings = termios.tcgetattr(sys.stdin.fileno())
         tty.setraw(sys.stdin.fileno())
         ch = sys.stdin.read(1)
-        termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, self.old_settings)
+        termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old_settings)
         return ch
-
-    def exit_raw(self):
-        """
-        Reverts env to normal mode / clean up function
-        """
-        termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, self.old_settings)
 
     @staticmethod
     def clear():
@@ -120,13 +120,6 @@ class _windows:
         """
         columns, rows = shutil.get_terminal_size()
         return int(columns), int(rows)
-
-    @staticmethod
-    def exit_raw():
-        """
-        Placeholder to ensure compatibility
-        """
-        pass
 
 
 if __name__ == "__main__":

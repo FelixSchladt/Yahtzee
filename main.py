@@ -6,8 +6,8 @@
    Run this file to start the game
 '''
 
-from src.game_engine import GameEngine
 import argparse
+from src.game_engine import GameEngine
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Basic settings for your Kniffel game')
