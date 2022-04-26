@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Copyright 2022 Ginthom (https://github.com/Ginthom)
+# Copyright 2022 Jannik Künstler (https://github.com/multiinside)
 
 '''The main file of the project
    Run this file to start the game
@@ -9,15 +9,9 @@
 from src.game_engine import GameEngine
 import argparse
 
-def main():
-    parser_name = argparse.ArgumentParser(description='Set player names')
-    parser_name.add_argument('--name_one', type=str)
-    parser_name.add_argument('--name_two', type=str)
-    args_name = parser_name.parse_args()
-
-    parser_savefile = argparse.ArgumentParser(description='Load a savefile')
-    parser_savefile.add_argument('--savefile', type=int)
-    args_savefile = parser_savefile.parse_args()
-
 if __name__ == '__main__':
-    GameEngine().run()
+    parser = argparse.ArgumentParser(description='Basic settings for your Kniffel game')
+    parser.add_argument('--savefile', type=str)
+    parser.add_argument('--player-one', type=str)
+    parser.add_argument('--player-two', type=str)
+    GameEngine(*vars(parser.parse_args()).values()).run()

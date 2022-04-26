@@ -9,6 +9,7 @@
 import sys
 import os
 from json import JSONDecodeError
+from time import sleep
 from src.tui_engine import TuiEngine,\
                            RoundsBox,\
                            draw_dices,\
@@ -25,9 +26,11 @@ from src.file_handler import save, load
 class GameEngine():
     '''The main backend of the game
     '''
-    def __init__(self, save_file: str = "save",
-                       player_one: str = "Player2",
-                       player_two: str = "Player1"):
+    def __init__(self, save_file: str, player_two: str, player_one: str):
+        player_one = "Player2" if player_one is None else player_one
+        player_two = "Player1" if player_two is None else player_two
+        save_file = "save" if save_file is None else save_file
+
         self.tui = TuiEngine()
         self.terminal = terminal()
 
@@ -71,23 +74,33 @@ class GameEngine():
         current_height, current_width = self.terminal.term_size()
         if self.height != current_height or self.width != current_width:
             self.height, self.width = current_height, current_width
+
+            self.tui.reset_grid() #TODO possible bug source
+
             #TODO reinitialize tui_engine -> grid init
             # could we reload the class somehow or is there a need for a dedicated reinit funciton in tui_engine ????
         if not self.tui.invalid_terminal_size():
-            return self.terminal.getch()
-        self.invalid_screen_size()
+            self.invalid_screen_size()
+        return self.terminal.getch()
 
     def invalid_screen_size(self):
         """This function shows the screen if the current terminal size is too small
         """
-        while not self.tui.invalid_terminal_size():
+        while self.tui.invalid_terminal_size():
+            self.tui = TuiEngine()
+            text = ["Invalid Terminal Size", "Please resize the terminal"]
             self.tui.text(2,
                       int(self.tui.display_height/2),
-                      "Invalid Terminal Size",
+                      text[0],
                       color=Colors.RED)
             self.tui.text(2,
                       int(self.tui.display_height/2+1),
-                      "Please resize the terminal")
+                      text[1])
+            self.tui.flush()
+            self.tui.rectangle(2,
+                               int(self.tui.display_height/2),
+                               len(max(text, key = len)), 2)
+            sleep(0.5)
 
 
     def load_game(self):

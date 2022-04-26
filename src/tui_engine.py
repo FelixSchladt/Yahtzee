@@ -59,7 +59,7 @@ class TuiEngine:
         '''Check if the dimensions of the current terminal fit the minimum
            requirements of the game
         '''
-        return self.display_width < MIN_WIDTH  or self.display_height < MIN_HEIGHT
+        return self.display_width < MIN_WIDTH  and self.display_height < MIN_HEIGHT
         #TODO Implement logic behind this to cause the  terminal to show different screen
         #     and show the user the issues -> calls function when OutOfBoundsError is raised
 
