@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 
-# Copyright 2022 FelixSchladt (https://github.com/FelixSchladt)
+# Copyright 2022 Felix Schladt (https://github.com/FelixSchladt)
 
 """
-Library for displaying dynamic content in the commandline
+Library for displaying content dynamically in the commandline
 """
+
 from src.exceptions import InvalidLenghtError, OutOfBoundsError
 from src.term_info import terminal, Colors
 from src.rules import CATEGORIES
@@ -12,7 +13,7 @@ from src.rules import CATEGORIES
 #OFFSET for the Score table and WIDTH for the Value Tables
 OFFSET = 90
 
-MIN_HEIGHT = 38
+MIN_HEIGHT = 38 #TODO REFACTOR minimal rewuired sizes for correct output
 MIN_WIDTH  = 123
 
 chars = {
@@ -29,9 +30,6 @@ chars = {
     'k': '╷',
     'l': '┼',
 }
-
-
-
 
 class TuiEngine:
     """
@@ -59,6 +57,7 @@ class TuiEngine:
         '''Check if the dimensions of the current terminal fit the minimum
            requirements of the game
         '''
+        self.__init__()
         if self.display_width < MIN_WIDTH  or self.display_height < MIN_HEIGHT:
             raise OutOfBoundsError
 
@@ -266,7 +265,7 @@ def draw_player_tables(tui, players):
     """
     w_1, w_2 = len(players[0].name), len(players[1].name)
     players[0].table = tui.draw_table(tui.display_width - OFFSET + 17, 2, w_1+2, 17 *2, "┼")
-    players[1].table = tui.draw_table(tui.display_width - OFFSET + 17 + w_2+2, 2, w_2+2, 17 *2, "┼")
+    players[1].table = tui.draw_table(tui.display_width - OFFSET + 17 + w_1+2, 2, w_2+2, 17 *2, "┼")
 
     update_player_scores(players)
 

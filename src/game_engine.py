@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 # Copyright 2022 Ginthom (https://github.com/Ginthom)
+# Copyright 2022 Felix Schladt (https://github.com/FelixSchladt)
 
 '''This module contains the games main loop
    and general controll unit
@@ -26,14 +27,15 @@ from src.file_handler import save, load
 class GameEngine():
     '''The main backend of the game
     '''
-    def __init__(self, save_file: str, player_two: str, player_one: str):
-        player_one = "Player2" if player_one is None else player_one
-        player_two = "Player1" if player_two is None else player_two
+    def __init__(self, save_file: str, player_two: str = None, player_one: str = None):
+        players = [ player if player is not None else f"Player{counter+1}" for counter, player in enumerate( (player_one, player_two) ) ]
+
         save_file = "save" if save_file is None else save_file
 
         self.tui = TuiEngine()
 
-        self.round_box = RoundsBox(self.tui)
+        self.round_box = None #Can throw not catchable OutOFBoundsError if terminal
+        #size is too small too initialize the box #RoundsBox(self.tui)
         self.turns = 3
 
         self.height, self.width = self.tui.terminal.term_size()
@@ -44,10 +46,10 @@ class GameEngine():
                 self.load_game()
 
             except (JSONDecodeError, ValueError):
-                self._init_players(player_one, player_two)
+                self._init_players(*players)
 
         else:
-            self._init_players(player_one, player_two)
+            self._init_players(*players)
 
     def _init_players(self, name_one: str, name_two: str):
         self.players = new_players(name_one, name_two)
@@ -59,7 +61,8 @@ class GameEngine():
            :throws: ValueError, when data is invalid
            :returns: None
         '''
-        # TODO implement this
+        # TODO implement this#
+        pass
 
     def getch(self):
         """
@@ -71,32 +74,35 @@ class GameEngine():
         if self.height != current_height or self.width != current_width:
             self.height, self.width = current_height, current_width
 
-            self.tui.reset_grid() #TODO possible bug source
-
-            #TODO reinitialize tui_engine -> grid init
-            # could we reload the class somehow or is there a need for a
-            #dedicated reinit funciton in tui_engine ????
-
-        self.invalid_screen_size()
-        return self.tui.terminal.getch()
+            self.tui.reset_grid()
+        try:
+            self.tui.invalid_terminal_size()
+            return self.tui.terminal.getch()
+        except OutOfBoundsError:
+            raise OutOfBoundsError
+            return chr(0)
 
     def invalid_screen_size(self):
         """This function shows the screen if the current terminal size is too small
         """
         self.tui = TuiEngine()
-        text = ["Invalid Terminal Size", "Please resize the terminal"]
-        self.tui.text(2,
+        text = "Invalid Terminal Size", "Please resize the terminal"
+        if self.tui.display_height < 4 or\
+                self.tui.display_width < (len(max(text, key=len))+4):
+            print("Error: Terminal too small")
+        else:
+
+            self.tui.text(int(self.tui.display_width/2 - len(text[0])/2),
                       int(self.tui.display_height/2),
                       text[0],
                       color=Colors.RED)
-        self.tui.text(2,
+            self.tui.text(int(self.tui.display_width/2 - len(text[1])/2),
                       int(self.tui.display_height/2+1),
                       text[1])
-        self.tui.flush()
-        self.tui.rectangle(2,
-                               int(self.tui.display_height/2),
-                               len(max(text, key = len)), 2)
-        sleep(0.5)
+            self.tui.flush()
+            self.tui.rectangle(2, int(self.tui.display_height/2),
+                           len(max(text, key = len)), 2)
+            sleep(0.1)
 
 
     def load_game(self):
@@ -247,6 +253,7 @@ class GameEngine():
         active = self.get_active_player_index()
 
         self.tui.frame()
+        self.round_box = RoundsBox(self.tui)
         self.round_box.set_round(self.turns)
 
         draw_dices(self.tui, self.players[active].dices)
