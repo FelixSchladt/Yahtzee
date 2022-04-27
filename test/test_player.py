@@ -2,6 +2,7 @@
 # pylint: disable=C
 
 # Copyright 2022 Ginthom (https://github.com/Ginthom)
+# Copyright 2022 Felix Schladt (https://github.com/FelixSchladt)
 
 from unittest import TestCase
 
@@ -26,6 +27,12 @@ class TestRuleGenerator(TestCase):
 
         for option in options:
             self.assertTrue(option[1] in range(0, 51))
+
+    def test_scores(self):
+        self.player.scores[6] = 66
+        self.player.calculate_scores()
+        self.assertEqual(self.player.scores[8], 35)
+        self.assertEqual(self.player.scores[16], 35 + 66)
 
     def tearDown(self):
         pass
