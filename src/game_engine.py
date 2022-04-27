@@ -19,7 +19,7 @@ from src.tui_engine import TuiEngine,\
                            log
 from src.player import new_players
 from src.rules import CATEGORIES, CATEGORY_FUNCTIONS
-from src.term_info import Colors
+from src.terminal import Colors
 from src.exceptions import OutOfBoundsError
 from src.file_handler import save, load
 
@@ -68,7 +68,7 @@ class GameEngine():
         """
             This method checks if terminal size has changed and if so does
             reinitialize tui_engine -> if nothing changes, it just proceeds to return
-            the blocking terminal.getch() of term_info class
+            the blocking terminal.getch() of terminal object
         """
         current_height, current_width = self.tui.terminal.term_size()
         if self.height != current_height or self.width != current_width:

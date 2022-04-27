@@ -1,13 +1,14 @@
 #!/usr/bin/python3
 
 # Copyright 2022 Felix Schladt (https://github.com/FelixSchladt)
+# Copyright 2022 Ginthom (https://github.com/Ginthom)
 
 """
 Library for displaying content dynamically in the commandline
 """
 
 from src.exceptions import InvalidLenghtError, OutOfBoundsError
-from src.term_info import terminal, Colors
+from src.terminal import terminal, Colors
 from src.rules import CATEGORIES
 
 #OFFSET for the Score table and WIDTH for the Value Tables
@@ -254,6 +255,7 @@ def category_table(tui):
     fields = tui.draw_table((tui.display_width - OFFSET , 2), 17, 17 *2)
     for counter, field in enumerate(fields):
         field(CATEGORIES[counter])
+
 
 def update_player_scores(players):
     '''Get both players current scores

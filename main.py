@@ -11,7 +11,7 @@ import signal
 import sys
 
 from src.game_engine import GameEngine
-from src.term_info import terminal
+from src.terminal import terminal
 
 def sigint(sig, frame):
     """Callback function for exiting game when SIGINT or SIGKILL
