@@ -27,7 +27,7 @@ from src.file_handler import save, load
 class GameEngine():
     '''The main backend of the game
     '''
-    def __init__(self, save_file: str, player_two: str = None, player_one: str = None):
+    def __init__(self, save_file: str = None, player_two: str = None, player_one: str = None):
         players = [ player if player is not None else f"Player{counter+1}" for\
                    counter, player in enumerate( (player_one, player_two) ) ]
 
