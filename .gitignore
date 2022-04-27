@@ -3,5 +3,5 @@
 src/.coverage
 *tui_engine.log
 None.json
-write_tests_here
+*write_tests_here.json
 
