@@ -275,7 +275,7 @@ def draw_player_tables(tui, players):
     """
     Draws tables for the players points
     """
-    w_1, w_2 = len(players[0].name), len(players[1].name)
+    w_1, w_2 = ( len(player.name) for player in players )
     width = tui.display_width - OFFSET
     players[0].table = tui.draw_table((width + 17, 2), w_1+2, 17 *2, "┼")
     players[1].table = tui.draw_table((width + 17 + w_1+2, 2), w_2+2, 17 *2, "┼")
@@ -290,19 +290,19 @@ def draw_dices(tui, dices):
        :param dices: The dices to be drawn
        :returns: Non None
     '''
-    gap_size = 2
-    dice_width = 7 + gap_size
+    gap_size    = 2
+    dice_width  = 7 + gap_size
     dice_height = 5
 
     for counter, dice in enumerate(dices):
-        level_1, level_2  = (2*dice_height, 2) if dice.selected else (2, 2*dice_height)
-        x_pos, y_pos = [(4+counter*dice_width, level_1,) for i in range(5)][counter]
+        level_1, level_2  = ( 2*dice_height, 2) if dice.selected else (2, 2*dice_height )
+        x_pos, y_pos = [ (4+counter*dice_width, level_1,) for i in range(5) ][counter]
         tui.dice(x_pos, y_pos, dice.value)
         tui.rectangle((x_pos, level_2), (dice_width, dice_height))
 
 
 def log(msg):
-    '''Log function for the drawing engine
+    '''Log function for debugging
 
        :param msg: the log message
        :returns: None
