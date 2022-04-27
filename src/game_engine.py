@@ -9,26 +9,25 @@
 
 import sys
 import os
-from json import JSONDecodeError
-from time import sleep
-from src.tui_engine import TuiEngine,\
-                           RoundsBox,\
-                           draw_dices,\
-                           draw_player_tables,\
-                           category_table,\
-                           log
-from src.player import new_players
-from src.rules import CATEGORIES, CATEGORY_FUNCTIONS
-from src.terminal import Colors
-from src.exceptions import OutOfBoundsError
+from json             import JSONDecodeError
+from time             import sleep
+from src.player       import new_players
+from src.rules        import CATEGORIES, CATEGORY_FUNCTIONS
+from src.terminal     import Colors
+from src.exceptions   import OutOfBoundsError
 from src.file_handler import save, load
-
+from src.tui_engine   import TuiEngine,\
+                             RoundsBox,\
+                             draw_dices,\
+                             draw_player_tables,\
+                             category_table,\
+                             log
 
 class GameEngine():
     '''The main backend of the game
     '''
     def __init__(self, save_file: str = None, player_two: str = None, player_one: str = None):
-        players = [ player if player is not None else f"Player{counter+1}" for\
+        player_names = [ player if player is not None else f"Player{counter+1}" for\
                    counter, player in enumerate( (player_one, player_two) ) ]
 
         save_file = "save" if save_file is None else save_file
@@ -41,17 +40,15 @@ class GameEngine():
 
         self.height, self.width = self.tui.terminal.term_size()
         self.save_path = save_file.replace(".json", "")
+        self._init_players(*player_names)
 
-        if os.path.exists(self.save_path):
+        if os.path.exists(f"{self.save_path}.json"):
             try:
                 # TODO this doesnt work
                 self.load_game()
 
             except (JSONDecodeError, ValueError):
-                self._init_players(*players)
-
-        else:
-            self._init_players(*players)
+                pass
 
     def _init_players(self, name_one: str, name_two: str):
         self.players = new_players(name_one, name_two)
@@ -105,19 +102,19 @@ class GameEngine():
            if a save file is given
         '''
         save_dict = load(self.save_path)
-        self.turns = save_dict["turns"]
+        self.turns = int(save_dict["turns"])
         for i, _ in enumerate(self.players):
-            self.players[i].load_from_dict(save_dict[f"players_{i}"])
+            self.players[i].load_from_dict(save_dict[f"player_{i}"])
 
     def save_game(self):
         '''Stores the game in a save file
         '''
         player_dict = {"turns": self.turns}
-        for index, player in enumerate(self.players):
-            player_dict[f"player_{index}"] = {"name": player.name,\
-                                              "dices": [dice.value for dice in player.dices],\
-                                              "flags": list(player.used_rules),\
-                                              "scores": list(player.scores)}
+        for i, player in enumerate(self.players):
+            player_dict[f"player_{i}"] = {"name": player.name,\
+                                          "dices": [dice.value for dice in player.dices],\
+                                          "flags": list(player.used_rules),\
+                                          "scores": list(player.scores)}
 
         save(player_dict, self.save_path)
 
@@ -222,7 +219,7 @@ class GameEngine():
         self.tui.terminal.clear()
         print(f"{self.players[active].name} chooses an option:")
         for i, option in enumerate(options):
-            print(f"{i+1}. {option[0].upper()}\tPoints: {option[1]}")
+            print(f"{i+1}. Points: {option[1]} | {option[0].upper()}")
 
         while True:
             try:

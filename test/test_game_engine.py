@@ -18,6 +18,17 @@ class TestRuleGenerator(TestCase):
         self.corrupted_file = "./test/save_files/corrupted"
         self.write_too_file = "./test/save_files/write_tests_here"
 
+    def test_constructor_with_save_path(self):
+        test_engine = GameEngine(save_file=self.correct_file)
+        self.assertEqual(test_engine.turns, 1)
+        self.assertEqual(test_engine.players[0].name, "Thomas")
+
+    def test_constructor_with_save_path_unknown_path(self):
+        test_engine = GameEngine(save_file="Some path")
+        #Player one is randomly assigned so its either of the two
+        self.assertTrue(test_engine.players[0].name in ("Player1", "Player2"))
+        self.assertTrue(test_engine.players[1].name in ("Player1", "Player2"))
+
     def test_load_game_correct(self):
         self.engine.save_path = self.correct_file
         self.assertTrue(len(self.engine.players) == 2)
@@ -32,7 +43,7 @@ class TestRuleGenerator(TestCase):
     def test_load_game_faulty_data(self):
         self.engine.save_path = self.corrupted_file
         # Error is dependent on what part of the file is corrupted
-        self.assertRaises((ValueError, KeyError), self.engine.load_game)
+        self.assertRaises((ValueError, KeyError, IndexError), self.engine.load_game)
 
     def test_save_game(self):
         self.engine.save_path = self.write_too_file

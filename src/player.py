@@ -17,11 +17,11 @@ class Player:
        a username.
     '''
     def __init__(self, name, active = False):
-        self.name = name
+        self.name   = name
         self.active = active
-        self.table = []
+        self.table  = []
 
-        self.dices = get_dices()
+        self.dices      = get_dices()
         self.scores     = [ 0 ]     * len(CATEGORIES)
         self.used_rules = [ False ] * len(CATEGORY_FUNCTIONS)
 
