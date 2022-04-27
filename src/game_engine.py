@@ -44,6 +44,7 @@ class GameEngine():
 
         if os.path.exists(self.save_path):
             try:
+                # TODO this doesnt work
                 self.load_game()
 
             except (JSONDecodeError, ValueError):
