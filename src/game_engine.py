@@ -144,6 +144,48 @@ class GameEngine():
 
         log(f"Input read: {key}")
 
+    def win_screen(self):
+        """Screen for showing results o the game"""
+        self.tui.terminal.clear()
+
+        p_1, p_2 = ( (player.name, player.get_score()) for player in self.players )
+
+        player_res = (p_1, p_2) if p_1[1] > p_2[1] else (p_2, p_1)
+
+        text = f"Player {player_res[0][0]} won!"
+
+        self.tui.frame(int(self.tui.display_width/2 - len(text)-1), 3,
+                       int(self.tui.display_width/2 + len(text)+1), 5)
+
+        self.tui.text((int(self.tui.display_width/2 - len(text)/2), 4), text,
+                      color = f"{Colors.BOLD}{Colors.UNDERLINE}")
+
+
+        len_p1, len_p2 = len(self.players[0].name), len(self.players[1].name)
+        player1_fields = self.tui.draw_table((int(self.tui.display_width/2 - len_p1 -2 ),
+                                              8), len_p1 +2, 4 )
+
+
+        player2_fields = self.tui.draw_table((int(self.tui.display_width/2), 8),
+                                             len_p2 +2, 4, "┼")
+
+
+
+        player1_fields[0](player_res[0][0], color= Colors.GREEN)
+        player2_fields[0](player_res[1][0])
+
+        player1_fields[1](player_res[0][1], color= Colors.GREEN)
+        player2_fields[1](player_res[1][1])
+
+        text = "Press any key to close the application"
+        self.tui.text((int(self.tui.display_width/2 - len(text)/2),
+                       self.tui.display_height), text, color = Colors.BOLD)
+
+        self.tui.flush()
+        self.getch()
+        self.tui.terminal.clear()
+        sys.exit(0)
+
     def end_turn(self):
         '''Executes when the player presses Enter.
            Will end a players turn.
@@ -161,17 +203,7 @@ class GameEngine():
 
         if self.game_over():
             self.tui.terminal.clear()
-            winner = self.players[0].name \
-                     if self.players[0].get_score() > self.players[1].get_score()\
-                     else self.players[1].name
-
-            #TODO print better win screen
-            #     print player table
-            #     make big box with winner name
-            self.tui.terminal.clear()
-            print(f"The winner of the game is: {winner}")
-            input("Press 'Enter' to exit")
-            sys.exit(0)
+            self.win_screen()
 
         self.turns = 3
         self.save_game()
@@ -209,10 +241,10 @@ class GameEngine():
         selected_option = options[selection][0]
         formated_option = selected_option.lower().replace(' ', '_')
 
-        scoreboard_index = [i for i in range(len(CATEGORIES))\
-                         if CATEGORIES[i] == selected_option][0]
-        function_index = [i for i in range(len(CATEGORY_FUNCTIONS))\
-                         if formated_option == CATEGORY_FUNCTIONS[i].__name__][0]
+        scoreboard_index = [ i for i in range(len(CATEGORIES))\
+                         if CATEGORIES[i] == selected_option ][0]
+        function_index = [ i for i in range(len(CATEGORY_FUNCTIONS))\
+                         if formated_option == CATEGORY_FUNCTIONS[i].__name__ ][0]
 
         # Set player score[index] to correct score
         self.players[active].scores[scoreboard_index] += CATEGORY_FUNCTIONS[function_index](

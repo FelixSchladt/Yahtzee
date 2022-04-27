@@ -1,3 +1,5 @@
+# Copyright 2022 Lukas Eisele (https://github.com/EisenmannLukas)
+
 """This file reads and writes the score to a file"""
 
 import os

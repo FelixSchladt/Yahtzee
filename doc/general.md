@@ -7,9 +7,10 @@ All source-code goes into the source-directory **"/src"**.
 
 For running the game, a minimal terminal size is requiered. Please maximize the terminal. 
 
-### Winaids
+### For Windows User
 
-Windows suck, and so does its dos box. We would recommend the new win11 terminal or piwersehll to have better posix compatibility
+The defautl windows terminal is quite bad at rendering. 
+Some flickering must be excpected. We would recommend the use of a gpu accalerated Terminal such as Kitty or Alacritty, but if a Windows environment is preferred we would recommend the new win11 terminal or powershell. 
 
 ## Files:
 

@@ -13,7 +13,7 @@ from src.rules import CATEGORIES
 #OFFSET for the Score table and WIDTH for the Value Tables
 OFFSET = 45
 
-MIN_HEIGHT = 38 #TODO REFACTOR minimal rewuired sizes for correct output
+MIN_HEIGHT = 38
 MIN_WIDTH  = 123
 
 chars = {
@@ -186,7 +186,6 @@ class TuiEngine:
             self.pixel(x_pos, y_pos + height, "┴")
 
         return [ PlacedText(self, x_pos+1, j, width-2) for j in range(y_pos+1, y_pos+height, 2)]
-
 
 
 class PlacedText:
