@@ -15,7 +15,7 @@ class Dice:
        dice
     '''
     def __init__(self):
-        self.value = self.roll()
+        self.roll()
         self.selected = False
 
     def roll(self):

@@ -46,7 +46,7 @@ class Player:
 
            :returns: All dice faces as integers
         '''
-        return [dice.value for dice in self.dices]
+        return [ dice.value for dice in self.dices ]
 
     def get_selected_dice_faces(self) -> []:
         '''Get all faces of selected dices.
@@ -54,12 +54,7 @@ class Player:
 
            :returns: All selected dice faces
         '''
-        selected = []
-        for dice in self.dices:
-            if dice.selected:
-                selected.append(dice.value)
-
-        return selected
+        return [ dice.value for dice in self.dices if dice.selected ]
 
     def get_options(self) -> []:
         '''
@@ -72,7 +67,7 @@ class Player:
                 options.append((OPTIONS[index], value))
 
             if self.used_rules[index] and function.__name__ == "yahtzee" and is_rule:
-                options.append(OPTIONS[index], value+self.dices[0].value*len(self.dices))
+                options.append(OPTIONS[index], value+self.dices[0].value * len(self.dices))
 
         return options
 
@@ -110,6 +105,6 @@ def new_players(name_one = "PLAYER 1", name_two = "PLAYER 2"):
        :param name_two: Name of player two
        :returns: None
     '''
-    if bool(getrandbits(1)):
-        return Player(name_one, True), Player(name_two)
-    return Player(name_two, True), Player(name_one)
+    return (Player(name_one, True), Player(name_two))\
+                if bool(getrandbits(1))\
+                else (Player(name_two, True), Player(name_one))
