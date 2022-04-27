@@ -18,6 +18,14 @@ class TestRuleGenerator(TestCase):
         self.corrupted_file = "./test/save_files/corrupted"
         self.write_too_file = "./test/save_files/write_tests_here"
 
+    def test_constructor_with_save_path(self):
+        test_engine = GameEngine(save_file=self.correct_file)
+        self.assertEqual(test_engine.players[1].name, "Thomas")
+
+    def test_constructor_with_save_path_unknown_path(self):
+        test_engine = GameEngine(save_file="Some path")
+        self.assertEqual(test_engine.players[0].name, "Player1")
+
     def test_load_game_correct(self):
         self.engine.save_path = self.correct_file
         self.assertTrue(len(self.engine.players) == 2)
