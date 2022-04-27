@@ -40,10 +40,11 @@ class GameEngine():
         self.turns = 3
 
         self.height, self.width = self.tui.terminal.term_size()
-        self.save_path = save_file
+        self.save_path = save_file.replace(".json", "")
 
         if os.path.exists(self.save_path):
             try:
+                # TODO this doesnt work
                 self.load_game()
 
             except (JSONDecodeError, ValueError):
