@@ -77,7 +77,10 @@ class TestRuleGenerator(TestCase):
             self.assertEqual(result, "q")
 
     def test_invalid_screen_size(self):
-        with patch.object(TuiEngine, 'text') as mock:
+        do_nothing = lambda *args, **kwargs :\
+                     lambda *args, **kwargs: None 
+        with patch.object(TuiEngine, 'text') as mock,\
+             patch('src.tui_engine.TuiEngine.flush', new_callable=do_nothing):
             self.engine.invalid_screen_size()
             mock.assert_called_with(((int(self.engine.tui.display_width/2-27/2)),
                 int(self.engine.tui.display_height/2+1)),
