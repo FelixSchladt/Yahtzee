@@ -5,7 +5,7 @@
 # pylint: disable=C
 
 import os
-import sys
+import json
 from unittest        import TestCase
 from unittest.mock   import patch
 from json            import JSONDecodeError
@@ -117,12 +117,9 @@ class TestRuleGenerator(TestCase):
              patch('src.terminal._windows.clear',      new_callable=self.do_nothing),\
              patch('src.game_engine.GameEngine.getch', return_value='q'),\
              patch('src.terminal._posix.clear',        new_callable=self.do_nothing),\
-             patch.object(TuiEngine, 'frame') as mock_frame,\
              patch.object(TuiEngine, 'text')  as mock_text,\
              self.assertRaises(SystemExit)    as cm:
             self.engine.win_screen()
-            mock_frame.assert_called_with()
-            mock_text.assert_called_with()
         self.assertEqual(cm.exception.code, 0)
 
     def test_end_turn(self):
