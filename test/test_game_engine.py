@@ -5,6 +5,7 @@
 # pylint: disable=C
 
 import os
+import sys
 from unittest        import TestCase
 from unittest.mock   import patch
 from json            import JSONDecodeError
@@ -20,6 +21,8 @@ class TestRuleGenerator(TestCase):
         self.faulty_json_file = "./test/save_files/faulty_format"
         self.corrupted_file = "./test/save_files/corrupted"
         self.write_too_file = "./test/save_files/write_tests_here"
+        self.do_nothing = lambda *args, **kwargs:\
+                          lambda *args, **kwargs: None
 
     def test_constructor_with_save_path(self):
         test_engine = GameEngine(save_file=self.correct_file)
@@ -77,10 +80,8 @@ class TestRuleGenerator(TestCase):
             self.assertEqual(result, "q")
 
     def test_invalid_screen_size(self):
-        do_nothing = lambda *args, **kwargs :\
-                     lambda *args, **kwargs: None 
         with patch.object(TuiEngine, 'text') as mock,\
-             patch('src.tui_engine.TuiEngine.flush', new_callable=do_nothing):
+             patch('src.tui_engine.TuiEngine.flush', new_callable=self.do_nothing):
             self.engine.invalid_screen_size()
             mock.assert_called_with(((int(self.engine.tui.display_width/2-27/2)),
                 int(self.engine.tui.display_height/2+1)),
@@ -91,3 +92,34 @@ class TestRuleGenerator(TestCase):
              patch.object(Dice, 'switch') as mock:
             self.engine.handle_input()
             mock.assert_called_with()
+
+        with patch('src.game_engine.GameEngine.getch', return_value=chr(13)),\
+             patch.object(GameEngine, 'end_turn') as mock:
+            self.engine.handle_input()
+            mock.assert_called_with()
+
+        with patch('src.game_engine.GameEngine.getch', return_value=chr(32)),\
+             patch.object(GameEngine, 'roll_dice') as mock:
+            self.engine.handle_input()
+            mock.assert_called_with()
+
+    def test_handle_input_on_exit(self):
+        with patch('src.game_engine.GameEngine.getch', return_value='q'),\
+             patch('src.terminal._windows.clear',      new_callable=self.do_nothing),\
+             patch('src.terminal._posix.clear',        new_callable=self.do_nothing),\
+             self.assertRaises(SystemExit) as cm:
+            self.engine.handle_input()
+        self.assertEqual(cm.exception.code, 0)
+
+    def test_win_screen(self):
+        with patch('src.tui_engine.TuiEngine.flush',   new_callable=self.do_nothing),\
+             patch('src.terminal._windows.clear',      new_callable=self.do_nothing),\
+             patch('src.game_engine.GameEngine.getch', return_value='q'),\
+             patch('src.terminal._posix.clear',        new_callable=self.do_nothing),\
+             patch.object(TuiEngine, 'frame') as mock_frame,\
+             patch.object(TuiEngine, 'text') as mock_text,\
+             self.assertRaises(SystemExit) as cm:
+            self.engine.win_screen()
+            mock_frame.assert_called_with()
+            mock_text.assert_called_with()
+        self.assertEqual(cm.exception.code, 0)
