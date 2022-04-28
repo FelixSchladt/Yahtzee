@@ -192,6 +192,7 @@ class GameEngine():
 
         if self.game_over():
             self.tui.terminal.clear()
+            os.remove(f"{self.save_path}.json")
             self.win_screen()
 
         self.turns = 3
@@ -219,7 +220,7 @@ class GameEngine():
 
                 if not selection in range(len(options)):
                     print("Invalid input, try again!")
-                    continueget_all_dice_faces()
+                    continue
                 break
 
             except ValueError:
@@ -236,10 +237,9 @@ class GameEngine():
         function_index = [ i for i in range(len(CATEGORY_FUNCTIONS))\
                          if formated_option == CATEGORY_FUNCTIONS[i].__name__ ][0]
 
-        # Set player score[index] to correct score
-        self.players[active].scores[scoreboard_index] += CATEGORY_FUNCTIONS[function_index](
-                self.players[active].get_all_dice_faces())[1]
 
+        # Set player score and a flag to indicate that the rule was used
+        self.players[active].scores[scoreboard_index] += options[selection][1]
         self.players[active].used_rules[function_index] = True
 
     def roll_dice(self):
