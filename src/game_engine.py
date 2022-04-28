@@ -181,9 +181,9 @@ class GameEngine():
            The player has to select a rule he want to use.
         '''
         active = self.get_active_player_index()
-        if not self.player_done(active):
-            if len(self.players[active].get_options()) > 0:
-                self.select_rule()
+        #if not self.player_done(active):
+        if len(self.players[active].get_options()) > 0:
+            self.select_rule()
 
         for i, _ in enumerate(self.players):
             self.players[i].calculate_scores()
@@ -208,6 +208,7 @@ class GameEngine():
         selection = -1
 
         self.tui.terminal.clear()
+        print(f"Dice: {self.players[active].get_all_dice_faces()}")
         print(f"{self.players[active].name} chooses an option:")
         for i, option in enumerate(options):
             print(f"{i+1}. Points: {option[1]} | {option[0].upper()}")
@@ -218,7 +219,7 @@ class GameEngine():
 
                 if not selection in range(len(options)):
                     print("Invalid input, try again!")
-                    continue
+                    continueget_all_dice_faces()
                 break
 
             except ValueError:
