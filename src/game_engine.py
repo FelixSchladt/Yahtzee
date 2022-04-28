@@ -34,8 +34,7 @@ class GameEngine():
 
         self.tui = TuiEngine()
 
-        self.round_box = None #Can throw not catchable OutOFBoundsError if terminal
-        #size is too small too initialize the box #RoundsBox(self.tui)
+        self.round_box = None
         self.turns = 3
 
         self.height, self.width = self.tui.terminal.term_size()
@@ -44,23 +43,15 @@ class GameEngine():
 
         if os.path.exists(f"{self.save_path}.json"):
             try:
-                # TODO this doesnt work
+                # TODO move/del save file after game is complete
+                # or itll be read again
                 self.load_game()
 
-            except (JSONDecodeError, ValueError):
+            except (JSONDecodeError, ValueError, KeyError):
                 pass
 
     def _init_players(self, name_one: str, name_two: str):
         self.players = new_players(name_one, name_two)
-
-    def _validate_save_file_contents(self, content: {}):
-        '''This method checks whether the data found in a save file matches
-           the format used by the game.
-
-           :throws: ValueError, when data is invalid
-           :returns: None
-        '''
-        # TODO implement this#
 
     def getch(self):
         """

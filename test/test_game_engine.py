@@ -5,12 +5,14 @@
 # pylint: disable=C
 
 import os
+import json
 from unittest        import TestCase
 from unittest.mock   import patch
 from json            import JSONDecodeError
 from src.game_engine import GameEngine
 from src.tui_engine  import TuiEngine
-from src.dices      import Dice
+from src.dices       import Dice
+from src.player      import Player
 
 class TestRuleGenerator(TestCase):
     def setUp(self):
@@ -20,6 +22,8 @@ class TestRuleGenerator(TestCase):
         self.faulty_json_file = "./test/save_files/faulty_format"
         self.corrupted_file = "./test/save_files/corrupted"
         self.write_too_file = "./test/save_files/write_tests_here"
+        self.do_nothing = lambda *args, **kwargs:\
+                          lambda *args, **kwargs: None
 
     def test_constructor_with_save_path(self):
         test_engine = GameEngine(save_file=self.correct_file)
@@ -77,10 +81,8 @@ class TestRuleGenerator(TestCase):
             self.assertEqual(result, "q")
 
     def test_invalid_screen_size(self):
-        do_nothing = lambda *args, **kwargs :\
-                     lambda *args, **kwargs: None 
         with patch.object(TuiEngine, 'text') as mock,\
-             patch('src.tui_engine.TuiEngine.flush', new_callable=do_nothing):
+             patch('src.tui_engine.TuiEngine.flush', new_callable=self.do_nothing):
             self.engine.invalid_screen_size()
             mock.assert_called_with(((int(self.engine.tui.display_width/2-27/2)),
                 int(self.engine.tui.display_height/2+1)),
@@ -91,3 +93,68 @@ class TestRuleGenerator(TestCase):
              patch.object(Dice, 'switch') as mock:
             self.engine.handle_input()
             mock.assert_called_with()
+
+        with patch('src.game_engine.GameEngine.getch', return_value=chr(13)),\
+             patch.object(GameEngine, 'end_turn') as mock:
+            self.engine.handle_input()
+            mock.assert_called_with()
+
+        with patch('src.game_engine.GameEngine.getch', return_value=chr(32)),\
+             patch.object(GameEngine, 'roll_dice') as mock:
+            self.engine.handle_input()
+            mock.assert_called_with()
+
+    def test_handle_input_on_exit(self):
+        with patch('src.game_engine.GameEngine.getch', return_value='q'),\
+             patch('src.terminal._windows.clear',      new_callable=self.do_nothing),\
+             patch('src.terminal._posix.clear',        new_callable=self.do_nothing),\
+             self.assertRaises(SystemExit) as cm:
+            self.engine.handle_input()
+        self.assertEqual(cm.exception.code, 0)
+
+    def test_win_screen(self):
+        with patch('src.tui_engine.TuiEngine.flush',   new_callable=self.do_nothing),\
+             patch('src.terminal._windows.clear',      new_callable=self.do_nothing),\
+             patch('src.game_engine.GameEngine.getch', return_value='q'),\
+             patch('src.terminal._posix.clear',        new_callable=self.do_nothing),\
+             patch.object(TuiEngine, 'text')  as mock_text,\
+             self.assertRaises(SystemExit)    as cm:
+            self.engine.win_screen()
+        self.assertEqual(cm.exception.code, 0)
+
+    def test_end_turn(self):
+        with patch('src.game_engine.GameEngine.save_game', new_callable=self.do_nothing),\
+             patch('src.terminal._windows.clear',          new_callable=self.do_nothing),\
+             patch('src.terminal._posix.clear',            new_callable=self.do_nothing),\
+             patch.object(Player, 'calculate_scores') as mock_cs,\
+             patch.object(Player, 'get_options')      as mock_go,\
+             patch.object(Player, 'reset_dice')       as mock_rd:
+            self.engine.end_turn()
+            mock_cs.assert_called_with()
+            mock_go.assert_called_with()
+            mock_rd.assert_called_with()
+
+    def test_end_turn_with_game_over(self):
+        with patch('src.game_engine.GameEngine.save_game',  new_callable=self.do_nothing),\
+             patch('src.terminal._windows.clear',           new_callable=self.do_nothing),\
+             patch('src.terminal._posix.clear',             new_callable=self.do_nothing),\
+             patch('src.game_engine.GameEngine.win_screen', new_callable=self.do_nothing),\
+             patch('src.game_engine.GameEngine.game_over',  return_value=True),\
+             patch.object(Player, 'calculate_scores') as mock_cs,\
+             patch.object(Player, 'get_options')      as mock_go,\
+             patch.object(Player, 'reset_dice')       as mock_rd,\
+             patch.object(GameEngine, 'win_screen')   as mock_ws:
+            self.engine.end_turn()
+            mock_cs.assert_called_with()
+            mock_go.assert_called_with()
+            mock_rd.assert_called_with()
+            mock_ws.assert_called_with()
+
+    def test_select_rule(self):
+        with patch('src.terminal._posix.clear',   new_callable=self.do_nothing),\
+             patch('src.terminal._windows.clear', new_callable=self.do_nothing),\
+             patch('src.game_engine.GameEngine.get_active_player_index', return_value=True),\
+             patch('builtins.print',              new_callable=self.do_nothing),\
+             patch('builtins.input',              return_value="1"):
+            self.engine.select_rule()
+            self.assertTrue(self.engine)
