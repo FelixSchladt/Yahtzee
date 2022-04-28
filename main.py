@@ -16,7 +16,7 @@ from src.terminal import terminal
 def sigint(sig, frame):
     """Callback function for exiting game when SIGINT or SIGKILL
     """
-    print(sig, frame) # pylint likes this
+    print(sig, frame) # pylint needs this
     terminal().clear()
     sys.exit(0)
 

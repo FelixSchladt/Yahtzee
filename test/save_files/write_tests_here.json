@@ -1,5 +1,1 @@
-<<<<<<< HEAD
 {"turns": 3, "player_0": {"name": "Player2", "dices": [5, 3, 4, 3, 4], "flags": [true, true, true, true, true, true, true, true, true, true, true, true, true], "scores": [0, 1, 0, 9, 8, 5, 12, 35, 0, 0, 0, 25, 0, 0, 0, 16, 76]}, "player_1": {"name": "Player1", "dices": [6, 3, 2, 1, 5], "flags": [true, true, true, true, true, true, true, true, true, true, true, true, false], "scores": [0, 0, 0, 3, 4, 10, 6, 23, 0, 18, 0, 0, 0, 0, 0, 0, 41]}}
-=======
-{"turns": 3, "player_0": {"name": "Players Two", "dices": [1, 4, 1, 3, 4], "flags": [false, false, false, false, false, false, false, false, false, false, false, false, false], "scores": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, "player_1": {"name": "Player One", "dices": [3, 1, 6, 1, 6], "flags": [false, false, false, false, false, false, false, false, false, false, false, false, false], "scores": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}}
->>>>>>> fa5d432533a641806bff40bb3608947bdd511258
