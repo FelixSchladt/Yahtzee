@@ -12,8 +12,7 @@ For running the game, a minimal terminal size is requiered. Please maximize the 
 The defautl windows terminal is quite bad at rendering. 
 Some flickering must be excpected. We would recommend the use of a gpu accalerated Terminal such as Kitty or Alacritty, but if a Windows environment is preferred we would recommend the new win11 terminal or powershell. 
 
-## Files:
-
+## File
 - [rules.md](https://github.com/FelixSchladt/kniffel/blob/main/doc/rules.md)
 
 ## Pylint errors
