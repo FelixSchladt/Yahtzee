@@ -3,5 +3,6 @@
 src/.coverage
 *tui_engine.log
 None.json
+save.json
 *write_tests_here.json
 
