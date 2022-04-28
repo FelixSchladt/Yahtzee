@@ -5,9 +5,12 @@
 # pylint: disable=C
 
 import os
-from unittest import TestCase
-from json import JSONDecodeError
+from unittest        import TestCase
+from unittest.mock   import patch
+from json            import JSONDecodeError
 from src.game_engine import GameEngine
+from src.tui_engine  import TuiEngine
+from src.dices      import Dice
 
 class TestRuleGenerator(TestCase):
     def setUp(self):
@@ -26,6 +29,11 @@ class TestRuleGenerator(TestCase):
     def test_constructor_with_save_path_unknown_path(self):
         test_engine = GameEngine(save_file="Some path")
         #Player one is randomly assigned so its either of the two
+        self.assertTrue(test_engine.players[0].name in ("Player1", "Player2"))
+        self.assertTrue(test_engine.players[1].name in ("Player1", "Player2"))
+
+    def test_constructor_with_save_path_faulty_file(self):
+        test_engine = GameEngine(save_file=self.faulty_json_file)
         self.assertTrue(test_engine.players[0].name in ("Player1", "Player2"))
         self.assertTrue(test_engine.players[1].name in ("Player1", "Player2"))
 
@@ -49,3 +57,34 @@ class TestRuleGenerator(TestCase):
         self.engine.save_path = self.write_too_file
         self.engine.save_game()
         self.assertTrue(os.path.isfile(f"{self.write_too_file}.json"))
+
+    def test_getch_valid_size(self):
+        with patch('src.terminal._windows.term_size', return_value=(999,999)),\
+             patch('src.terminal._windows.getch',     return_value='q'),\
+             patch('src.terminal._posix.term_size',   return_value=(999,999)),\
+             patch('src.terminal._posix.getch',       return_value='q'):
+            result = self.engine.getch()
+            self.assertEqual(result, "q")
+
+    def test_getch_invalid_size(self):
+        with patch('src.terminal._windows.term_size', return_value=(999,999)),\
+             patch('src.terminal._windows.getch',     return_value='q'),\
+             patch('src.terminal._posix.term_size',   return_value=(999,999)),\
+             patch('src.terminal._posix.getch',       return_value='q'):
+            self.engine.height = 100
+            self.engine.width  = 100
+            result = self.engine.getch()
+            self.assertEqual(result, "q")
+
+    def test_invalid_screen_size(self):
+        with patch.object(TuiEngine, 'text') as mock:
+            self.engine.invalid_screen_size()
+            mock.assert_called_with(((int(self.engine.tui.display_width/2-27/2)),
+                int(self.engine.tui.display_height/2+1)),
+                "Please enlarge the terminal")
+
+    def test_handle_input(self):
+        with patch('src.game_engine.GameEngine.getch', return_value='1'),\
+             patch.object(Dice, 'switch') as mock:
+            self.engine.handle_input()
+            mock.assert_called_with()
