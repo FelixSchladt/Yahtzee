@@ -52,13 +52,12 @@ requirement.
 # Files
 
 Documentation for the source code:
-- rules.md
-- tui_engine.md
-- terminal.py
-- game_engine.md
-- file_handler.md
-- rules.md
-- dices.md
+- [tui_engine.md](https://github.com/FelixSchladt/kniffel/blob/main/doc/tui_engine.md)
+- [terminal.py](https://github.com/FelixSchladt/kniffel/blob/main/doc/terminal.md)
+- [game_engine.md](https://github.com/FelixSchladt/kniffel/blob/main/doc/game_engine.md)
+- [file_handler.md](https://github.com/FelixSchladt/kniffel/blob/main/doc/file_handler.md)
+- [rules.md](https://github.com/FelixSchladt/kniffel/blob/main/doc/rules.md)
+- [dices.md](https://github.com/FelixSchladt/kniffel/blob/main/doc/dices.md)
 
 Additional files:
 - played_game_record.log
