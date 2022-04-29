@@ -10,14 +10,16 @@ Also contains a class with the ANSI color codes
 import os
 import platform
 
-if platform.system() == 'Linux' or platform.system() == 'FreeBSD':
-    import sys
-    import tty
-    import termios
-else:
+if platform.system() == 'Windows':
     import msvcrt
     import shutil
     import ctypes
+else:
+    #Should work on all Posix compliant systems such as Linux, FreeBsd, Darwin(Not tested)
+    import sys
+    import tty
+    import termios
+
 
 class Colors:
     """ ANSI color codes """
