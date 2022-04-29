@@ -54,6 +54,7 @@ requirement.
 Documentation for the source code:
 - rules.md
 - tui_engine.md
+- terminal.py
 - game_engine.md
 - file_handler.md
 - rules.md
