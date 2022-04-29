@@ -50,6 +50,8 @@ class GameEngine():
                 pass
 
     def _init_players(self, name_one: str, name_two: str):
+        name_one = name_one[:10] if len(name_one) > 10 else name_one
+        name_two = name_two[:10] if len(name_two) > 10 else name_two
         self.players = new_players(name_one, name_two)
 
     def getch(self):
