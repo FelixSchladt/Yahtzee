@@ -14,6 +14,7 @@ from src.rules import CATEGORIES
 #OFFSET for the Score table and WIDTH for the Value Tables
 OFFSET = 45
 
+#Minimal required terminal size in characters
 MIN_HEIGHT = 38
 MIN_WIDTH  = 123
 
@@ -80,6 +81,7 @@ class TuiEngine:
         assigns char to (pos_x, pos_y) coordinate in the grid buffer
         """
         if len(char) != 1:
+            #raise if char is more than a single character
             raise InvalidLenghtError
         if len(self.__grid) < (pos_y+1) or len(self.__grid[0]) < pos_x:
             raise OutOfBoundsError
