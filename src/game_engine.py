@@ -9,7 +9,6 @@
 
 import sys
 import os
-import signal
 from json             import JSONDecodeError
 from time             import sleep
 from src.player       import new_players
