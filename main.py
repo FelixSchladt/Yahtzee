@@ -28,4 +28,11 @@ if __name__ == '__main__':
     parser.add_argument('-1', '--player-one', type=str)
     parser.add_argument('-2', '--player-two', type=str)
 
-    GameEngine(*vars(parser.parse_args()).values()).run()
+    try:
+        GameEngine(*vars(parser.parse_args()).values()).run()
+    except ValueError:
+        print("Error: This terminal emulator seems to be non standard compliant.\n"
+              "Emulators known to work are for example:"
+              " GnomeTerminal, Konsole, Kitty, Alaccritty, Powershell, Xterm, Urxvt")
+    except OSError as ex:
+        print(f"Error:  Something went wrong: {ex}")
