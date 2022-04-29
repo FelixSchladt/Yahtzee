@@ -45,7 +45,9 @@ requirement.
 The **TUI_ENGINE** class has some performance overhead. With some terminal emulators this can cause flickering.
 A GPU accalerated terminal such as Kitty or Alacritty should be preferred. 
 
+## played_game_record
 
+As requested we made a record of a played game. This was achieved with tee and is under ./doc/played_game_record.log 
 
 
 
