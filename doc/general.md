@@ -49,6 +49,19 @@ This class is just a wrapper for constants and therefore does not have any funct
 We believe this is the neatest way to bundle these constants and therefore ignored pylint's
 requirement.
 
+# Files
+
+Documentation for the source code:
+- rules.md
+- tui_engine.md
+- game_engine.md
+- file_handler.md
+- rules.md
+- dices.md
+
+Additional files:
+- played_game_record.log
+- working_game_screeshot.png
 
 ## Comments:
 

@@ -36,7 +36,7 @@ class GameEngine():
         self.tui = TuiEngine()
 
         self.round_box = None
-        self.turns = 3
+        self.turns = 2
 
         self.height, self.width = self.tui.terminal.term_size()
         self.save_path = save_file.replace(".json", "")
@@ -197,7 +197,7 @@ class GameEngine():
                 os.remove(f"{self.save_path}.json")
             self.win_screen()
 
-        self.turns = 3
+        self.turns = 2
         self.save_game()
 
     def select_rule(self):
