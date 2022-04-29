@@ -33,13 +33,13 @@ class TestRuleGenerator(TestCase):
     def test_constructor_with_save_path_unknown_path(self):
         test_engine = GameEngine(save_file="Some path")
         #Player one is randomly assigned so its either of the two
-        self.assertTrue(test_engine.players[0].name in ("Player1", "Player2"))
-        self.assertTrue(test_engine.players[1].name in ("Player1", "Player2"))
+        self.assertTrue(test_engine.players[0].name in ("Player 1", "Player 2"))
+        self.assertTrue(test_engine.players[1].name in ("Player 1", "Player 2"))
 
     def test_constructor_with_save_path_faulty_file(self):
         test_engine = GameEngine(save_file=self.faulty_json_file)
-        self.assertTrue(test_engine.players[0].name in ("Player1", "Player2"))
-        self.assertTrue(test_engine.players[1].name in ("Player1", "Player2"))
+        self.assertTrue(test_engine.players[0].name in ("Player 1", "Player 2"))
+        self.assertTrue(test_engine.players[1].name in ("Player 1", "Player 2"))
 
     def test_load_game_correct(self):
         self.engine.save_path = self.correct_file
