@@ -5,4 +5,5 @@ src/.coverage
 None.json
 save.json
 *write_tests_here.json
+.idea
 
