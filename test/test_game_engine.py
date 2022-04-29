@@ -5,7 +5,6 @@
 # pylint: disable=C
 
 import os
-import json
 from unittest        import TestCase
 from unittest.mock   import patch
 from json            import JSONDecodeError

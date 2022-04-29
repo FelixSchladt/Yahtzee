@@ -212,8 +212,8 @@ class GameEngine():
         print(f"Dice: {self.players[active].get_all_dice_faces()}\n")
         print(f"{self.players[active].name} chooses an option:")
         for i, option in enumerate(options):
-            print(f"{i+1}.{'  ' if i<10 else ' '}Points: {option[1]}"\
-                  f"{' ' if option[1]<10 else ''} | {option[0].upper()}")
+            print(f"{i+1}.{'  ' if i<9 else ' '}Points: {option[1]}"\
+                  f"{' ' if option[1]<9 else ''} | {option[0].upper()}")
 
         while True:
             try:
