@@ -65,7 +65,10 @@ class GameEngine():
 
             self.tui.reset_grid()
         self.tui.invalid_terminal_size()
-        return self.tui.terminal.getch()
+        try:
+            return self.tui.terminal.getch()
+        except (ValueError, UnicodeDecodeError):
+            return '-99'
 
     def invalid_screen_size(self):
         """This function shows the screen if the current terminal size is too small
