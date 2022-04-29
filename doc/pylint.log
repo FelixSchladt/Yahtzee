@@ -1,0 +1,11 @@
+pylint ./src/
+************* Module src.game_engine
+src/game_engine.py:40:34: E1120: No value for argument 'self' in unbound method call (no-value-for-parameter)
+src/game_engine.py:62:40: E1120: No value for argument 'self' in unbound method call (no-value-for-parameter)
+************* Module src.terminal
+src/terminal.py:14:4: E0401: Unable to import 'msvcrt' (import-error)
+src/terminal.py:24:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+
+------------------------------------------------------------------
+Your code has been rated at 9.72/10 (previous run: 9.72/10, +0.00)
+
