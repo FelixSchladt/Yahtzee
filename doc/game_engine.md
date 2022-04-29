@@ -76,3 +76,12 @@ These functions handle the data of the game
 - \_init_players(self, name_one: str, name_two: str):
 	This method creates the player objects required for a new game.
 	The player names can be chosen freely.
+	The max langth of a players name is 10.
+
+- save_game(self):
+	This function will save the games state to a file with json-format.
+	If the user does not provide a file path, it will default to ./save.json
+
+- load_game(self):
+	Loads a game state from a file.
+	Also defaults to ./save.json.
