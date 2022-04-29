@@ -44,7 +44,7 @@ class TestRuleGenerator(TestCase):
         self.engine.save_path = self.correct_file
         self.assertTrue(len(self.engine.players) == 2)
         self.assertTrue(len(self.engine.players[0].dices) == 5)
-        self.assertTrue(self.engine.turns == 3)
+        self.assertTrue(self.engine.turns == 2)
         self.assertTrue(len(self.engine.players[1].used_rules) == 13)
 
     def test_load_game_faulty_format(self):
