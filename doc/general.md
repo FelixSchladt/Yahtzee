@@ -1,24 +1,34 @@
 # General Information
 
-This dir contains the projects documentation.
+This directory contains the projects documentation.
 All source-code goes into the source-directory **"/src"**.
+
+The markdown files in this directory are made to work with githubs markdown syntax.
 
 ## Requirements
 
-For running the game, a minimal terminal size is requiered. Please maximize the terminal. 
+For running the game, a minimal terminal size is requiered. 
+**Please maximize the terminal**. 
+Terminal emulators of developement environments like the one built into Pycharm will very likely not work,
+as they don't fit the required dimensions.
+
+The minimum requirements are:
+- Height: 38 Characters
+- Width: 123 Characters 
 
 ### For Windows Users
 
-The defautl windows terminal is quite bad at rendering. 
-Some flickering must be excpected. We would recommend the use of a gpu accalerated Terminal such as Kitty or Alacritty, but if a Windows environment is preferred we would recommend the new win11 terminal or powershell. 
+Since this project was developed on Linux,
+theres some minimal issues problems when using windows.
 
-## File
-- [rules.md](https://github.com/FelixSchladt/kniffel/blob/main/doc/rules.md)
+The default windows terminal is quite slow when it comes to rendering. 
+Some flickering must be excpected. We would recommend the use of a gpu-accalerated terminal such as Kitty or Alacritty,
+but if a Windows environment is preferred we would recommend the new win11 terminal or powershell. 
 
 ## Pylint errors
 
-Sometimes pylint is jsut mistaken or makes no sense in our eyes.
-This is the reason why two pylint errors persist. 
+There are two unfixable pylint errors in this project.
+They will be explained here.
 
 Both originate from src/terminal.py which provides OS specific access to terminal related functionality.
 
@@ -35,19 +45,16 @@ A similar Error should appear about the Modules "tty" and "termios" on Windows (
 src/terminal.py:22:0: R0903: Too few public methods (0/2) (too-few-public-methods)
 ```
 The class in question is the Colors class in terminal.py which provides easy access to ASCII colorcodes.
-This class is just a wrapper for constants and therfore does not have any functions related to it.
-I personally believe this is the neatest way to bundle these constants and therfore ignored pylint's
+This class is just a wrapper for constants and therefore does not have any functions related to it.
+We believe this is the neatest way to bundle these constants and therefore ignored pylint's
 requirement.
 
 
 ## Comments:
 
-The **TUI_ENGINE** class has some performance overhead. With some terminal emulators this can cause flickering.
+The **Tui_Engine** class has some performance overhead. With some terminal emulators this can cause flickering.
 A GPU accalerated terminal such as Kitty or Alacritty should be preferred. 
 
-## played_game_record
+## played game record
 
-As requested we made a record of a played game. This was achieved with tee and is under ./doc/played_game_record.log 
-
-
-
+As requested we made a record of a played game. This was achieved with *tee* and is under ./doc/played_game_record.log 
