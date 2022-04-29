@@ -1,3 +1,57 @@
 coverage run -m unittest discover -v
+test_dice (test.test_dice.TestRuleGenerator) ... ok
+test_dice_roll (test.test_dice.TestRuleGenerator) ... ok
+test_dice_switch (test.test_dice.TestRuleGenerator) ... ok
+test_get_dices (test.test_dice.TestRuleGenerator) ... ok
+test_reset_dices (test.test_dice.TestRuleGenerator) ... ok
+test_load (test.test_file_handler.TestRuleGenerator) ... ok
+test_save (test.test_file_handler.TestRuleGenerator) ... ok
+test_constructor_with_save_path (test.test_game_engine.TestRuleGenerator) ... ok
+test_constructor_with_save_path_faulty_file (test.test_game_engine.TestRuleGenerator) ... ok
+test_constructor_with_save_path_unknown_path (test.test_game_engine.TestRuleGenerator) ... ok
+test_end_turn (test.test_game_engine.TestRuleGenerator) ... ok
+test_end_turn_with_game_over (test.test_game_engine.TestRuleGenerator) ... ok
+test_getch_invalid_size (test.test_game_engine.TestRuleGenerator) ... ok
+test_getch_valid_size (test.test_game_engine.TestRuleGenerator) ... ok
+test_handle_input (test.test_game_engine.TestRuleGenerator) ... ok
+test_handle_input_on_exit (test.test_game_engine.TestRuleGenerator) ... ok
+test_invalid_screen_size (test.test_game_engine.TestRuleGenerator) ... ok
+test_load_game_correct (test.test_game_engine.TestRuleGenerator) ... ok
+test_load_game_faulty_data (test.test_game_engine.TestRuleGenerator) ... ok
+test_load_game_faulty_format (test.test_game_engine.TestRuleGenerator) ... ok
+test_save_game (test.test_game_engine.TestRuleGenerator) ... ok
+test_select_rule (test.test_game_engine.TestRuleGenerator) ... ok
+test_soft_exit (test.test_game_engine.TestRuleGenerator) ... ok
+test_win_screen (test.test_game_engine.TestRuleGenerator) ... ok
+test_calculate_scores (test.test_player.TestRuleGenerator) ... ok
+test_get_options (test.test_player.TestRuleGenerator) ... ok
+test_new_players (test.test_player.TestRuleGenerator) ... ok
+test_scores (test.test_player.TestRuleGenerator) ... ok
+test_add_faces (test.test_rules.TestRuleGenerator) ... ok
+test_big_road (test.test_rules.TestRuleGenerator) ... ok
+test_chance (test.test_rules.TestRuleGenerator) ... ok
+test_full_house (test.test_rules.TestRuleGenerator) ... ok
+test_multiple (test.test_rules.TestRuleGenerator) ... ok
+test_quadrupel (test.test_rules.TestRuleGenerator) ... ok
+test_small_road (test.test_rules.TestRuleGenerator) ... ok
+test_triplet (test.test_rules.TestRuleGenerator) ... ok
+test_yahtzee (test.test_rules.TestRuleGenerator) ... ok
+test_getch (test.test_terminal.TestRuleGenerator) ... ok
+test_posix_getch (test.test_terminal.TestRuleGenerator) ... ok
+test_terminal (test.test_terminal.TestRuleGenerator) ... ok
+test_OutOfBounds (test.test_tui_engine.TestTuiEngine) ... expected failure
+test_category_table (test.test_tui_engine.TestTuiEngine) ... ok
+test_dice (test.test_tui_engine.TestTuiEngine) ... expected failure
+test_dices (test.test_tui_engine.TestTuiEngine) ... ok
+test_frame (test.test_tui_engine.TestTuiEngine) ... ok
+test_log (test.test_tui_engine.TestTuiEngine) ... ok
+test_pixel (test.test_tui_engine.TestTuiEngine) ... ok
+test_roundsbox (test.test_tui_engine.TestTuiEngine) ... ok
+test_text (test.test_tui_engine.TestTuiEngine) ... ok
+
+----------------------------------------------------------------------
+Ran 49 tests in 0.969s
+
+OK (expected failures=2)
 Are you sure you want to exit (y/n)?
 Your game is saved in: save.json
