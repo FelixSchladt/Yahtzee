@@ -32,6 +32,7 @@ class Player:
            :returns: None
         '''
         self.name = data["name"]
+        self.active = data["active"]
         for i, dice_value in enumerate(data["dices"]):
             self.dices[i].value = dice_value
 

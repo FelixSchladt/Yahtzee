@@ -106,18 +106,17 @@ class TestRuleGenerator(TestCase):
 
     def test_handle_input_on_exit(self):
         with patch('src.game_engine.GameEngine.getch', return_value='q'),\
+             patch.object(GameEngine, 'soft_exit') as mock,\
              patch('src.terminal._windows.clear',      new_callable=self.do_nothing),\
-             patch('src.terminal._posix.clear',        new_callable=self.do_nothing),\
-             self.assertRaises(SystemExit) as cm:
+             patch('src.terminal._posix.clear',        new_callable=self.do_nothing):
             self.engine.handle_input()
-        self.assertEqual(cm.exception.code, 0)
+            mock.assert_called_with()
 
     def test_win_screen(self):
         with patch('src.tui_engine.TuiEngine.flush',   new_callable=self.do_nothing),\
              patch('src.terminal._windows.clear',      new_callable=self.do_nothing),\
              patch('src.game_engine.GameEngine.getch', return_value='q'),\
              patch('src.terminal._posix.clear',        new_callable=self.do_nothing),\
-             patch.object(TuiEngine, 'text')  as mock_text,\
              self.assertRaises(SystemExit)    as cm:
             self.engine.win_screen()
         self.assertEqual(cm.exception.code, 0)
@@ -158,3 +157,11 @@ class TestRuleGenerator(TestCase):
              patch('builtins.input',              return_value="1"):
             self.engine.select_rule()
             self.assertTrue(self.engine)
+
+    def test_soft_exit(self):
+        with patch('src.terminal._posix.clear',   new_callable=self.do_nothing),\
+             patch('src.terminal._windows.clear', new_callable=self.do_nothing),\
+             patch('src.game_engine.GameEngine.getch', return_value='y'),\
+             self.assertRaises(SystemExit) as cm:
+            self.engine.soft_exit()
+        self.assertEqual(cm.exception.code, 0)

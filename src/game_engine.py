@@ -9,6 +9,7 @@
 
 import sys
 import os
+import signal
 from json             import JSONDecodeError
 from time             import sleep
 from src.player       import new_players
@@ -27,7 +28,7 @@ class GameEngine():
     '''The main backend of the game
     '''
     def __init__(self, save_file: str = None, player_two: str = None, player_one: str = None):
-        player_names = [ player if player is not None else f"Player{counter+1}" for\
+        player_names = [ player if player is not None else f"Player {counter+1}" for\
                    counter, player in enumerate( (player_one, player_two) ) ]
 
         save_file = "save" if save_file is None else save_file
@@ -43,8 +44,6 @@ class GameEngine():
 
         if os.path.exists(f"{self.save_path}.json"):
             try:
-                # TODO move/del save file after game is complete
-                # or itll be read again
                 self.load_game()
 
             except (JSONDecodeError, ValueError, KeyError):
@@ -105,7 +104,8 @@ class GameEngine():
             player_dict[f"player_{i}"] = {"name": player.name,\
                                           "dices": [dice.value for dice in player.dices],\
                                           "flags": list(player.used_rules),\
-                                          "scores": list(player.scores)}
+                                          "scores": list(player.scores),\
+                                          "active": player.active}
 
         save(player_dict, self.save_path)
 
@@ -122,8 +122,7 @@ class GameEngine():
             self.players[active].dices[int(key)-1].switch()
 
         elif key == 'q':
-            self.tui.terminal.clear()
-            sys.exit(0)
+            self.soft_exit()
 
         elif ord(key) == 13: # 'Enter'
             self.end_turn()
@@ -192,7 +191,8 @@ class GameEngine():
 
         if self.game_over():
             self.tui.terminal.clear()
-            os.remove(f"{self.save_path}.json")
+            if os.path.exists(f"{self.save_path}.json"):
+                os.remove(f"{self.save_path}.json")
             self.win_screen()
 
         self.turns = 3
@@ -280,6 +280,11 @@ class GameEngine():
         self.tui.text((4, 20), "Selected                  ")
         self.tui.text((4, 20), "Selected: "\
                 f"{self.players[active].get_selected_dice_faces()}")
+        self.tui.text((4, 23), "How to play:")
+        self.tui.text((4, 24), "Number keys 1-5: Store dice")
+        self.tui.text((4, 25), "Space          : Roll")
+        self.tui.text((4, 26), "Enter          : End turn")
+        self.tui.text((4, 27), "q              : Quit game")
         self.tui.flush()
 
     def get_active_player_index(self) -> int:
@@ -320,6 +325,18 @@ class GameEngine():
                 break
 
         return done
+
+    def soft_exit(self):
+        '''Perform tasks before exiting when Ctrl+C is detected
+        '''
+        self.tui.terminal.clear()
+        print(f"Are you sure you want to exit (y/n)?\nYour game is saved in: {self.save_path}.json")
+        choice = self.getch()
+
+        if choice == 'y':
+            self.save_game()
+            self.tui.terminal.clear()
+            sys.exit(0)
 
     def run(self):
         '''Contains the main loop of the game
