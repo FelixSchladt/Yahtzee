@@ -37,7 +37,7 @@ An exception to this rule is the "yahtzee", as one can roll this perticular cons
 The game is saved after every turn.
 
 ## Ending the game
-The game ends, once both players have collected points for each category.
+The game ends once both players have collected points for each category.
 The player with more points wins.
 
 After ending a game the respective save file gets removed.
