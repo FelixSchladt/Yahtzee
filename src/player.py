@@ -94,7 +94,8 @@ class Player:
 
            :returns: The total amount of points the player has collected
         '''
-        return sum(score for score in self.scores)
+        return sum(score for score in self.scores[:6])\
+               + sum(score for score in self.scores[8:15])
 
 
 def new_players(name_one = "PLAYER 1", name_two = "PLAYER 2"):
