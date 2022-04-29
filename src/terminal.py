@@ -52,9 +52,7 @@ def terminal():
     """
     returns the platform specific library for terminal handling
     """
-    if platform.system() == 'Linux' or platform.system() == 'FreeBSD':
-        return _posix()
-    return _windows()
+    return _windows if platform.system() == "Windows" else _posix()
 
 
 class _posix:
