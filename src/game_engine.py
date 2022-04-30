@@ -261,7 +261,7 @@ class GameEngine():
 
         self.turns -= 1
 
-        if self.turns == 0:
+        if self.turns <= 0:
             self.end_turn()
 
     def draw_game(self):
