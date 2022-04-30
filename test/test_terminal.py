@@ -21,6 +21,8 @@ from src.terminal  import terminal,\
 class TestRuleGenerator(TestCase):
     def setUp(self):
         self.term = terminal()
+        self.do_nothing = lambda *args, **kwargs:\
+                          lambda *args, **kwargs: None
 
     def test_terminal(self):
         if platform.system() in ('Linux', 'FreeBSD'):
@@ -41,3 +43,10 @@ class TestRuleGenerator(TestCase):
 
         else:
             print("Please run tests for 'terminal' on a linux based OS!")
+
+    def test_posic_clear(self):
+        # We can only validate that it does not crash
+        # the clear funciotn has to be patched, otherwise
+        # the entire test log gets cleared as well
+        with patch('os.system', new_callable=self.do_nothing):
+            self.term.clear()
