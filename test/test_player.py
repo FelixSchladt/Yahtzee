@@ -34,8 +34,37 @@ class TestRuleGenerator(TestCase):
         self.assertEqual(self.player.scores[8], 35)
         self.assertEqual(self.player.scores[16], 35 + 66)
 
-    def tearDown(self):
-        pass
+    def test_get_selected_dice_faces(self):
+        for i, _ in enumerate(self.player.dices):
+            self.player.dices[i].value = 5
+
+        # Select all dice
+        for i, _ in enumerate(self.player.dices):
+            self.player.dices[i].selected = True
+
+        self.assertEqual([5, 5, 5, 5, 5], self.player.get_selected_dice_faces())
+
+    def test_reset_dice(self):
+        # Select all dice
+        for i, _ in enumerate(self.player.dices):
+            self.player.dices[i].selected = True
+
+        self.player.reset_dice()
+
+        # All dice should be deselected
+        for dice in self.player.dices:
+            self.assertFalse(dice.selected)
+
+    def test_double_yahtzee(self):
+        for i, _ in enumerate(self.player.dices):
+            self.player.dices[i].value = 5
+
+        # Simulate that all options have been used before
+        # This includes the first yahtzee
+        for i, _ in enumerate(self.player.used_rules):
+            self.player.used_rules[i] = True
+
+        self.assertTrue(("Yahtzee", 75) in self.player.get_options())
 
     def test_new_players(self):
         name_one = "Some player"
