@@ -217,7 +217,7 @@ class RoundsBox:
     '''A dedicated class to display a box containing the remaining rounds
     '''
     def __init__(self, tui):
-        self.rounds = 3
+        self.rounds = 2
         self.__tui = tui
         self.text = PlacedText(tui, 57, 4, 30)
         self.draw()
@@ -238,12 +238,12 @@ class RoundsBox:
     def reset(self):
         '''Reset the counter in the box
         '''
-        self.rounds = 3
+        self.rounds = 2
         self.draw()
 
     def __call__(self):
         self.rounds -= 1
-        if self.rounds == 0:
+        if self.rounds <= 0:
             self.reset()
             return False
         self.draw()
