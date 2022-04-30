@@ -33,8 +33,8 @@ class TestRuleGenerator(TestCase):
     def test_getch(self):
         # Size method is dependant on actual terminal size
         # so its hard to define a constant value for it
-        self.assertTrue(self.term.rows in range(1, 200))
-        self.assertTrue(self.term.columns in range(1, 200))
+        self.assertTrue(self.term.rows in range(1, 999))
+        self.assertTrue(self.term.columns in range(1, 999))
 
     def test_posix_getch(self):
         if platform.system() in ('Linux', 'FreeBSD'):
