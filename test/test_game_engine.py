@@ -69,6 +69,13 @@ class TestRuleGenerator(TestCase):
             result = self.engine.getch()
             self.assertEqual(result, "q")
 
+    def test_getch_utf8_key(self):
+        with patch('src.terminal._windows.term_size', return_value=(999,999)),\
+             patch('src.terminal._posix.term_size',   return_value=(999,999)),\
+             patch('src.terminal._windows.getch', side_effect=UnicodeDecodeError),\
+             patch('src.terminal._posix.getch',   side_effect=ValueError):
+            self.assertEqual('-99', self.engine.getch())
+
     def test_getch_invalid_size(self):
         with patch('src.terminal._windows.term_size', return_value=(999,999)),\
              patch('src.terminal._windows.getch',     return_value='q'),\
@@ -156,6 +163,32 @@ class TestRuleGenerator(TestCase):
              patch('builtins.input',              return_value="1"):
             self.engine.select_rule()
             self.assertTrue(self.engine)
+
+    def test_roll_dice(self):
+        self.engine.turns = 2
+        self.engine.players[0].active = True
+        self.engine.players[0].dices[0].selected = False
+        with patch.object(Dice, 'roll') as mock_r:
+            self.engine.roll_dice()
+            mock_r.assert_called_with()
+
+    def test_roll_dice_turn_end(self):
+        self.engine.turns = 1
+        with patch.object(GameEngine, 'end_turn') as mock_end:
+            self.engine.roll_dice()
+            mock_end.assert_called_with()
+
+    def test_roll_dice_invalid_turns(self):
+        self.engine.turns = -1
+        with patch.object(GameEngine, 'end_turn') as mock_end:
+            self.engine.roll_dice()
+            mock_end.assert_called_with()
+
+    def test_draw_game(self):
+        with patch('src.tui_engine.TuiEngine.flush', new_callable=self.do_nothing),\
+             patch.object(TuiEngine, 'text') as mock_txt:
+            self.engine.draw_game()
+            mock_txt.assert_called_with((4, 27), "q              : Quit game")
 
     def test_soft_exit(self):
         with patch('src.terminal._posix.clear',   new_callable=self.do_nothing),\
