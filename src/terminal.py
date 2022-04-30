@@ -52,7 +52,7 @@ def terminal():
     """
     returns the platform specific library for terminal handling
     """
-    return _windows if platform.system() == "Windows" else _posix()
+    return _windows() if platform.system() == "Windows" else _posix()
 
 
 class _posix:
