@@ -5,13 +5,31 @@
 
 import os.path
 from unittest import TestCase, expectedFailure
+from unittest.mock import patch
 from src.tui_engine import TuiEngine, category_table, OFFSET, log, draw_dices, RoundsBox
 from src.dices import get_dices
+from src.exceptions import OutOfBoundsError
 
 class TestTuiEngine(TestCase):
     def setUp(self):
         self.tui = TuiEngine()
+        self.do_nothing = lambda *args, **kwargs:\
+                          lambda *args, **kwargs: None
 
+    def test_invalid_terminal_size_invalid_size(self):
+        self.tui.display_width = 1
+        self.tui.display_height = 1
+        with patch('src.tui_engine.TuiEngine.__init__', new_callable=self.do_nothing),\
+             self.assertRaises(OutOfBoundsError) as err:
+            self.tui.invalid_terminal_size()
+
+        self.assertIsInstance(err.exception, OutOfBoundsError)
+
+    def test_invalid_terminal_size(self):
+        with patch.object(TuiEngine, '__init__') as mock_init:
+            self.tui.invalid_terminal_size()
+            mock_init.assert_called_with()
+    
     def test_pixel(self):
         self.tui.pixel(0,0, "A")
         self.assertEqual(self.tui._TuiEngine__grid[1][0], "A\x1b[0m")
@@ -24,19 +42,23 @@ class TestTuiEngine(TestCase):
         self.assertEqual(self.tui._TuiEngine__grid[5][1], "└\x1b[0m")
         self.assertEqual(self.tui._TuiEngine__grid[5][4], "┘\x1b[0m")
 
-    @expectedFailure
     def test_dice(self):
         self.tui.reset_grid()
-        self.tui.dice(0,0,7)
+        with self.assertRaises(KeyError) as err:
+            self.tui.dice(0,0,7)
+
+        self.assertIsInstance(err.exception, KeyError)
 
     def test_text(self):
         self.tui.reset_grid()
         self.tui.text((0,0), "test", 3)
         self.assertEqual(self.tui._TuiEngine__grid[1][3], " ")
 
-    @expectedFailure
     def test_OutOfBounds(self):
-        self.tui.pixel(0, 99999999999999)
+        with self.assertRaises(OutOfBoundsError) as err:
+            self.tui.pixel(0, 99999999999999)
+
+        self.assertIsInstance(err.exception, OutOfBoundsError)
 
     def test_category_table(self):
         category_table(self.tui)
