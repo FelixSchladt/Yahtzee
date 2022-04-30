@@ -203,9 +203,6 @@ CATEGORIES =["", "Aces", "Twos", "Threes", "Fours", "Fives", "Sixes", "Total ->"
                 + [ "Bonus", "Triplet", "Quadrupel", "Full House"]\
                 + ["Small Straight", "Large Straight", "Yahtzee", "Chance", "Total"]
 
-RULES = ["multiple", "triplet", "quadrupel", "full_house",
-         "small_road", "big_road", "yahtzee", "chance"]
-
 OPTIONS = ["Aces", "Twos", "Threes", "Fours", "Fives", "Sixes"]\
           + ["Triplet", "Quadrupel", "Full House"]\
           + ["Small Straight", "Large Straight", "Yahtzee", "Chance"]
