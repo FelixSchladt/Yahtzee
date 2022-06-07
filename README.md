@@ -1,7 +1,7 @@
 
-# Kniffel
+# Yahtzee
 
-A simple simulation of the game 'Kniffel'.
+A simple simulation of the game 'Yahtzee'.
 For additional Information please refer to */doc*.
 
 # How to play
