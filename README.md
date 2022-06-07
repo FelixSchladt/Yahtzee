@@ -4,6 +4,8 @@
 A simple simulation of the game 'Yahtzee'.
 For additional Information please refer to */doc*.
 
+![alt text](https://github.com/FelixSchladt/Yahtzee/blob/main/doc/working_game_screenshot.png?raw=true)
+
 # How to play
 
 ## Select a save file
